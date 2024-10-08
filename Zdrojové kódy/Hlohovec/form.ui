@@ -1,0 +1,1908 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ILTIS</class>
+ <widget class="QMainWindow" name="ILTIS">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1920</width>
+    <height>1080</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>App</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(0,0,0); </string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="HLO_k1">
+    <property name="geometry">
+     <rect>
+      <x>1239</x>
+      <y>314</y>
+      <width>125</width>
+      <height>59</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/Kolaj/Kol_st1_basic.bmp</normaloff>img/Kolaj/Kol_st1_basic.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>125</width>
+      <height>59</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="HLO_k2">
+    <property name="geometry">
+     <rect>
+      <x>1239</x>
+      <y>372</y>
+      <width>125</width>
+      <height>59</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/Kolaj/Kol_st2_basic.bmp</normaloff>img/Kolaj/Kol_st2_basic.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>125</width>
+      <height>59</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="HLO_S1">
+    <property name="geometry">
+     <rect>
+      <x>1187</x>
+      <y>315</y>
+      <width>52</width>
+      <height>58</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/HlavneKombinovaneNav/Kom_basicL.bmp</normaloff>img/HlavneKombinovaneNav/Kom_basicL.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>68</width>
+      <height>59</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="HLO_S2">
+    <property name="geometry">
+     <rect>
+      <x>1187</x>
+      <y>373</y>
+      <width>52</width>
+      <height>58</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/HlavneKombinovaneNav/Kom_basicL.bmp</normaloff>img/HlavneKombinovaneNav/Kom_basicL.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>68</width>
+      <height>59</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="HLO_V1">
+    <property name="geometry">
+     <rect>
+      <x>1070</x>
+      <y>310</y>
+      <width>117</width>
+      <height>125</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/Vyhybka/VyhLH_basic.bmp</normaloff>img/Vyhybka/VyhLH_basic.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>125</width>
+      <height>117</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="HLO_fik_L">
+    <property name="geometry">
+     <rect>
+      <x>876</x>
+      <y>322</y>
+      <width>23</width>
+      <height>43</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/Fiktivne/Fikt_basicL.bmp</normaloff>img/Fiktivne/Fikt_basicL.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>23</width>
+      <height>43</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="HLO_zr_do_st_odZ">
+    <property name="geometry">
+     <rect>
+      <x>1047</x>
+      <y>322</y>
+      <width>23</width>
+      <height>43</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/Zriad/Zriad_basicP.bmp</normaloff>img/Zriad/Zriad_basicP.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>68</width>
+      <height>59</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="HLO_Sk">
+    <property name="geometry">
+     <rect>
+      <x>922</x>
+      <y>313</y>
+      <width>125</width>
+      <height>59</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/Kolaj/Kol_basic.bmp</normaloff>img/Kolaj/Kol_basic.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>125</width>
+      <height>59</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="HLO_zr_zo_st_odZ">
+    <property name="geometry">
+     <rect>
+      <x>899</x>
+      <y>322</y>
+      <width>23</width>
+      <height>43</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/Zriad/Zriad_basicL.bmp</normaloff>img/Zriad/Zriad_basicL.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>68</width>
+      <height>59</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ZBE_HLO_TU2_b">
+    <property name="geometry">
+     <rect>
+      <x>787</x>
+      <y>313</y>
+      <width>51</width>
+      <height>59</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/Kolaj/Kol_basic.bmp</normaloff>img/Kolaj/Kol_basic.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>125</width>
+      <height>59</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="HLO_L">
+    <property name="geometry">
+     <rect>
+      <x>838</x>
+      <y>315</y>
+      <width>38</width>
+      <height>58</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/HlavneNav/Hl_basicP.bmp</normaloff>img/HlavneNav/Hl_basicP.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>38</width>
+      <height>58</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="HLO_trat_suhlas_doZ">
+    <property name="geometry">
+     <rect>
+      <x>804</x>
+      <y>372</y>
+      <width>39</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/TS/TS_basicL.bmp</normaloff>img/TS/TS_basicL.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>39</width>
+      <height>18</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="HLO_dialkove">
+    <property name="geometry">
+     <rect>
+      <x>1101</x>
+      <y>248</y>
+      <width>58</width>
+      <height>43</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/Stanice/HLO_basic.bmp</normaloff>img/Stanice/HLO_basic.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>58</width>
+      <height>43</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="HLO_ASVC">
+    <property name="geometry">
+     <rect>
+      <x>1161</x>
+      <y>248</y>
+      <width>58</width>
+      <height>43</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/Stanice/ASVC_basic.bmp</normaloff>img/Stanice/ASVC_basic.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>58</width>
+      <height>43</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ZBE_fik_S">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>322</y>
+      <width>23</width>
+      <height>43</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/Fiktivne/Fikt_basicL.bmp</normaloff>img/Fiktivne/Fikt_basicL.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>23</width>
+      <height>43</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="textZbehy">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>325</y>
+      <width>71</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>18</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#d0d0d0;&quot;&gt;Zbehy&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="HLO_pracovisko">
+    <property name="geometry">
+     <rect>
+      <x>1243</x>
+      <y>248</y>
+      <width>55</width>
+      <height>38</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>18</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="pixmap">
+     <pixmap>img/Stanice/Pracovisko.bmp</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="combo_hlavne">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>440</y>
+      <width>72</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(166, 166, 166);</string>
+    </property>
+    <item>
+     <property name="text">
+      <string/>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>VLAK</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>PN</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>ZR JC</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>VOLNO</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>STOJ</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="combo_zriad">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>440</y>
+      <width>72</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(166, 166, 166);</string>
+    </property>
+    <item>
+     <property name="text">
+      <string/>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>POSUN</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>ZR JC</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>VOLNO</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>STOJ</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="combo_vyh">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>440</y>
+      <width>72</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(166, 166, 166);</string>
+    </property>
+    <item>
+     <property name="text">
+      <string/>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>P</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="combo_kombi">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>440</y>
+      <width>72</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(166, 166, 166);</string>
+    </property>
+    <item>
+     <property name="text">
+      <string/>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>VLAK</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>POSUN</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>PN</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>ZR JC</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>VOLNO</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>STOJ</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QPushButton" name="HLO_1k_fik">
+    <property name="geometry">
+     <rect>
+      <x>1364</x>
+      <y>315</y>
+      <width>52</width>
+      <height>58</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/HlavneKombinovaneNav/Kom_basicP.bmp</normaloff>img/HlavneKombinovaneNav/Kom_basicP.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>68</width>
+      <height>59</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="HLO_2k_fik">
+    <property name="geometry">
+     <rect>
+      <x>1364</x>
+      <y>373</y>
+      <width>52</width>
+      <height>58</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/HlavneKombinovaneNav/Kom_basicP.bmp</normaloff>img/HlavneKombinovaneNav/Kom_basicP.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>68</width>
+      <height>59</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="textHlohovec">
+    <property name="geometry">
+     <rect>
+      <x>1103</x>
+      <y>195</y>
+      <width>111</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; font-weight:700; color:#d0d0d0;&quot;&gt;Hlohovec&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="HLO_k2_kon">
+    <property name="geometry">
+     <rect>
+      <x>1416</x>
+      <y>372</y>
+      <width>3</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>img/Kolaj/Kol_koniec_volna.bmp</pixmap>
+    </property>
+   </widget>
+   <widget class="QLabel" name="HLO_k1_kon">
+    <property name="geometry">
+     <rect>
+      <x>1416</x>
+      <y>315</y>
+      <width>3</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>img/Kolaj/Kol_koniec_volna.bmp</pixmap>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="combo_fikt">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>440</y>
+      <width>72</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(166, 166, 166);</string>
+    </property>
+    <item>
+     <property name="text">
+      <string/>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>ZR JC</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="combo_ciel_ko">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>465</y>
+      <width>72</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(166, 166, 166);</string>
+    </property>
+    <item>
+     <property name="text">
+      <string/>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>PVC 40</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>PVC TR-1</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>POS-K</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="combo_ciel_zr">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>465</y>
+      <width>72</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(166, 166, 166);</string>
+    </property>
+    <item>
+     <property name="text">
+      <string/>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>POS-K</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="combo_ciel_fi">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>465</y>
+      <width>72</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(166, 166, 166);</string>
+    </property>
+    <item>
+     <property name="text">
+      <string/>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>POC</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QPushButton" name="H_ZBE_HLO_priec">
+    <property name="geometry">
+     <rect>
+      <x>765</x>
+      <y>318</y>
+      <width>22</width>
+      <height>53</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/Priecestie/Priec_basic.bmp</normaloff>img/Priecestie/Priec_basic.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>22</width>
+      <height>53</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ZBE_HLO_TU2_a">
+    <property name="geometry">
+     <rect>
+      <x>714</x>
+      <y>313</y>
+      <width>51</width>
+      <height>59</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/Kolaj/Kol_basic.bmp</normaloff>img/Kolaj/Kol_basic.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>125</width>
+      <height>59</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ZBE_HLO_So">
+    <property name="geometry">
+     <rect>
+      <x>676</x>
+      <y>315</y>
+      <width>38</width>
+      <height>58</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/HlavneNav/Hl_basicL.bmp</normaloff>img/HlavneNav/Hl_basicL.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>38</width>
+      <height>58</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ZBE_HLO_Lo">
+    <property name="geometry">
+     <rect>
+      <x>638</x>
+      <y>315</y>
+      <width>38</width>
+      <height>58</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/HlavneNav/Hl_basicP.bmp</normaloff>img/HlavneNav/Hl_basicP.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>38</width>
+      <height>58</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ZBE_HLO_TU1_1">
+    <property name="geometry">
+     <rect>
+      <x>513</x>
+      <y>313</y>
+      <width>125</width>
+      <height>59</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>img/Kolaj/Kol_basic.bmp</normaloff>img/Kolaj/Kol_basic.bmp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>125</width>
+      <height>59</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="combo_TS_HLO">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>400</y>
+      <width>72</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(166, 166, 166);</string>
+    </property>
+    <item>
+     <property name="text">
+      <string/>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>UTS</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="combo_priec">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>400</y>
+      <width>72</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(166, 166, 166);</string>
+    </property>
+    <item>
+     <property name="text">
+      <string/>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>ZATV</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>OTV</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="combo_oddielove">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>380</y>
+      <width>72</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(166, 166, 166);</string>
+    </property>
+    <item>
+     <property name="text">
+      <string/>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>PN</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>VOLNO</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>STOJ</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QGroupBox" name="groupCentrala">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>830</y>
+      <width>1920</width>
+      <height>201</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(166, 166, 166);
+font: 9pt &quot;Segoe UI&quot;;
+color: rgb(0, 0, 0);
+font: 700 18pt &quot;Segoe UI&quot;;</string>
+    </property>
+    <property name="title">
+     <string>Hlohovec</string>
+    </property>
+    <widget class="QGroupBox" name="groupSystem">
+     <property name="geometry">
+      <rect>
+       <x>1440</x>
+       <y>36</y>
+       <width>478</width>
+       <height>163</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(166, 166, 166);
+font: 700 12pt &quot;Segoe UI&quot;;
+background-color: rgb(0, 0, 0);</string>
+     </property>
+     <property name="title">
+      <string>Systém:</string>
+     </property>
+    </widget>
+    <widget class="QGroupBox" name="groupPoruchy">
+     <property name="geometry">
+      <rect>
+       <x>960</x>
+       <y>36</y>
+       <width>478</width>
+       <height>163</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;
+background-color: rgb(0, 0, 0);
+color: rgb(166, 166, 166);</string>
+     </property>
+     <property name="title">
+      <string>Poruchy:</string>
+     </property>
+     <widget class="QLabel" name="textChybaREST">
+      <property name="geometry">
+       <rect>
+        <x>15</x>
+        <y>30</y>
+        <width>261</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>12</pointsize>
+        <italic>false</italic>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(166, 166, 166);</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Strata spojenia s REST serverom&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::AutoText</enum>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupHlasenia">
+     <property name="geometry">
+      <rect>
+       <x>480</x>
+       <y>36</y>
+       <width>478</width>
+       <height>163</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;
+background-color: rgb(0, 0, 0);
+color: rgb(166, 166, 166);</string>
+     </property>
+     <property name="title">
+      <string>Prevádzkové hlásenia:</string>
+     </property>
+     <widget class="QTextBrowser" name="textHlasenia">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>24</y>
+        <width>478</width>
+        <height>139</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupHlasenia_2">
+     <property name="geometry">
+      <rect>
+       <x>1</x>
+       <y>36</y>
+       <width>476</width>
+       <height>163</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;
+background-color: rgb(0, 0, 0);
+color: rgb(166, 166, 166);</string>
+     </property>
+     <property name="title">
+      <string>Výzvy pre obsluhu:</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupREST">
+    <property name="geometry">
+     <rect>
+      <x>900</x>
+      <y>269</y>
+      <width>166</width>
+      <height>140</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(166, 166, 166);
+color: rgb(0, 0, 0);</string>
+    </property>
+    <property name="title">
+     <string>Pripojenie k REST serveru</string>
+    </property>
+    <widget class="QPushButton" name="ButtonClose">
+     <property name="geometry">
+      <rect>
+       <x>146</x>
+       <y>0</y>
+       <width>20</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 0, 0);
+color: rgb(0, 0, 0);</string>
+     </property>
+     <property name="text">
+      <string>X</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="Line_IP">
+     <property name="geometry">
+      <rect>
+       <x>27</x>
+       <y>50</y>
+       <width>115</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(190, 190, 190);
+color: rgb(0, 0, 0);</string>
+     </property>
+     <property name="text">
+      <string>158.193.224.52:8041</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="ButtonConnect">
+     <property name="geometry">
+      <rect>
+       <x>47</x>
+       <y>80</y>
+       <width>80</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(25, 170, 0);
+color: rgb(0, 0, 0);</string>
+     </property>
+     <property name="text">
+      <string>Connect</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="ButtonDisconnect">
+     <property name="geometry">
+      <rect>
+       <x>47</x>
+       <y>110</y>
+       <width>80</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 0, 0);
+color: rgb(0, 0, 0);</string>
+     </property>
+     <property name="text">
+      <string>Disconnect</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="textConnection">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>30</y>
+       <width>131</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>18</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(0,0,0);</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:400;&quot;&gt;IP adresa REST API&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::AutoText</enum>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="DateTime">
+    <property name="geometry">
+     <rect>
+      <x>1769</x>
+      <y>0</y>
+      <width>151</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(166, 166, 166);
+font: 700 12pt &quot;Segoe UI&quot;;
+color: rgb(0, 0, 0);</string>
+    </property>
+    <property name="text">
+     <string>01.01.1970 00:00:00</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="combo_Riadenie">
+    <property name="geometry">
+     <rect>
+      <x>1020</x>
+      <y>260</y>
+      <width>72</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(166, 166, 166);</string>
+    </property>
+    <item>
+     <property name="text">
+      <string/>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>LOKAL</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>CENTR</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QGroupBox" name="groupPrehlad">
+    <property name="geometry">
+     <rect>
+      <x>919</x>
+      <y>269</y>
+      <width>128</width>
+      <height>135</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(166, 166, 166);
+color: rgb(0, 0, 0);</string>
+    </property>
+    <property name="title">
+     <string>Prehľad</string>
+    </property>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>34</y>
+       <width>125</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>obsluhy</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="ButtonClose_1">
+     <property name="geometry">
+      <rect>
+       <x>108</x>
+       <y>0</y>
+       <width>20</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 0, 0);
+color: rgb(0, 0, 0);</string>
+     </property>
+     <property name="text">
+      <string>X</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>75</y>
+       <width>125</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Verzia 1.1</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>50</y>
+       <width>125</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>ILTIS-N Hlohovec</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>100</y>
+       <width>125</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Dávid Macko</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_8">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>115</y>
+       <width>125</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>2024</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_9">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>20</y>
+       <width>125</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Pracovisko lokálnej</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <zorder>HLO_k2</zorder>
+   <zorder>HLO_S1</zorder>
+   <zorder>HLO_S2</zorder>
+   <zorder>HLO_V1</zorder>
+   <zorder>HLO_k1</zorder>
+   <zorder>HLO_fik_L</zorder>
+   <zorder>HLO_zr_do_st_odZ</zorder>
+   <zorder>HLO_Sk</zorder>
+   <zorder>HLO_zr_zo_st_odZ</zorder>
+   <zorder>ZBE_HLO_TU2_b</zorder>
+   <zorder>HLO_L</zorder>
+   <zorder>HLO_trat_suhlas_doZ</zorder>
+   <zorder>HLO_dialkove</zorder>
+   <zorder>HLO_ASVC</zorder>
+   <zorder>ZBE_fik_S</zorder>
+   <zorder>textZbehy</zorder>
+   <zorder>HLO_pracovisko</zorder>
+   <zorder>combo_hlavne</zorder>
+   <zorder>combo_zriad</zorder>
+   <zorder>combo_vyh</zorder>
+   <zorder>combo_kombi</zorder>
+   <zorder>HLO_1k_fik</zorder>
+   <zorder>HLO_2k_fik</zorder>
+   <zorder>textHlohovec</zorder>
+   <zorder>HLO_k2_kon</zorder>
+   <zorder>HLO_k1_kon</zorder>
+   <zorder>combo_fikt</zorder>
+   <zorder>combo_ciel_ko</zorder>
+   <zorder>combo_ciel_zr</zorder>
+   <zorder>combo_ciel_fi</zorder>
+   <zorder>H_ZBE_HLO_priec</zorder>
+   <zorder>ZBE_HLO_TU2_a</zorder>
+   <zorder>ZBE_HLO_So</zorder>
+   <zorder>ZBE_HLO_Lo</zorder>
+   <zorder>ZBE_HLO_TU1_1</zorder>
+   <zorder>combo_TS_HLO</zorder>
+   <zorder>combo_priec</zorder>
+   <zorder>combo_oddielove</zorder>
+   <zorder>groupCentrala</zorder>
+   <zorder>groupREST</zorder>
+   <zorder>DateTime</zorder>
+   <zorder>combo_Riadenie</zorder>
+   <zorder>groupPrehlad</zorder>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1920</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(166, 166, 166);</string>
+   </property>
+   <widget class="QMenu" name="menuSyst_m">
+    <property name="title">
+     <string>Systém</string>
+    </property>
+    <widget class="QMenu" name="menuSpr_va_hl_sen">
+     <property name="title">
+      <string>Správa hlásení</string>
+     </property>
+     <addaction name="actionHorizont_lne"/>
+     <addaction name="actionVertik_lne"/>
+    </widget>
+    <addaction name="actionVo_ba_rozsahu_inform_ci"/>
+    <addaction name="separator"/>
+    <addaction name="actionAlarm_vypn"/>
+    <addaction name="menuSpr_va_hl_sen"/>
+    <addaction name="separator"/>
+    <addaction name="actionPozn_mka"/>
+    <addaction name="actionPriponiemka"/>
+    <addaction name="separator"/>
+    <addaction name="actionZ_znam_makra_pr_kazov"/>
+    <addaction name="actionObsluha_makra_pr_kazov"/>
+    <addaction name="separator"/>
+    <addaction name="actionZobrazenie_protokolovania"/>
+    <addaction name="actionProtokolovanie_Online"/>
+    <addaction name="separator"/>
+    <addaction name="actionPr_kazy_tla_iarne"/>
+    <addaction name="separator"/>
+    <addaction name="actionVo_ba_identifik_cie_funkcie"/>
+    <addaction name="actionPrihl_senie"/>
+    <addaction name="actionOdhl_senie"/>
+    <addaction name="actionZavrie"/>
+   </widget>
+   <widget class="QMenu" name="menu_V_RD">
+    <property name="title">
+     <string>ČV/RD</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuKonfigur_cia">
+    <property name="title">
+     <string>Konfigurácia</string>
+    </property>
+    <widget class="QMenu" name="menuSpr_va_syst_mu">
+     <property name="title">
+      <string>Správa systému</string>
+     </property>
+     <addaction name="actionRozsah_inform_ci"/>
+     <addaction name="actionProfil"/>
+     <addaction name="actionPracovisk"/>
+     <addaction name="actionIdentifik_cie_funkcie"/>
+     <addaction name="actionIdentifik_cei_u_vate_a"/>
+    </widget>
+    <addaction name="actionVo_ba_profilu"/>
+    <addaction name="actionNastavenie_zvuku"/>
+    <addaction name="actionZmena_hesla"/>
+    <addaction name="actionVo_ba_tla_iarne"/>
+    <addaction name="separator"/>
+    <addaction name="menuSpr_va_syst_mu"/>
+    <addaction name="separator"/>
+    <addaction name="actionVo_ba_pracoviska_dr_by"/>
+    <addaction name="action_dr_ba"/>
+    <addaction name="actionTestovac_obraz_monitora"/>
+    <addaction name="separator"/>
+    <addaction name="actionPreh_ad"/>
+   </widget>
+   <widget class="QMenu" name="menuPomoc">
+    <property name="title">
+     <string>Pomoc</string>
+    </property>
+    <addaction name="actionInfo"/>
+    <addaction name="actionKontext"/>
+   </widget>
+   <widget class="QMenu" name="menuREST_server">
+    <property name="title">
+     <string>REST server</string>
+    </property>
+    <addaction name="actionVlastnosti"/>
+   </widget>
+   <addaction name="menuSyst_m"/>
+   <addaction name="menu_V_RD"/>
+   <addaction name="menuKonfigur_cia"/>
+   <addaction name="menuPomoc"/>
+   <addaction name="menuREST_server"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionVo_ba_rozsahu_inform_ci">
+   <property name="text">
+    <string>Voľba rozsahu informácií</string>
+   </property>
+  </action>
+  <action name="actionAlarm_vypn">
+   <property name="text">
+    <string>Alarm vypnúť</string>
+   </property>
+  </action>
+  <action name="actionHorizont_lne">
+   <property name="text">
+    <string>Horizontálne</string>
+   </property>
+  </action>
+  <action name="actionVertik_lne">
+   <property name="text">
+    <string>Vertikálne</string>
+   </property>
+  </action>
+  <action name="actionPozn_mka">
+   <property name="text">
+    <string>Poznámka ...</string>
+   </property>
+  </action>
+  <action name="actionPriponiemka">
+   <property name="text">
+    <string>Pripomienka ...</string>
+   </property>
+  </action>
+  <action name="actionZ_znam_makra_pr_kazov">
+   <property name="text">
+    <string>Záznam makra príkazov ...</string>
+   </property>
+  </action>
+  <action name="actionObsluha_makra_pr_kazov">
+   <property name="text">
+    <string>Obsluha makra príkazov ...</string>
+   </property>
+  </action>
+  <action name="actionZobrazenie_protokolovania">
+   <property name="text">
+    <string>Zobrazenie protokolovania ...</string>
+   </property>
+  </action>
+  <action name="actionProtokolovanie_Online">
+   <property name="text">
+    <string>Protokolovanie Online ...</string>
+   </property>
+  </action>
+  <action name="actionPr_kazy_tla_iarne">
+   <property name="text">
+    <string>Príkazy tlačiarne ...</string>
+   </property>
+  </action>
+  <action name="actionVo_ba_identifik_cie_funkcie">
+   <property name="text">
+    <string>Voľba identifikácie funkcie ...</string>
+   </property>
+  </action>
+  <action name="actionPrihl_senie">
+   <property name="text">
+    <string>Prihlásenie ...</string>
+   </property>
+  </action>
+  <action name="actionOdhl_senie">
+   <property name="text">
+    <string>Odhlásenie ...</string>
+   </property>
+  </action>
+  <action name="actionZavrie">
+   <property name="text">
+    <string>Zavrieť ...</string>
+   </property>
+  </action>
+  <action name="actionVo_ba_profilu">
+   <property name="text">
+    <string>Voľba profilu ...</string>
+   </property>
+  </action>
+  <action name="actionNastavenie_zvuku">
+   <property name="text">
+    <string>Nastavenie zvuku ...</string>
+   </property>
+  </action>
+  <action name="actionZmena_hesla">
+   <property name="text">
+    <string>Zmena hesla ...</string>
+   </property>
+  </action>
+  <action name="actionVo_ba_tla_iarne">
+   <property name="text">
+    <string>Voľba tlačiarne ...</string>
+   </property>
+  </action>
+  <action name="actionRozsah_inform_ci">
+   <property name="text">
+    <string>Rozsah informácií ...</string>
+   </property>
+  </action>
+  <action name="actionProfil">
+   <property name="text">
+    <string>Profil ...</string>
+   </property>
+  </action>
+  <action name="actionPracovisk">
+   <property name="text">
+    <string>Pracoviská ...</string>
+   </property>
+  </action>
+  <action name="actionIdentifik_cie_funkcie">
+   <property name="text">
+    <string>Identifikácie funkcie ...</string>
+   </property>
+  </action>
+  <action name="actionIdentifik_cei_u_vate_a">
+   <property name="text">
+    <string>Identifikácie užívateľa ...</string>
+   </property>
+  </action>
+  <action name="actionVo_ba_pracoviska_dr_by">
+   <property name="text">
+    <string>Voľba pracoviska údržby ...</string>
+   </property>
+  </action>
+  <action name="action_dr_ba">
+   <property name="text">
+    <string>Údržba ...</string>
+   </property>
+  </action>
+  <action name="actionTestovac_obraz_monitora">
+   <property name="text">
+    <string>Testovací obraz monitora ...</string>
+   </property>
+  </action>
+  <action name="actionPreh_ad">
+   <property name="text">
+    <string>Prehľad ...</string>
+   </property>
+  </action>
+  <action name="actionInfo">
+   <property name="text">
+    <string>Prehľad</string>
+   </property>
+  </action>
+  <action name="actionKontext">
+   <property name="text">
+    <string>Kontext</string>
+   </property>
+  </action>
+  <action name="actionVlastnosti">
+   <property name="text">
+    <string>Vlastnosti ...</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
