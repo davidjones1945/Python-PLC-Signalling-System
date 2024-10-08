@@ -1,0 +1,9 @@
+{
+    "files": [
+        "app.py",
+        "form.ui",
+        "ui_form.py",
+        "ico.py",
+        "zaverTab.py"
+    ]
+}
