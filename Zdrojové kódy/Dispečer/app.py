@@ -7,6 +7,7 @@ import arrow
 
 from ui_form import Ui_ILTIS
 import ico
+from zoznamNavestidiel import ZoznamNavestidiel
 from vyhybka import Vyhybka
 from navestidlo import Navestidlo
 from usek import Usek
@@ -14,6 +15,9 @@ from SZZ import SZZ
 from tratSuhlas import TratSuhlas
 from priecestie import Priecestie
 from riadenieObsluhy import RiadenieObsluhy
+
+from datum import Datum
+from casSubory import DlhyCasPosun, DlhyCasVlak, CasOchrDr, LifeSign
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
@@ -259,183 +263,8 @@ class dataUpdate(QThread):
                 self.dataUpdated.emit(self.dictUseky, self.dictTS)
             sleep(0.1)
 
-class DlhyCasVlak(QThread): #dlhý časový súbor pre vlakovú cestu
-    finished = Signal()
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        while not self.isInterruptionRequested():
-            self.sleep(1)   #nenkonečná slučka vlákna
-
-    def start_timer(self):
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.stop_timer)
-        self.timer.start(180000) #3 minúty
-
-    def stop_timer(self):
-        self.timer.stop()
-        self.finished.emit()
-
-class DlhyCasPosun(QThread): #dlhý časový súbor pre posunovú cestu
-    finished = Signal()
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        while not self.isInterruptionRequested():
-            self.sleep(1)   #nenkonečná slučka vlákna
-
-    def start_timer(self):
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.stop_timer)
-        self.timer.start(60000) #1 minúta
-
-    def stop_timer(self):
-        self.timer.stop()
-        self.finished.emit()
-
-class CasOchrDr(QThread): #časový súbor pre ochrannú dráhu
-    finished = Signal()
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        while not self.isInterruptionRequested():
-            self.sleep(1)   #nenkonečná slučka vlákna
-
-    def start_timer(self):
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.stop_timer)
-        self.timer.start(30000) #30 sekúnd
-        
-    def stop_timer(self):
-        self.timer.stop()
-        self.finished.emit()
-
-class LifeSign(QThread): #LifeSign aplikácie
-    def __init__(self, app_instance):
-        super().__init__()
-        self.app_instance = app_instance
-
-    def run(self):
-        while not self.isInterruptionRequested():
-            self.app_instance.prikazDoPLC(cas=True)
-            self.sleep(5)   #5 sekúnd
-
-class DateTime(QThread): #Čas a dátum pre aplikáciu
-    dataUpdated = Signal(str)
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        while not self.isInterruptionRequested():
-            cas = arrow.now().format('  DD.MM.YY HH:mm:ss')
-            self.sleep(1)   #1 sekunda
-            self.dataUpdated.emit(cas)
-
 class App(QMainWindow): #hlavná triedy vizualizácie
-    def __init__(self, parent=None):
-        self.lastNav = 0  #posledné kliknuté návestidlo
-        self.Start = 0    #počiatočné návestidlo jazdnej cesty
-        self.End = 0    #koncové návestidlo jazdnej cesty
-        self.lastVyh = 'X'  #posledná kliknutá výhybka
-        self.lastPri = 'X'  #posledné kliknuté priecestie 
-        self.lastStanica = 'X' #posledná kliknutá stanica
-        self.lastTS = 'X'   #posledný kliknutý traťový súhlas
-        self.secondLastTS = 'X' #predposledný kliknutý traťový súhlas
-
-        self.dictNav = {    #slovník návestidiel
-            #------------------------------------------RADOSINA-----------------------------------------------------------------------------
-            1: Navestidlo(ID=1, nazov='R_Se1', usekPred='RAD_Sk', usekZa='RAD_V1', nazovGUI='RAD_zr_do_st_odZ', enumIkon=ico.NavZriadL, dictIkon=ico.dictZriadovacieL,app=self),
-            2: Navestidlo(ID=2, nazov='R_Se1p', usekPred='RAD_Sk', nazovGUI='RAD_zr_zo_st_odZ', enumIkon=ico.NavZriadP, dictIkon=ico.dictZriadovacieP, app=self),
-            3: Navestidlo(ID=3, nazov='R_S', usekPred='RAD_ZBE_TU1', usekZa='RAD_Sk', nazovGUI='RAD_S', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, zavisle=46, app=self),
-            4: Navestidlo(ID=4, nazov='R_L1', usekPred='RAD_k1', usekZa='RAD_V1', nazovGUI='RAD_L1', enumIkon=ico.NavOdchodP, dictIkon=ico.dictOdchodoveP, zavisle=47, app=self),
-            5: Navestidlo(ID=5, nazov='R_L2', usekPred='RAD_k2', usekZa='RAD_V1', nazovGUI='RAD_L2', enumIkon=ico.NavOdchodP, dictIkon=ico.dictOdchodoveP, zavisle=48, app=self),
-            6: Navestidlo(ID=6, nazov='R_S_fik', usekPred='RAD_Sk', nazovGUI='RAD_fik_S', enumIkon=ico.FiktP, dictIkon=ico.dictFiktP, zavisle=49, app=self),
-            7: Navestidlo(ID=7, nazov='R_29_fik', usekPred='RAD_ZBE_TU2_2', nazovGUI='RAD_fik_29', enumIkon=ico.FiktP, dictIkon=ico.dictFiktP, app=self),
-            8: Navestidlo(ID=8, nazov='R_19', usekPred='RAD_ZBE_TU1', usekZa='RAD_ZBE_TU2_1', nazovGUI='RAD_ZBE_19', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, app=self, oddielove=True, TZZ='AB3'),
-            9: Navestidlo(ID=9, nazov='R_18', usekPred='RAD_ZBE_TU2_1', usekZa='RAD_ZBE_TU1', nazovGUI='RAD_ZBE_18', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, app=self, oddielove=True, TZZ='AB3'),
-            10: Navestidlo(ID=10, nazov='R_k1_fik', usekPred='RAD_k1', nazovGUI='RAD_k1_fik', enumIkon=ico.NavOdchodL, dictIkon=ico.dictOdchodoveL, zavisle=50, app=self),
-            11: Navestidlo(ID=11, nazov='R_k2_fik', usekPred='RAD_k2', nazovGUI='RAD_k2_fik', enumIkon=ico.NavOdchodL, dictIkon=ico.dictOdchodoveL, zavisle=51, app=self),
-            #------------------------------------------ZBEHY-----------------------------------------------------------------------------
-            12: Navestidlo(ID=12, nazov='Z_L', usekPred='RAD_ZBE_TU4', usekZa='ZBE_Lk', nazovGUI='ZBE_L', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, zavisle=58, app=self),
-            13: Navestidlo(ID=13, nazov='Z_BL', usekPred='LUZ_ZBE_TU1', usekZa='ZBE_BLk', nazovGUI='ZBE_BL', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, zavisle=59, app=self),
-            14: Navestidlo(ID=14, nazov='Z_L_fik', usekPred='ZBE_Lk', nazovGUI='ZBE_fik_L', enumIkon=ico.FiktL, dictIkon=ico.dictFiktL, zavisle=60, app=self),
-            15: Navestidlo(ID=15, nazov='Z_BL_fik', usekPred='ZBE_BLk', nazovGUI='ZBE_fik_BL', enumIkon=ico.FiktL, dictIkon=ico.dictFiktL, zavisle=61, app=self),
-            16: Navestidlo(ID=16, nazov='Z_Se1p', usekPred='ZBE_Lk', nazovGUI='ZBE_zr_zo_st_odR', enumIkon=ico.NavZriadL, dictIkon=ico.dictZriadovacieL, app=self),
-            17: Navestidlo(ID=17, nazov='Z_Se2p', usekPred='ZBE_BLk', nazovGUI='ZBE_zr_zo_st_odL', enumIkon=ico.NavZriadL, dictIkon=ico.dictZriadovacieL, app=self),
-            18: Navestidlo(ID=18, nazov='Z_Se1', usekPred='ZBE_Lk', usekZa='ZBE_V1', nazovGUI='ZBE_zr_do_st_odR', enumIkon=ico.NavZriadP, dictIkon=ico.dictZriadovacieP, app=self),
-            19: Navestidlo(ID=19, nazov='Z_Se2', usekPred='ZBE_BLk', usekZa='ZBE_V2', nazovGUI='ZBE_zr_do_st_odL', enumIkon=ico.NavZriadP, dictIkon=ico.dictZriadovacieP, app=self),
-            20: Navestidlo(ID=20, nazov='Z_S1', usekPred='ZBE_k1', usekZa='ZBE_V1', nazovGUI='ZBE_S1', enumIkon=ico.NavOdchodL, dictIkon=ico.dictOdchodoveL, zavisle=62, app=self),
-            21: Navestidlo(ID=21, nazov='Z_S2', usekPred='ZBE_k2', usekZa='ZBE_V2', nazovGUI='ZBE_S2', enumIkon=ico.NavOdchodL, dictIkon=ico.dictOdchodoveL, zavisle=63, app=self),
-            22: Navestidlo(ID=22, nazov='Z_L1', usekPred='ZBE_k1', usekZa='ZBE_V3', nazovGUI='ZBE_L1', enumIkon=ico.NavOdchodP, dictIkon=ico.dictOdchodoveP, zavisle=64, app=self),
-            23: Navestidlo(ID=23, nazov='Z_L2', usekPred='ZBE_k2', usekZa='ZBE_V3', nazovGUI='ZBE_L2', enumIkon=ico.NavOdchodP, dictIkon=ico.dictOdchodoveP, zavisle=65, app=self),
-            24: Navestidlo(ID=24, nazov='Z_Se3', usekPred='ZBE_Sk', usekZa='ZBE_V3', nazovGUI='ZBE_zr_do_st_odH', enumIkon=ico.NavZriadL, dictIkon=ico.dictZriadovacieL, app=self),
-            25: Navestidlo(ID=25, nazov='Z_Se3p', usekPred='ZBE_Sk', nazovGUI='ZBE_zr_zo_st_odH', enumIkon=ico.NavZriadP, dictIkon=ico.dictZriadovacieP, app=self),
-            26: Navestidlo(ID=26, nazov='Z_S_fik', usekPred='ZBE_Sk', nazovGUI='ZBE_fik_S', enumIkon=ico.FiktP, dictIkon=ico.dictFiktP, zavisle=66, app=self),
-            27: Navestidlo(ID=27, nazov='Z_S', usekPred='ZBE_HLO_TU1_1', usekZa='ZBE_Sk', nazovGUI='ZBE_S', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, zavisle=67, app=self),
-            28: Navestidlo(ID=28, nazov='Z_RAD_ZBE_40', usekPred='RAD_ZBE_TU4', usekZa='RAD_ZBE_TU3', nazovGUI='RAD_ZBE_40', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, app=self, oddielove=True, TZZ='AB3'),
-            29: Navestidlo(ID=29, nazov='Z_RAD_ZBE_39', usekPred='RAD_ZBE_TU3', usekZa='RAD_ZBE_TU4', nazovGUI='RAD_ZBE_39', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, app=self, oddielove=True, TZZ='AB3'),
-            30: Navestidlo(ID=30, nazov='Z_Lo', usekPred='ZBE_HLO_TU1_1', usekZa='ZBE_HLO_TU2_a', nazovGUI='ZBE_HLO_Lo', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, zavisle=69, app=self, oddielove=True, TZZ='AH'),
-            31: Navestidlo(ID=31, nazov='Z_So', usekPred='ZBE_HLO_TU2_a', usekZa='ZBE_HLO_TU1_1', nazovGUI='ZBE_HLO_So', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, zavisle=70, app=self, oddielove=True, TZZ='AH'),
-            32: Navestidlo(ID=32, nazov='Z_28_fik', usekPred='RAD_ZBE_TU3', nazovGUI='RAD_ZBE_fik_28', enumIkon=ico.FiktL, dictIkon=ico.dictFiktL, app=self),
-            33: Navestidlo(ID=33, nazov='Z_BS_fik', usekPred='LUZ_ZBE_TU1', nazovGUI='LUZ_fik_BS', enumIkon=ico.FiktL, dictIkon=ico.dictFiktL, app=self),
-            34: Navestidlo(ID=34, nazov='Z_HLO_L_fik', usekPred='ZBE_HLO_TU2_b', nazovGUI='Z_HLO_fikL', enumIkon=ico.FiktP, dictIkon=ico.dictFiktP, app=self),
-            #------------------------------------------HLOHOVEC-----------------------------------------------------------------------------
-            35: Navestidlo(ID=35, nazov='H_Se1', usekPred='HLO_Sk', usekZa='HLO_V1', nazovGUI='HLO_zr_do_st_odZ', enumIkon=ico.NavZriadP, dictIkon=ico.dictZriadovacieP, app=self),
-            36: Navestidlo(ID=36, nazov='H_Se1p', usekPred='HLO_Sk', nazovGUI='HLO_zr_zo_st_odZ', enumIkon=ico.NavZriadL, dictIkon=ico.dictZriadovacieL, app=self),
-            37: Navestidlo(ID=37, nazov='H_L', usekPred='ZBE_HLO_TU2_b', usekZa='HLO_Sk', nazovGUI='HLO_L', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, zavisle=71, app=self),
-            38: Navestidlo(ID=38, nazov='H_S1', usekPred='HLO_k1', usekZa='HLO_V1', nazovGUI='HLO_S1', enumIkon=ico.NavOdchodL, dictIkon=ico.dictOdchodoveL, zavisle=72, app=self),
-            39: Navestidlo(ID=39, nazov='H_S2', usekPred='HLO_k2', usekZa='HLO_V1', nazovGUI='HLO_S2', enumIkon=ico.NavOdchodL, dictIkon=ico.dictOdchodoveL, zavisle=73, app=self),
-            40: Navestidlo(ID=40, nazov='H_L_fik', usekPred='HLO_Sk', nazovGUI='HLO_fik_L', enumIkon=ico.FiktL, dictIkon=ico.dictFiktL, zavisle=74, app=self),
-            41: Navestidlo(ID=41, nazov='H_ZBE_L_fik', usekPred='ZBE_HLO_TU1_1', nazovGUI='H_ZBE_fik_S', enumIkon=ico.FiktL, dictIkon=ico.dictFiktL, app=self),
-            42: Navestidlo(ID=42, nazov='H_k1_fik', usekPred='HLO_k1', nazovGUI='HLO_k1_fik', enumIkon=ico.NavOdchodP, dictIkon=ico.dictOdchodoveP, zavisle=76, app=self),
-            43: Navestidlo(ID=43, nazov='H_k2_fik', usekPred='HLO_k2', nazovGUI='HLO_k2_fik', enumIkon=ico.NavOdchodP, dictIkon=ico.dictOdchodoveP, zavisle=77, app=self),
-            44: Navestidlo(ID=44, nazov='H_Lo', usekPred='H_ZBE_HLO_TU1_1', usekZa='H_ZBE_HLO_TU2_a', nazovGUI='H_ZBE_HLO_Lo', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, zavisle=69, app=self, oddielove=True, TZZ='AH'),
-            45: Navestidlo(ID=45, nazov='H_So', usekPred='H_ZBE_HLO_TU2_a', usekZa='H_ZBE_HLO_TU1_1', nazovGUI='H_ZBE_HLO_So', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, zavisle=70, app=self, oddielove=True, TZZ='AH'),
-            #------------------------------------------DISPECER-----------------------------------------------------------------------------
-            #------------------------------------------RADOSINA-----------------------------------------------------------------------------
-            46: Navestidlo(ID=46, nazov='DR_S', usekPred='DISP_RAD_ZBE_TU1', usekZa='DISP_RAD_Sk', nazovGUI='DISP_RAD_S', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, zavisle=3, app=self),
-            47: Navestidlo(ID=47, nazov='DR_L1', usekPred='DISP_RAD_k1', usekZa='DISP_RAD_V1', nazovGUI='DISP_RAD_L1', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, zavisle=4, app=self),
-            48: Navestidlo(ID=48, nazov='DR_L2', usekPred='DISP_RAD_k2', usekZa='DISP_RAD_V1', nazovGUI='DISP_RAD_L2', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, zavisle=5, app=self),
-            49: Navestidlo(ID=49, nazov='DR_S_fik', usekPred='DISP_RAD_Sk', nazovGUI='DISP_RAD_fik_S', enumIkon=ico.FiktP, dictIkon=ico.dictFiktP, zavisle=6, app=self),
-            50: Navestidlo(ID=50, nazov='DR_k1_fik', usekPred='DISP_RAD_k1', nazovGUI='DISP_RAD_k1_fik', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, zavisle=10, app=self),
-            51: Navestidlo(ID=51, nazov='DR_k2_fik', usekPred='DISP_RAD_k2', nazovGUI='DISP_RAD_k2_fik', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, zavisle=11, app=self),
-            52: Navestidlo(ID=52, nazov='DR_19', usekPred='DISP_RAD_ZBE_TU1', usekZa='DISP_RAD_ZBE_TU2a', nazovGUI='DISP_RAD_ZBE_19', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, app=self, oddielove=True, TZZ='AB3'),
-            53: Navestidlo(ID=53, nazov='DR_18', usekPred='DISP_RAD_ZBE_TU2a', usekZa='DISP_RAD_ZBE_TU1', nazovGUI='DISP_RAD_ZBE_18', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, app=self, oddielove=True, TZZ='AB3'),
-            54: Navestidlo(ID=54, nazov='DR_29', usekPred='DISP_RAD_ZBE_TU2b', usekZa='DISP_RAD_ZBE_TU3', nazovGUI='DISP_RAD_ZBE_29', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, app=self, oddielove=True, TZZ='AB3'),
-            55: Navestidlo(ID=55, nazov='DR_28', usekPred='DISP_RAD_ZBE_TU3', usekZa='DISP_RAD_ZBE_TU2b', nazovGUI='DISP_RAD_ZBE_28', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, app=self, oddielove=True, TZZ='AB3'),
-            #------------------------------------------ZBEHY-----------------------------------------------------------------------------
-            56: Navestidlo(ID=56, nazov='DZ_RAD_ZBE_40', usekPred='DISP_RAD_ZBE_TU4', usekZa='DISP_RAD_ZBE_TU3', nazovGUI='DISP_RAD_ZBE_40', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, app=self, oddielove=True, TZZ='AB3'),
-            57: Navestidlo(ID=57, nazov='DZ_RAD_ZBE_39', usekPred='DISP_RAD_ZBE_TU3', usekZa='DISP_RAD_ZBE_TU4', nazovGUI='DISP_RAD_ZBE_39', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, app=self, oddielove=True, TZZ='AB3'),
-            58: Navestidlo(ID=58, nazov='DZ_L', usekPred='DISP_RAD_ZBE_TU4', usekZa='DISP_ZBE_Lk', nazovGUI='DISP_ZBE_L', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, zavisle=12, app=self),
-            59: Navestidlo(ID=59, nazov='DZ_BL', usekPred='DISP_LUZ_ZBE_TU1', usekZa='DISP_ZBE_BLk', nazovGUI='DISP_ZBE_BL', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, zavisle=13, app=self),
-            60: Navestidlo(ID=60, nazov='DZ_L_fik', usekPred='DISP_ZBE_Lk', nazovGUI='DISP_ZBE_fik_L', enumIkon=ico.FiktL, dictIkon=ico.dictFiktL, zavisle=14, app=self),
-            61: Navestidlo(ID=61, nazov='DZ_BL_fik', usekPred='DISP_ZBE_BLk', nazovGUI='DISP_ZBE_fik_BL', enumIkon=ico.FiktL, dictIkon=ico.dictFiktL, zavisle=15, app=self),
-            62: Navestidlo(ID=62, nazov='DZ_S1', usekPred='DISP_ZBE_k1', usekZa='DISP_ZBE_V1', nazovGUI='DISP_ZBE_S1', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, zavisle=20, app=self),
-            63: Navestidlo(ID=63, nazov='DZ_S2', usekPred='DISP_ZBE_k2', usekZa='DISP_ZBE_V2', nazovGUI='DISP_ZBE_S2', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, zavisle=21, app=self),
-            64: Navestidlo(ID=64, nazov='DZ_L1', usekPred='DISP_ZBE_k1', usekZa='DISP_ZBE_V3', nazovGUI='DISP_ZBE_L1', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, zavisle=22, app=self),
-            65: Navestidlo(ID=65, nazov='DZ_L2', usekPred='DISP_ZBE_k2', usekZa='DISP_ZBE_V3', nazovGUI='DISP_ZBE_L2', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, zavisle=23, app=self),
-            66: Navestidlo(ID=66, nazov='DZ_S_fik', usekPred='DISP_ZBE_Sk', nazovGUI='DISP_ZBE_fik_S', enumIkon=ico.FiktP, dictIkon=ico.dictFiktP, zavisle=26, app=self),
-            67: Navestidlo(ID=67, nazov='DZ_S', usekPred='DISP_ZBE_HLO_TU1_1', usekZa='ZBE_Sk', nazovGUI='DISP_ZBE_S', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, zavisle=27, app=self),
-            68: Navestidlo(ID=68, nazov='DZ_BS_fik', usekPred='DISP_LUZ_ZBE_TU1', nazovGUI='DISP_LUZ_fik_BS', enumIkon=ico.FiktL, dictIkon=ico.dictFiktL, app=self),
-            69: Navestidlo(ID=69, nazov='DH_Lo', usekPred='DISP_ZBE_HLO_TU1_4', usekZa='DISP_ZBE_HLO_TU2_a', nazovGUI='DISP_ZBE_HLO_Lo', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, zavisle=30, app=self, oddielove=True, TZZ='AH'),
-            #------------------------------------------HLOHOVEC-----------------------------------------------------------------------------
-            70: Navestidlo(ID=70, nazov='DH_So', usekPred='DISP_ZBE_HLO_TU2_a', usekZa='DISP_ZBE_HLO_TU1_4', nazovGUI='DISP_ZBE_HLO_So', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, zavisle=45, app=self, oddielove=True, TZZ='AH'),
-            71: Navestidlo(ID=71, nazov='DH_L', usekPred='DISP_ZBE_HLO_TU2_b', usekZa='DISP_HLO_Sk', nazovGUI='DISP_HLO_L', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, zavisle=37, app=self),
-            72: Navestidlo(ID=72, nazov='DH_S1', usekPred='DISP_HLO_k1', usekZa='DISP_HLO_V1', nazovGUI='DISP_HLO_S1', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, zavisle=38, app=self),
-            73: Navestidlo(ID=73, nazov='DH_S2', usekPred='DISP_HLO_k2', usekZa='DISP_HLO_V1', nazovGUI='DISP_HLO_S2', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, zavisle=39, app=self),
-            74: Navestidlo(ID=74, nazov='DH_L_fik', usekPred='DISP_HLO_Sk', nazovGUI='DISP_HLO_fik_L', enumIkon=ico.FiktL, dictIkon=ico.dictFiktL, zavisle=40, app=self),
-            75: Navestidlo(ID=75, nazov='DH_ZBE_S_fik', usekPred='DISP_ZBE_HLO_TU1_1', nazovGUI='H_ZBE_fik_S', enumIkon=ico.FiktL, dictIkon=ico.dictFiktL, app=self),
-            76: Navestidlo(ID=76, nazov='DH_k1_fik', usekPred='DISP_HLO_k1', nazovGUI='DISP_HLO_k1_fik', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, zavisle=42, app=self),
-            77: Navestidlo(ID=77, nazov='DH_k2_fik', usekPred='DISP_HLO_k2', nazovGUI='DISP_HLO_k2_fik', enumIkon=ico.NavVchodP, dictIkon=ico.dictVchodoveP, zavisle=43, app=self),
-            }       
-
+    def __init__(self, parent=None):              
         super().__init__(parent)
         self.ui = Ui_ILTIS()    #vytvorenie spojenia s triedami
         self.szz = SZZ(self)   
@@ -443,24 +272,37 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         self.ui.setupUi(self)
 
         self.workerThread = dataUpdate(self)   #prepojenie bočných vláken s hlavným vláknom
-        self.workerThreadTimeVlak = DlhyCasVlak()
-        self.workerThreadTimePosun = DlhyCasPosun()
-        self.workerThreadTimeOD = CasOchrDr()
+        self.workerThreadDlhyCasVlak = DlhyCasVlak()
+        self.workerThreadDlhyCasPosun = DlhyCasPosun()
+        self.workerThreadCasOchrDrahy = CasOchrDr()
         self.workerThreadLifeSign = LifeSign(self)
-        self.workerThreadDateTime = DateTime()
-        self.workerThreadDateTime.start()
+        self.workerThreadDatum = Datum()
+        self.workerThreadDatum.start()
 
         self.workerThread.dataUpdated.connect(self.update) #definícia prepojenia vláken a metód
         self.workerThread.dataUpdated.connect(lambda: self.szz.stavanieCesty(True, Disp=True))
 
-        self.workerThreadDateTime.dataUpdated.connect(self.aktualizaciaCasu)
+        self.workerThreadDatum.dataUpdated.connect(self.aktualizaciaCasu)
         
-        self.workerThreadTimeVlak.finished.connect(lambda: self.szz.rusenieCesty(True))
-        self.workerThreadTimePosun.finished.connect(lambda: self.szz.rusenieCesty(True))
-        self.workerThreadTimeOD.finished.connect(lambda: self.szz.rusenieOD(Disp=True))
+        self.workerThreadDlhyCasVlak.finished.connect(lambda: self.szz.rusenieCesty(True))
+        self.workerThreadDlhyCasPosun.finished.connect(lambda: self.szz.rusenieCesty(True))
+        self.workerThreadCasOchrDrahy.finished.connect(lambda: self.szz.rusenieOD(Disp=True))
 
-        self.workerThread.setParent(self)  #definovanie rosičovského objektu pre vlákna
+        self.workerThread.setParent(self)  #definovanie rodičovského objektu pre vlákna
         self.workerThreadLifeSign.setParent(self)
+
+        self.posledneNav = 0  #posledné kliknuté návestidlo
+        self.pociatocneNav = 0    #počiatočné návestidlo jazdnej cesty
+        self.koncoveNav = 0    #koncové návestidlo jazdnej cesty
+
+        self.poslednaVyh = 'X'  #posledná kliknutá výhybka
+        self.poslednePriec = 'X'  #posledné kliknuté priecestie 
+        self.poslednaStn = 'X' #posledná kliknutá stanica
+        self.poslednyTS = 'X'   #posledný kliknutý traťový súhlas
+        self.predposlednyTS = 'X' #predposledný kliknutý traťový súhlas
+
+        self.zoznamNavOBJ = ZoznamNavestidiel(parent = self)    #objekt zoznamu návestidiel
+        self.zoznamNav = self.zoznamNavOBJ.zoznamNav
 
     def popUp(self, okno): #zobrazenie a skrytie kontextového okna s RAST API adresou
         if okno == 'REST':
@@ -490,9 +332,9 @@ class App(QMainWindow): #hlavná triedy vizualizácie
             self.ui.groupREST.hide()
 
             self.workerThread.start()    #po úspešnom spojení sa spúšťa beh vláken
-            self.workerThreadTimeVlak.start()
-            self.workerThreadTimePosun.start()
-            self.workerThreadTimeOD.start()
+            self.workerThreadDlhyCasVlak.start()
+            self.workerThreadDlhyCasPosun.start()
+            self.workerThreadCasOchrDrahy.start()
             self.workerThreadLifeSign.start()
 
             self.ui.RAD_ASVC.setIcon(ico.icon_ASVC_vypnute)
@@ -504,11 +346,11 @@ class App(QMainWindow): #hlavná triedy vizualizácie
 
     def ukonciPripojenie(self): #metóda pre zastavenie vláken a ukončenie komunikácie
         self.workerThread.requestInterruption()    
-        self.workerThreadTimeVlak.requestInterruption()
-        self.workerThreadTimePosun.requestInterruption()
-        self.workerThreadTimeOD.requestInterruption()  
+        self.workerThreadDlhyCasVlak.requestInterruption()
+        self.workerThreadDlhyCasPosun.requestInterruption()
+        self.workerThreadCasOchrDrahy.requestInterruption()  
         self.workerThreadLifeSign.requestInterruption()  
-        self.workerThreadDateTime.requestInterruption()  
+        self.workerThreadDatum.requestInterruption()  
 
         self.ui.textChybaREST.show()
         self.ui.textChybaESA.show()  
@@ -528,43 +370,44 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                     self.ui.textChybaESA.show()
 
         if objekt in ['update', 'navestidla']:  #aktualizácia návestidiel
-            self.dictNav[8].zhasnute =  self.workerThread.dictTS[1].smer  #otáčanie svietenia AB podľa TS
-            self.dictNav[9].zhasnute =  not self.workerThread.dictTS[1].smer
-            self.dictNav[52].zhasnute =  self.workerThread.dictTS[1].smer  
-            self.dictNav[53].zhasnute =  not self.workerThread.dictTS[1].smer
+            self.zoznamNav[8].zhasnute =  self.workerThread.dictTS[1].smer  #otáčanie svietenia AB podľa TS
+            self.zoznamNav[9].zhasnute =  not self.workerThread.dictTS[1].smer  #AB18 + AB19
+            self.zoznamNav[52].zhasnute =  self.workerThread.dictTS[1].smer  
+            self.zoznamNav[53].zhasnute =  not self.workerThread.dictTS[1].smer
 
-            self.dictNav[55].zhasnute =  not self.workerThread.dictTS[2].smer  
-            self.dictNav[54].zhasnute =  self.workerThread.dictTS[2].smer
+            self.zoznamNav[28].zhasnute =  not self.workerThread.dictTS[2].smer  #AB28 + AB29
+            self.zoznamNav[29].zhasnute =  self.workerThread.dictTS[2].smer
+            self.zoznamNav[55].zhasnute =  not self.workerThread.dictTS[2].smer  
+            self.zoznamNav[54].zhasnute =  self.workerThread.dictTS[2].smer
+            
 
-            self.dictNav[28].zhasnute =  not self.workerThread.dictTS[2].smer  
-            self.dictNav[29].zhasnute =  self.workerThread.dictTS[2].smer
-            self.dictNav[57].zhasnute =  self.workerThread.dictTS[2].smer  
-            self.dictNav[56].zhasnute =  not self.workerThread.dictTS[2].smer
+            self.zoznamNav[57].zhasnute =  self.workerThread.dictTS[2].smer  #AB39 + AB40
+            self.zoznamNav[56].zhasnute =  not self.workerThread.dictTS[2].smer
 
             for nav in [30,44,69]:
-                self.dictNav[nav].predhlaska = self.workerThread.predhlaskaZBE
+                self.zoznamNav[nav].predhlaska = self.workerThread.predhlaskaZBE
 
             for nav in [31,45,70]:
-                self.dictNav[nav].predhlaska = self.workerThread.predhlaskaHLO
+                self.zoznamNav[nav].predhlaska = self.workerThread.predhlaskaHLO
 
-            if clicked and ID in self.dictNav:  #ak bolo návestidlo kliknuté obsluhou
-                self.dictNav[ID].vybrane = not self.dictNav[ID].vybrane 
-                for i in self.dictNav.keys():
+            if clicked and ID in self.zoznamNav:  #ak bolo návestidlo kliknuté obsluhou
+                self.zoznamNav[ID].vybrane = not self.zoznamNav[ID].vybrane 
+                for i in self.zoznamNav.keys():
                     if i != ID:
-                        self.dictNav[i].vybrane = False               
+                        self.zoznamNav[i].vybrane = False               
 
-            for ID in self.dictNav.keys():  #vyberaj z návestidiel
+            for ID in self.zoznamNav.keys():  #vyberaj z návestidiel
                 for i in self.workerThread.dictUseky.keys():   #vyberaj z úsekov
-                    if self.dictNav[ID].usekPred == self.workerThread.dictUseky[i].nazovGUI:   #ak sa nájde úsek previazaný s návestidlom
-                        self.dictNav[ID].jeVolnyPred = self.workerThread.dictUseky[i].jeVolny  #aktualizuj symbol návestidla podľa obsadenia úseku
+                    if self.zoznamNav[ID].usekPred == self.workerThread.dictUseky[i].nazovGUI:   #ak sa nájde úsek previazaný s návestidlom
+                        self.zoznamNav[ID].jeVolnyPred = self.workerThread.dictUseky[i].jeVolny  #aktualizuj symbol návestidla podľa obsadenia úseku
 
-                    if self.dictNav[ID].usekPred == self.workerThread.dictUseky[i].nazovGUI:   #ak sa nájde úsek previazaný s návestidlom
-                        self.dictNav[ID].usekOdozva = self.workerThread.dictUseky[i].odozva  #aktualizuj symbol návestidla podľa LIfeSign úseku
+                    if self.zoznamNav[ID].usekPred == self.workerThread.dictUseky[i].nazovGUI:   #ak sa nájde úsek previazaný s návestidlom
+                        self.zoznamNav[ID].usekOdozva = self.workerThread.dictUseky[i].odozva  #aktualizuj symbol návestidla podľa LIfeSign úseku
 
-                    if self.dictNav[ID].usekZa == self.workerThread.dictUseky[i].nazovGUI:   #ak sa nájde úsek previazaný s návestidlom
-                        self.dictNav[ID].jeVolnyZa = self.workerThread.dictUseky[i].jeVolny  #aktualizuj symbol návestidla podľa obsadenia úseku
+                    if self.zoznamNav[ID].usekZa == self.workerThread.dictUseky[i].nazovGUI:   #ak sa nájde úsek previazaný s návestidlom
+                        self.zoznamNav[ID].jeVolnyZa = self.workerThread.dictUseky[i].jeVolny  #aktualizuj symbol návestidla podľa obsadenia úseku
 
-                self.dictNav[ID].update(self)
+                self.zoznamNav[ID].update(self)
 
         if objekt in ['update', 'priecestie']:  #aktualizácia priecestí
             if clicked and ID in self.workerThread.dictPriecestie:
@@ -588,66 +431,28 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                 self.workerThread.dictStanice[i].update(self)
 
     def clickObjekt(self, id, objekt):  #metóda spracovávajúca kliknutie na objekt
-        if objekt == 'navestidlo':
-            self.lastNav = id   #zápis posledného kliknutého návestidla                            
-            if (id in [3,46,47,48,50,51] and self.workerThread.dictStanice[1].dialkove) or (    #ak má precovisko aktívne riadenie   
-            id in [12,13,27,58,59,62,63,64,65,67] and self.workerThread.dictStanice[2].dialkove) or (
-            id in [37,71,72,73,76,77] and self.workerThread.dictStanice[3].dialkove):  #vchodové návestidlo
-                self.update(id, True, objekt='navestidla') #aktualizuj symbol návestidla
-                if self.dictNav[id].vybrane and not self.szz.vyberCesty:
-                    self.comboShowHide('vchodove')
-                elif self.dictNav[id].vybrane and self.szz.vyberCesty:
-                    self.comboShowHide('vchodove_konc')
-                else:
-                    self.comboShowHide()
+        if objekt == 'navestidlo': # ak bolo vybrané návestidlo
+            self.posledneNav = id   #zápis posledného kliknutého návestidla  
 
-            elif (id in [4,5,10,11] and self.workerThread.dictStanice[1].dialkove) or ( #ak má precovisko aktívne riadenie 
-            id in [20,21,22,23]  and self.workerThread.dictStanice[2].dialkove) or (
-            id in [38,39,42,43] and self.workerThread.dictStanice[3].dialkove):    #odchodové návestidlo
-                self.update(id, True, objekt='navestidla') #aktualizuj symbol návestidla
-                if self.dictNav[id].vybrane and not self.szz.vyberCesty:
-                    self.comboShowHide('odchodove')
-                elif self.dictNav[id].vybrane and self.szz.vyberCesty:
-                    self.comboShowHide('odchodove_konc')
-                else:
-                    self.comboShowHide()
+            if ((self.posledneNav in range(1, 11) or self.posledneNav in range(46, 55)) and self.workerThread.dictStanice[1].dialkove) or (
+            (self.posledneNav in range(12, 34) or self.posledneNav in range(56, 69)) and self.workerThread.dictStanice[2].dialkove) or (
+            (self.posledneNav in range(35, 45) or self.posledneNav in range(70, 77)) and self.workerThread.dictStanice[3].dialkove):
+                
+                self.update(self.posledneNav, True, objekt='navestidla') #aktualizuj symbol návestidla
 
-            elif (id in [1,2] and self.workerThread.dictStanice[1].dialkove) or (   #ak má precovisko aktívne riadenie 
-            id in [16,17,18,19,24,25] and self.workerThread.dictStanice[2].dialkove) or (
-            id in[35,36] and self.workerThread.dictStanice[3].dialkove):  #zriaďovacie návestidlo
-                self.update(id, True, objekt='navestidla') #aktualizuj symbol návestidla
-                if self.dictNav[id].vybrane and not self.szz.vyberCesty:
-                    self.comboShowHide('zriadovacie')
-                elif self.dictNav[id].vybrane and self.szz.vyberCesty:
-                    self.comboShowHide('zriadovacie_konc')
+                if self.zoznamNav[self.posledneNav].vybrane and not self.szz.vyberCesty:    
+                    self.comboShowHide(self.zoznamNav[self.posledneNav].comboBox)   #otvor comboBox pre počiatok stavenia vlakovej cesty
+                elif self.zoznamNav[self.posledneNav].vybrane and self.szz.vyberCesty:
+                    self.comboShowHide((self.zoznamNav[self.posledneNav].comboBox + '_konc'))   #otvor comboBox pre unokčenie stavenia vlakovej cesty
                 else:
-                    self.comboShowHide()
+                    self.comboShowHide()    #skry comboBox
 
-            elif (id in [6,49] and self.workerThread.dictStanice[1].dialkove) or (  #ak má precovisko aktívne riadenie 
-            id in [14,15,26,60,61,66] and self.workerThread.dictStanice[2].dialkove) or (
-            id in [40,74] and self.workerThread.dictStanice[3].dialkove):   #fiktívne návestidlo
-                self.update(id, True, objekt='navestidla') #aktualizuj symbol návestidla
-                if self.dictNav[id].vybrane and not self.szz.vyberCesty:
-                    self.comboShowHide('fiktivne')
-                elif self.dictNav[id].vybrane and self.szz.vyberCesty:
-                    self.comboShowHide('fiktivne_konc')
-                else:
-                    self.comboShowHide()
-
-            elif (id in [31,69] and self.workerThread.dictStanice[2].dialkove) or ( #ak má precovisko aktívne riadenie 
-            id in [44,70] and self.workerThread.dictStanice[3].dialkove):   #oddielové návestidlo
-                self.update(id, True, objekt='navestidla') #aktualizuj symbol návestidla
-                if self.dictNav[id].vybrane:
-                    self.comboShowHide('oddielove')
-                else:
-                    self.comboShowHide()
-            
             else:
-                self.vypisHlasenia('Obsluha stanice prevedená na lokálne pracovisko')
+                self.vypisHlasenia('Obsluha stanice prevedená na lokálne pracovisko') #ak nie je aktívne ovládanie, vypíš hlásenie
 
         elif objekt == 'vyhybka':
             if id in self.workerThread.dictUseky:  #ak sa výhybka nachádza v zozname
-                self.lastVyh = id   #zapíš ju ako poslednú kliknutú
+                self.poslednaVyh = id   #zapíš ju ako poslednú kliknutú
                 if (id in [3,31] and self.workerThread.dictStanice[1].dialkove) or (
                 id in [12,13,16,40,41,44] and self.workerThread.dictStanice[2].dialkove) or (
                 id in [26,54] and self.workerThread.dictStanice[3].dialkove):   #ak má precovisko aktívne riadenie 
@@ -676,7 +481,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                     self.vypisHlasenia('Obsluha stanice prevedená na lokálne pracovisko')
 
         elif objekt == 'priecestie':
-            self.lastPri = id
+            self.poslednePriec = id
             if (id in [1,3] and self.workerThread.dictStanice[1].dialkove) or (
             id in [2,4,5] and self.workerThread.dictStanice[3].dialkove):   #ak má precovisko aktívne riadenie 
                 self.update(id, True, objekt='priecestie')
@@ -690,7 +495,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                 self.vypisHlasenia('Obsluha stanice prevedená na lokálne pracovisko')
 
         elif objekt == 'TS':
-            self.lastTS = id 
+            self.poslednyTS = id 
             if (id in [1,6] and self.workerThread.dictStanice[1].dialkove) or (
             id in [2,3,4,7,8,9] and self.workerThread.dictStanice[2].dialkove) or (
             id in [5,10] and self.workerThread.dictStanice[3].dialkove):    #ak má precovisko aktívne riadenie 
@@ -710,7 +515,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                 self.vypisHlasenia('Obsluha stanice prevedená na lokálne pracovisko')
 
         elif objekt == 'stanica':
-            self.lastStanica = id
+            self.poslednaStn = id
             self.update(id, True, 'Stanice')
             if self.workerThread.dictStanice[id].vyber:
                 self.comboShowHide('stanica')
@@ -807,95 +612,95 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         self.comboShowHide()    #po výbere skry menu
 
         if index == 1:  #zatvorenie priecetia
-            self.prikazDoPLC(priec=True, nazov=self.workerThread.dictPriecestie[self.lastPri].nazovGUI, prikaz='/True')            
+            self.prikazDoPLC(priec=True, nazov=self.workerThread.dictPriecestie[self.poslednePriec].nazovGUI, prikaz='/True')            
 
         elif index == 2:  #otvorenie priecestia
-            self.prikazDoPLC(priec=True, nazov=self.workerThread.dictPriecestie[self.lastPri].nazovGUI, prikaz='/False')
+            self.prikazDoPLC(priec=True, nazov=self.workerThread.dictPriecestie[self.poslednePriec].nazovGUI, prikaz='/False')
         
         else:
-            self.workerThread.dictPriecestie[self.lastPri].vyber = False
-            self.workerThread.dictPriecestie[self.lastPri].update(self)
+            self.workerThread.dictPriecestie[self.poslednePriec].vyber = False
+            self.workerThread.dictPriecestie[self.poslednePriec].update(self)
 
         self.ui.combo_priec.setCurrentIndex(0) #resetuj index vybranej akcie z kontextového menu  
 
     def akciaNavestidlo(self, index, ID):   #vyhodnotenie vybranej akcie z kontextového menu
         self.comboShowHide()    #po výbere skry menu
 
-        if ((ID in [1,2]) and index == 1) and (self.lastNav not in [10,11,42,43,50,51,76,77]):  #výber vlakovej cesty
+        if ((ID in [1,2]) and index == 1) and (self.posledneNav not in [10,11,42,43,50,51,76,77]):  #výber vlakovej cesty
             self.vyberCestu('Vlak')
 
         elif (ID == 2 and index == 2) or (ID == 3 and index == 1):  #výber posunovej cesty
-            if self.lastNav in [1,4,5,18,19,20,21,22,23,24,35,38,39]:
+            if self.posledneNav in [1,4,5,18,19,20,21,22,23,24,35,38,39]:
                 self.vyberCestu('Posun')
 
             else:
                 self.vypisHlasenia('Nie je možné postaviť posunovú cestu')
 
         elif (ID == 1 and index == 3) or (ID == 4 and index == 1) or (ID == 2 and index == 4) or (ID == 3 and index == 2):    #rušenie cesty
-            self.End = self.lastNav
-            self.lastNav = 0
+            self.koncoveNav = self.posledneNav
+            self.posledneNav = 0
 
             if ID == 4: #predhlášky od jednotlivých staníc
-                if self.End in [6,49]:
+                if self.koncoveNav in [6,49]:
                     self.prikazDoPLC(odchod=True, nazov='odchodR', prikaz='/False')
-                if self.End in [14,60]:
+                if self.koncoveNav in [14,60]:
                     self.prikazDoPLC(odchod=True, nazov='odchodZR', prikaz='/False')
-                elif self.End in [15,61]:
+                elif self.koncoveNav in [15,61]:
                     self.prikazDoPLC(odchod=True, nazov='odchodZL', prikaz='/False')
-                elif self.End in [26,66]:
+                elif self.koncoveNav in [26,66]:
                     self.prikazDoPLC(odchod=True, nazov='odchodZH', prikaz='/False')
                     self.prikazDoPLC(prikaz='/False', nazov='ZBE', predhl=True)
-                elif self.End in [40,74]:
+                elif self.koncoveNav in [40,74]:
                     self.prikazDoPLC(odchod=True, nazov='odchodH', prikaz='/False')
                     self.prikazDoPLC(prikaz='/False', nazov='HLO', predhl=True)
 
-            if self.End in [26,66]:
+            if self.koncoveNav in [26,66]:
                 for nav in [30,44,69]:
-                    self.dictNav[nav].predhlaska = False
+                    self.zoznamNav[nav].predhlaska = False
 
-            elif self.End in [40,74]:
+            elif self.koncoveNav in [40,74]:
                 for nav in [31,45,70]:
-                    self.dictNav[nav].predhlaska = False
+                    self.zoznamNav[nav].predhlaska = False
 
-            self.dictNav[self.End].vybrane = False
-            self.dictNav[self.End].update(self)
+            self.zoznamNav[self.koncoveNav].vybrane = False
+            self.zoznamNav[self.koncoveNav].update(self)
             self.szz.rusenieCesty(Disp=True)
 
-        elif self.Start in [3,12,13,27,37,46,58,59,67,68,71] and ID in [10,12,13] and index == 1: #stavanie vchodovej bez ochrannej dráhy
+        elif self.pociatocneNav in [3,12,13,27,37,46,58,59,67,68,71] and ID in [10,12,13] and index == 1: #stavanie vchodovej bez ochrannej dráhy
             if not self.szz.typCesty:
                 self.postavCestu()
             else:
                 self.vypisHlasenia('Nekorektný typ jazdnej cesty')
 
         elif ((ID in [10,12,13]) and (index == 2) and (not self.szz.typCesty)): #stavanie vchodovej cesty s ochrannou dráhou
-            if self.Start in [12,13,27,58,59,67]:
+            if self.pociatocneNav in [12,13,27,58,59,67]:
                 self.postavCestu(True)
 
             else:
                 self.vypisHlasenia('Jazdná cesta nemá definovanú ochrannú dráhu')
                 self.ukonciStavanie()
             
-        elif (self.Start in [4,5,20,21,22,23,38,39,47,48,62,63,64,65,72,73]) and ((ID in [10,12]) and (index == 1) and (not self.szz.typCesty)): #stavanie odchodovej cesty
-            if self.Start in [4,5,47,48]:
+        elif (self.pociatocneNav in [4,5,20,21,22,23,38,39,47,48,62,63,64,65,72,73]) and ((ID in [10,12]) and (index == 1) and (not self.szz.typCesty)): #stavanie odchodovej cesty
+            if self.pociatocneNav in [4,5,47,48]:
                 if self.workerThread.dictTS[1].prijem:
                     self.postavCestu()
                 else:
                     self.ukonciStavanie(TS=True)
 
-            elif self.Start in [20,62]:
+            elif self.pociatocneNav in [20,62]:
                 if self.workerThread.dictTS[2].prijem:
                     self.postavCestu()
                 else:
                     self.ukonciStavanie(TS=True)
                 
-            elif self.Start in [21,63]:
-                if self.lastNav in [14,60]:                    
+            elif self.pociatocneNav in [21,63]:
+                if self.posledneNav in [14,60]:                    
                     if self.workerThread.dictTS[2].prijem:
                         self.postavCestu()
                     else:
                         self.ukonciStavanie(TS=True)
 
-                elif self.lastNav in [15,61]:                    
+                elif self.posledneNav in [15,61]:                    
                     if self.workerThread.dictTS[4].volnost: 
                         if self.workerThread.dictTS[4].prijem:
                             self.postavCestu()
@@ -904,7 +709,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                     else:
                         self.ukonciStavanie(volnost=True)
 
-            elif self.Start in [22,23,64,65]:
+            elif self.pociatocneNav in [22,23,64,65]:
                 if self.workerThread.odhlaskaLo:                    
                     if self.workerThread.dictTS[3].prijem:
                         self.postavCestu()
@@ -913,7 +718,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                 else:
                     self.ukonciStavanie(odhl=True)
 
-            elif self.Start in [38,39,72,73]:
+            elif self.pociatocneNav in [38,39,72,73]:
                 if self.workerThread.odhlaskaSo:
                     if self.workerThread.dictTS[5].prijem:
                         self.postavCestu()
@@ -925,82 +730,82 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         elif (ID == 10 and index == 3) or (ID == 11 and index == 1):    #stavanie posunovej cesty
             self.postavCestu()
 
-        elif ((ID == 1 and index == 2) or (ID == 2 and index == 3) or (ID == 5 and index == 1)) and (self.lastNav not in [10,11,42,43,50,51,76,77]): #Privolávacia návesť
-            self.dictNav[self.lastNav].vybrane = False
+        elif ((ID == 1 and index == 2) or (ID == 2 and index == 3) or (ID == 5 and index == 1)) and (self.posledneNav not in [10,11,42,43,50,51,76,77]): #Privolávacia návesť
+            self.zoznamNav[self.posledneNav].vybrane = False
             
-            if self.dictNav[self.lastNav].znak == 'Stoj':
-                self.dictNav[self.lastNav].znak = 'PN'
-                self.prikazDoPLC(prikaz='/PN', id=self.dictNav[self.lastNav].ID, nazov=self.dictNav[self.lastNav].nazov)  
+            if self.zoznamNav[self.posledneNav].znak == 'Stoj':
+                self.zoznamNav[self.posledneNav].znak = 'PN'
+                self.prikazDoPLC(prikaz='/PN', id=self.zoznamNav[self.posledneNav].ID, nazov=self.zoznamNav[self.posledneNav].nazov)  
                 self.prikazDoPLC(prikaz='/PN', znak=True)
-                self.dictNav[self.lastNav].update(self)
+                self.zoznamNav[self.posledneNav].update(self)
                 
-                if self.dictNav[self.lastNav].zavisle != -1:
-                    self.dictNav[self.dictNav[self.lastNav].zavisle].znak = 'PN'
-                    self.dictNav[self.dictNav[self.lastNav].zavisle].update(self)
+                if self.zoznamNav[self.posledneNav].zavisle != -1:
+                    self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].znak = 'PN'
+                    self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].update(self)
 
-            elif self.dictNav[self.lastNav].znak == 'PN':
-                self.dictNav[self.lastNav].znak = 'Stoj'
-                self.prikazDoPLC(prikaz='/Stoj', id=self.dictNav[self.lastNav].ID, nazov=self.dictNav[self.lastNav].nazov)
+            elif self.zoznamNav[self.posledneNav].znak == 'PN':
+                self.zoznamNav[self.posledneNav].znak = 'Stoj'
+                self.prikazDoPLC(prikaz='/Stoj', id=self.zoznamNav[self.posledneNav].ID, nazov=self.zoznamNav[self.posledneNav].nazov)
                 self.prikazDoPLC(prikaz='/Stoj', znak=True)
-                self.dictNav[self.lastNav].update(self) 
+                self.zoznamNav[self.posledneNav].update(self) 
 
-                if self.dictNav[self.lastNav].zavisle != -1:
-                    self.dictNav[self.dictNav[self.lastNav].zavisle].znak = 'Stoj'
-                    self.dictNav[self.dictNav[self.lastNav].zavisle].update(self)           
+                if self.zoznamNav[self.posledneNav].zavisle != -1:
+                    self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].znak = 'Stoj'
+                    self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].update(self)           
 
-        elif ((ID == 1 and index == 5) or (ID == 2 and index == 6) or (ID == 3 and index == 4) or (ID == 5 and index == 3)) and (self.lastNav not in [10,11,42,43,50,51,76,77]): #Manuálne zadanie 'Stoj'
-            self.dictNav[self.lastNav].vybrane = False
+        elif ((ID == 1 and index == 5) or (ID == 2 and index == 6) or (ID == 3 and index == 4) or (ID == 5 and index == 3)) and (self.posledneNav not in [10,11,42,43,50,51,76,77]): #Manuálne zadanie 'Stoj'
+            self.zoznamNav[self.posledneNav].vybrane = False
 
-            if (self.dictNav[self.lastNav].pociatocne) or (self.dictNav[self.lastNav].TZZ == 'AH' and self.dictNav[self.lastNav].predhlaska):   #iba ak je návestidlo počiatočným návestidlom jazdnej cesty
-                self.dictNav[self.lastNav].manual = True
-                self.dictNav[self.lastNav].znak = 'Stoj'
-                self.prikazDoPLC(prikaz='/Stoj', id=self.dictNav[self.lastNav].ID, nazov=self.dictNav[self.lastNav].nazov)
+            if (self.zoznamNav[self.posledneNav].pociatocne) or (self.zoznamNav[self.posledneNav].TZZ == 'AH' and self.zoznamNav[self.posledneNav].predhlaska):   #iba ak je návestidlo počiatočným návestidlom jazdnej cesty
+                self.zoznamNav[self.posledneNav].manual = True
+                self.zoznamNav[self.posledneNav].znak = 'Stoj'
+                self.prikazDoPLC(prikaz='/Stoj', id=self.zoznamNav[self.posledneNav].ID, nazov=self.zoznamNav[self.posledneNav].nazov)
                 self.prikazDoPLC(prikaz='/Stoj', znak=True)
-                self.dictNav[self.lastNav].update(self)
+                self.zoznamNav[self.posledneNav].update(self)
 
-                if self.dictNav[self.lastNav].zavisle != -1:
-                    self.dictNav[self.dictNav[self.lastNav].zavisle].znak = 'Stoj'
-                    self.dictNav[self.dictNav[self.lastNav].zavisle].update(self)
+                if self.zoznamNav[self.posledneNav].zavisle != -1:
+                    self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].znak = 'Stoj'
+                    self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].update(self)
 
             else:
                 self.vypisHlasenia('Nesprávne zadanie STOJ na návestidle')
 
-        elif ((ID == 1 and index == 4) or (ID == 2 and index == 5) or (ID == 3 and index == 3) or (ID == 5 and index == 2)) and (self.lastNav not in [10,11,42,43,50,51,76,77]): #Manuálne zadanie 'Volno'
-            self.dictNav[self.lastNav].vybrane = False
+        elif ((ID == 1 and index == 4) or (ID == 2 and index == 5) or (ID == 3 and index == 3) or (ID == 5 and index == 2)) and (self.posledneNav not in [10,11,42,43,50,51,76,77]): #Manuálne zadanie 'Volno'
+            self.zoznamNav[self.posledneNav].vybrane = False
 
-            if (self.dictNav[self.lastNav].pociatocne) or (self.dictNav[self.lastNav].TZZ == 'AH' and self.dictNav[self.lastNav].predhlaska):   #iba ak je návestidlo počiatočným návestidlom jazdnej cesty
-                self.dictNav[self.lastNav].manual = True
-                if (ID in [1,5]) or (ID == 2 and not self.dictNav[self.lastNav].typAktCes):
-                    self.dictNav[self.lastNav].znak = 'Volno'
-                    self.prikazDoPLC(prikaz='/Volno', id=self.dictNav[self.lastNav].ID, nazov=self.dictNav[self.lastNav].nazov)
+            if (self.zoznamNav[self.posledneNav].pociatocne) or (self.zoznamNav[self.posledneNav].TZZ == 'AH' and self.zoznamNav[self.posledneNav].predhlaska):   #iba ak je návestidlo počiatočným návestidlom jazdnej cesty
+                self.zoznamNav[self.posledneNav].manual = True
+                if (ID in [1,5]) or (ID == 2 and not self.zoznamNav[self.posledneNav].typAktCes):
+                    self.zoznamNav[self.posledneNav].znak = 'Volno'
+                    self.prikazDoPLC(prikaz='/Volno', id=self.zoznamNav[self.posledneNav].ID, nazov=self.zoznamNav[self.posledneNav].nazov)
                     self.prikazDoPLC(prikaz='/Volno', znak=True)
 
-                    if self.dictNav[self.lastNav].zavisle != -1:
-                        self.dictNav[self.dictNav[self.lastNav].zavisle].znak = 'Volno'
-                        self.dictNav[self.dictNav[self.lastNav].zavisle].update(self)
+                    if self.zoznamNav[self.posledneNav].zavisle != -1:
+                        self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].znak = 'Volno'
+                        self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].update(self)
 
-                elif (ID == 3) or (ID == 2 and self.dictNav[self.lastNav].typAktCes):
-                    self.dictNav[self.lastNav].znak = 'Posun'
-                    self.prikazDoPLC(prikaz='/Posun', id=self.dictNav[self.lastNav].ID, nazov=self.dictNav[self.lastNav].nazov)
+                elif (ID == 3) or (ID == 2 and self.zoznamNav[self.posledneNav].typAktCes):
+                    self.zoznamNav[self.posledneNav].znak = 'Posun'
+                    self.prikazDoPLC(prikaz='/Posun', id=self.zoznamNav[self.posledneNav].ID, nazov=self.zoznamNav[self.posledneNav].nazov)
                     self.prikazDoPLC(prikaz='/Posun', znak=True)
 
-                    if self.dictNav[self.lastNav].zavisle != -1:
-                        self.dictNav[self.dictNav[self.lastNav].zavisle].znak = 'Posun'
-                        self.dictNav[self.dictNav[self.lastNav].zavisle].update(self)
+                    if self.zoznamNav[self.posledneNav].zavisle != -1:
+                        self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].znak = 'Posun'
+                        self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].update(self)
 
-                self.dictNav[self.lastNav].update(self)
+                self.zoznamNav[self.posledneNav].update(self)
 
             else:
                 self.vypisHlasenia('Nesprávne zadanie VOĽNO na návestidle')
         
         else:
-            if self.lastNav != 0:
-                self.dictNav[self.lastNav].vybrane = False
-                self.dictNav[self.lastNav].update(self)
+            if self.posledneNav != 0:
+                self.zoznamNav[self.posledneNav].vybrane = False
+                self.zoznamNav[self.posledneNav].update(self)
 
-            if self.End != 0:
-                self.dictNav[self.End].vybrane = False
-                self.dictNav[self.End].update(self)
+            if self.koncoveNav != 0:
+                self.zoznamNav[self.koncoveNav].vybrane = False
+                self.zoznamNav[self.koncoveNav].update(self)
 
         self.ui.combo_hlavne.setCurrentIndex(0) #resetuj index vybranej akcie z kontextového menu
         self.ui.combo_kombi.setCurrentIndex(0)
@@ -1015,22 +820,22 @@ class App(QMainWindow): #hlavná triedy vizualizácie
 
     def akciaTS(self, index, id):   #metóda pre prácu s traťovým súhlasom 
         if (index == 1) and (id == 2):   #žiadosť o TS
-            if not self.workerThread.dictTS[self.lastTS].prijem:
-                if self.workerThread.dictTS[self.lastTS].volnost: 
-                    self.prikazDoPLC('ZUS/' + str(self.lastTS) + '/True')
+            if not self.workerThread.dictTS[self.poslednyTS].prijem:
+                if self.workerThread.dictTS[self.poslednyTS].volnost: 
+                    self.prikazDoPLC('ZUS/' + str(self.poslednyTS) + '/True')
                 else:
                     self.vypisHlasenia('Obsadený medzistaničný úsek')
             else:
                 self.vypisHlasenia('Traťový súhlas je prijatý')
 
         elif (index == 2) and (id == 2):   #zrušenie žiadosti o TS
-            self.prikazDoPLC('ZUS/' + str(self.lastTS) + '/False')        
+            self.prikazDoPLC('ZUS/' + str(self.poslednyTS) + '/False')        
 
-        elif ((index == 1 and id == 1) or (index == 3 and id ==2))  and (self.workerThread.dictTS[self.lastTS].prijem is True):   #udelenie TS
-            self.prikazDoPLC('UTS/' + str(self.lastTS))
+        elif ((index == 1 and id == 1) or (index == 3 and id ==2))  and (self.workerThread.dictTS[self.poslednyTS].prijem is True):   #udelenie TS
+            self.prikazDoPLC('UTS/' + str(self.poslednyTS))
           
         elif (index == 4) and (id == 2):    #zrušenie blokovej podmienky
-            self.prikazDoPLC('ZBP/' + str(self.lastTS))
+            self.prikazDoPLC('ZBP/' + str(self.poslednyTS))
 
         elif index != 0:
             self.vypisHlasenia('Neudelený traťový súhlas')
@@ -1069,29 +874,29 @@ class App(QMainWindow): #hlavná triedy vizualizácie
 
         self.szz.vyberCesty = True #definuje aktívny výber vlakovej cesty
 
-        self.Start = self.lastNav   #vybrané návestidlo označí za počiatočné
+        self.pociatocneNav = self.posledneNav   #vybrané návestidlo označí za počiatočné
 
-        self.dictNav[self.Start].stavanieOd = True
-        self.dictNav[self.Start].typAktCes = self.szz.typCesty #zapíše počiatočnému návestidlu typ cesty
-        self.dictNav[self.Start].vybrane = False
-        self.dictNav[self.Start].update(self)
+        self.zoznamNav[self.pociatocneNav].stavanieOd = True
+        self.zoznamNav[self.pociatocneNav].typAktCes = self.szz.typCesty #zapíše počiatočnému návestidlu typ cesty
+        self.zoznamNav[self.pociatocneNav].vybrane = False
+        self.zoznamNav[self.pociatocneNav].update(self)
 
     def postavCestu(self, Ochr=False):  #metóda, ktorá vydá príkaz pre postavenie vybranej cesty algoritmom SZZ
         self.szz.vyberCesty = False
-        self.End = self.lastNav
-        self.lastNav = 0
+        self.koncoveNav = self.posledneNav
+        self.posledneNav = 0
 
-        self.dictNav[self.End].vybrane = False
-        self.dictNav[self.End].update(self)
+        self.zoznamNav[self.koncoveNav].vybrane = False
+        self.zoznamNav[self.koncoveNav].update(self)
 
         self.szz.stavanieCesty(OD=Ochr, Disp=True)
 
     def ukonciStavanie(self, TS=False, odhl=False, volnost=False):   #metóda slúži na ukončenie stavania VC v prípade zlého TS alebo obsadeného medzist. úseku
-        self.dictNav[self.Start].stavanieOd = False
-        self.dictNav[self.Start].update(self)
+        self.zoznamNav[self.pociatocneNav].stavanieOd = False
+        self.zoznamNav[self.pociatocneNav].update(self)
         self.szz.vyberCesty = False
-        self.Start = 0
-        self.End = 0
+        self.pociatocneNav = 0
+        self.koncoveNav = 0
 
         if odhl:
             self.vypisHlasenia('Chýbajúca odhláška za vlakom')
@@ -1125,15 +930,15 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                 URL = adresa + 'udelRiad/' + nazov
             
             elif cesta:
-                if self.Start > 45:
-                    start = self.dictNav[self.Start].zavisle
+                if self.pociatocneNav > 45:
+                    start = self.zoznamNav[self.pociatocneNav].zavisle
                 else:
-                    start = self.Start
+                    start = self.pociatocneNav
 
-                if self.End > 45:
-                    end = self.dictNav[self.End].zavisle
+                if self.koncoveNav > 45:
+                    end = self.zoznamNav[self.koncoveNav].zavisle
                 else:
-                    end = self.End
+                    end = self.koncoveNav
 
                 if nazov == 'stavanie':
                     if prikaz == 'True':
@@ -1149,10 +954,10 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                     URL = adresa + 'Cesta/0/0/False/False/False/False/DISP'
 
             elif znak:
-                if self.lastNav > 45:
-                    nav = self.dictNav[self.lastNav].zavisle
+                if self.posledneNav > 45:
+                    nav = self.zoznamNav[self.posledneNav].zavisle
                 else:
-                    nav = self.lastNav
+                    nav = self.posledneNav
 
                 if prikaz != '_':
                     URL = adresa + 'Navest/' + str(nav) + prikaz + '/DISP'

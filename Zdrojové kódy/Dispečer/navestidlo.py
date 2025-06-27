@@ -1,5 +1,5 @@
 class Navestidlo:
-    def __init__(self, ID, nazov, nazovGUI, enumIkon, dictIkon, app, usekPred = 'X', zavisle = -1,  usekZa = 'X', oddielove = False, TZZ = ' '):
+    def __init__(self, ID, nazov, nazovGUI, enumIkon, dictIkon, app, usekPred = 'X', zavisle = -1,  usekZa = 'X', oddielove = False, TZZ = ' ', comboBox = ' '):
         self.app = app  #inštancia spolupracujúcej triedy
         self.ID = ID    #ID návestidla
 
@@ -45,6 +45,8 @@ class Navestidlo:
         self.predhlaska = False #príjem predhlášky na návestidlo
 
         self.zavisle = zavisle  #definícia závislých symbolov jedného návestidla v dispečerskej aplikácii
+
+        self.comboBox = comboBox #dafinícia priradeného comboBox-u k návestidlu
 
     def update(self, app):  #metóda pre aktualizáciu symbolu návestidla
         if not self.oddielove:  #ak nie je oddielové
