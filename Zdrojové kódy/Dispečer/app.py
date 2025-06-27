@@ -11,9 +11,7 @@ from update import DataUpdate
 from datum import Datum
 from casSubory import DlhyCasPosun, DlhyCasVlak, CasOchrDr, LifeSign
 
-# Important:
-# You need to run the following command to generate the ui_form.py file
-#     pyside6-uic form.ui -o ui_form.py, or
+# Important: You need to run the following command to generate the ui_form.py file: pyside6-uic form.ui -o ui_form.py, or
 
 class App(QMainWindow): #hlavná triedy vizualizácie
     def __init__(self, parent=None):              
@@ -72,11 +70,13 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         IP = self.citajAdresu()
         URL = IP + 'test'
 
+        resp = {}
+
         try:
-            response = requests.get(URL)    
+            response = requests.get(url = URL, timeout = 5)  
             resp = response.json()
-        except (requests.exceptions.ConnectionError):
-            print('zla IP adresa')
+        except requests.exceptions.ConnectionError:
+            self.ui.textChyba.setText('Nepodarilo sa pripojiť k REST API serveru.')
             return -1
 
         if resp['OK']:
@@ -234,11 +234,11 @@ class App(QMainWindow): #hlavná triedy vizualizácie
 
         elif objekt == 'priecestie':
             self.poslednePriec = id
-            if (id in [1,3] and self.vlaknoUpdate.dictStanice[1].dialkove) or (
-            id in [2,4,5] and self.vlaknoUpdate.dictStanice[3].dialkove):   #ak má precovisko aktívne riadenie 
-                self.update(id, True, objekt='priecestie')
+            if (self.poslednePriec in [1,3] and self.vlaknoUpdate.dictStanice[1].dialkove) or (
+            self.poslednePriec in [2,4,5] and self.vlaknoUpdate.dictStanice[3].dialkove):   #ak má precovisko aktívne riadenie 
+                self.update(self.poslednePriec, True, objekt='priecestie')
 
-                if self.vlaknoUpdate.dictPriecestie[id].vyber:
+                if self.vlaknoUpdate.dictPriecestie[self.poslednePriec].vyber:
                     self.comboShowHide('priecestie')
                 else:
                     self.comboShowHide()
@@ -248,28 +248,35 @@ class App(QMainWindow): #hlavná triedy vizualizácie
 
         elif objekt == 'TS':
             self.poslednyTS = id 
-            if (id in [1,6] and self.vlaknoUpdate.dictStanice[1].dialkove) or (
-            id in [2,3,4,7,8,9] and self.vlaknoUpdate.dictStanice[2].dialkove) or (
-            id in [5,10] and self.vlaknoUpdate.dictStanice[3].dialkove):    #ak má precovisko aktívne riadenie 
-                if (id in [4,9]) or (id in [1,2,6,7] and (not self.vlaknoUpdate.dictStanice[1].dialkove or not self.vlaknoUpdate.dictStanice[2].dialkove)):
+
+            if (self.vlaknoUpdate.dictTS[self.poslednyTS].ID == 1 and self.vlaknoUpdate.dictStanice[1].dialkove) or (   #ak máRadošina diaľkové riadenie
+            self.vlaknoUpdate.dictTS[self.poslednyTS].ID in [2,3,4] and self.vlaknoUpdate.dictStanice[2].dialkove) or ( #ak majú Zbehy diaľkové riadenie
+            self.vlaknoUpdate.dictTS[self.poslednyTS].ID == 5 and self.vlaknoUpdate.dictStanice[3].dialkove):    #ak má Hlohovec diaľkové riadenie 
+                
+                if (self.vlaknoUpdate.dictTS[self.poslednyTS].ID == 4) or (
+                self.vlaknoUpdate.dictTS[self.poslednyTS].ID in [1,2] and (not self.vlaknoUpdate.dictStanice[1].dialkove or not self.vlaknoUpdate.dictStanice[2].dialkove)):
                     self.vlaknoUpdate.dictTS[id].vybrane = not self.vlaknoUpdate.dictTS[id].vybrane 
+
                     if self.vlaknoUpdate.dictTS[id].vybrane:
                         self.comboShowHide('TS_ESA')
                     else:
                         self.comboShowHide()
+
                 elif (id in [3,5,8,10]) or (id in [1,2,6,7] and (self.vlaknoUpdate.dictStanice[1].dialkove or self.vlaknoUpdate.dictStanice[2].dialkove)):
                     self.vlaknoUpdate.dictTS[id].vybrane = not self.vlaknoUpdate.dictTS[id].vybrane 
+
                     if self.vlaknoUpdate.dictTS[id].vybrane:
                         self.comboShowHide('TS_DISP')
                     else:
                         self.comboShowHide()
+                        
             else:
                 self.vypisHlasenia('Obsluha stanice prevedená na lokálne pracovisko')
 
         elif objekt == 'stanica':
             self.poslednaStn = id
-            self.update(id, True, 'Stanice')
-            if self.vlaknoUpdate.dictStanice[id].vyber:
+            self.update(self.poslednaStn, True, 'Stanice')
+            if self.vlaknoUpdate.dictStanice[self.poslednaStn].vyber:
                 self.comboShowHide('stanica')
             else:
                 self.comboShowHide()            
