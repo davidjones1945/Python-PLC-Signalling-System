@@ -17,9 +17,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
     def __init__(self, parent=None):              
         super().__init__(parent)
         self.ui = Ui_ILTIS()    #vytvorenie spojenia s triedami
-        self.szz = SZZ(self)   
-
-        self.ui.setupUi(self)
+        self.szz = SZZ(self) 
 
         self.vlaknoUpdate = DataUpdate(self)   #prepojenie bočných vláken s hlavným vláknom
         self.vlaknoDlhyCasVlak = DlhyCasVlak()
@@ -27,6 +25,15 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         self.vlaknoCasOchrDrahy = CasOchrDr()
         self.vlaknoLifeSign = LifeSign(self)
         self.vlaknoDatum = Datum()
+
+        self.zoznamNavOBJ = ZoznamNavestidiel(parent = self)    #objekt zoznamu návestidiel
+        self.zoznamNav = self.zoznamNavOBJ.zoznamNav
+
+        self.vlaknoUpdate.setParent(self)  #definovanie rodičovského objektu pre vlákna
+        self.vlaknoLifeSign.setParent(self)
+
+        self.ui.setupUi(self)
+
         self.vlaknoDatum.start()
 
         self.vlaknoUpdate.dataUpdated.connect(self.update) #definícia prepojenia vláken a metód
@@ -36,10 +43,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         
         self.vlaknoDlhyCasVlak.finished.connect(lambda: self.szz.rusenieCesty(True))
         self.vlaknoDlhyCasPosun.finished.connect(lambda: self.szz.rusenieCesty(True))
-        self.vlaknoCasOchrDrahy.finished.connect(lambda: self.szz.rusenieOD(Disp=True))
-
-        self.vlaknoUpdate.setParent(self)  #definovanie rodičovského objektu pre vlákna
-        self.vlaknoLifeSign.setParent(self)
+        self.vlaknoCasOchrDrahy.finished.connect(lambda: self.szz.rusenieOD(Disp=True))    
 
         self.posledneNav = 0  #posledné kliknuté návestidlo
         self.pociatocneNav = 0    #počiatočné návestidlo jazdnej cesty
@@ -50,9 +54,6 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         self.poslednaStn = 'X' #posledná kliknutá stanica
         self.poslednyTS = 'X'   #posledný kliknutý traťový súhlas
         self.predposlednyTS = 'X' #predposledný kliknutý traťový súhlas
-
-        self.zoznamNavOBJ = ZoznamNavestidiel(parent = self)    #objekt zoznamu návestidiel
-        self.zoznamNav = self.zoznamNavOBJ.zoznamNav
 
     def popUp(self, okno): #zobrazenie a skrytie kontextového okna s RAST API adresou
         if okno == 'REST':
@@ -111,38 +112,30 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         self.ui.DateTime.setText(cas)
 
     def update(self, ID = -1, clicked=False, objekt='update'): #metóda pre aktualizáciu symbolov objektov
-        if objekt in ['update', 'useky']:   #aktualizácia úsekov
+        if objekt in ['update', 'useky']:   #aktualizácia úsekov počas aktualizácie celého okna (update) alebo len pri špecifickom volaní (useky)
             for i in self.vlaknoUpdate.dictUseky.keys():
                 self.vlaknoUpdate.dictUseky[i].update(self)
                 
-                if self.vlaknoUpdate.dictUseky[21].odozva:
+                if self.vlaknoUpdate.dictUseky[21].odozva:  #aktualizácia informácie o TÚ z ESA 44 
                     self.ui.textChybaESA.hide()
                 
                 else:
                     self.ui.textChybaESA.show()
 
-        if objekt in ['update', 'navestidla']:  #aktualizácia návestidiel
-            self.zoznamNav[8].zhasnute =  self.vlaknoUpdate.dictTS[1].smer  #otáčanie svietenia AB podľa TS
-            self.zoznamNav[9].zhasnute =  not self.vlaknoUpdate.dictTS[1].smer  #AB18 + AB19
-            self.zoznamNav[52].zhasnute =  self.vlaknoUpdate.dictTS[1].smer  
-            self.zoznamNav[53].zhasnute =  not self.vlaknoUpdate.dictTS[1].smer
+        if objekt in ['update', 'navestidla']:  #aktualizácia návestidiel počas aktualizácie celého okna (update) alebo len pri špecifickom volaní (navestidla)
+            for i in [9,29,52,54,57]:
+                self.zoznamNav[i].zhasnute = self.vlaknoUpdate.dictTS[1].smer  #otáčanie svietenia návestidiel AB v smere RAD-ZBE podľa TS
 
-            self.zoznamNav[28].zhasnute =  not self.vlaknoUpdate.dictTS[2].smer  #AB28 + AB29
-            self.zoznamNav[29].zhasnute =  self.vlaknoUpdate.dictTS[2].smer
-            self.zoznamNav[55].zhasnute =  not self.vlaknoUpdate.dictTS[2].smer  
-            self.zoznamNav[54].zhasnute =  self.vlaknoUpdate.dictTS[2].smer
-            
+            for i in [8,28,53,55,56]:
+                self.zoznamNav[i].zhasnute = not self.vlaknoUpdate.dictTS[1].smer  #otáčanie svietenia návestidiel AB v smere ZBE - RAD podľa TS          
 
-            self.zoznamNav[57].zhasnute =  self.vlaknoUpdate.dictTS[2].smer  #AB39 + AB40
-            self.zoznamNav[56].zhasnute =  not self.vlaknoUpdate.dictTS[2].smer
-
-            for nav in [30,44,69]:
+            for nav in [30,44,69]:  #prenos predhlášky na návestidlo AH Lo
                 self.zoznamNav[nav].predhlaska = self.vlaknoUpdate.predhlaskaZBE
 
-            for nav in [31,45,70]:
+            for nav in [31,45,70]:  #prenos predhlášky na návestidlá AH So
                 self.zoznamNav[nav].predhlaska = self.vlaknoUpdate.predhlaskaHLO
 
-            if clicked and ID in self.zoznamNav:  #ak bolo návestidlo kliknuté obsluhou
+            if clicked and ID in self.zoznamNav:  #ak bolo návestidlo kliknuté obsluhou vyznač ho a zruš vyznačenie ostatných návestidiel
                 self.zoznamNav[ID].vybrane = not self.zoznamNav[ID].vybrane 
                 for i in self.zoznamNav.keys():
                     if i != ID:
@@ -152,31 +145,29 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                 for i in self.vlaknoUpdate.dictUseky.keys():   #vyberaj z úsekov
                     if self.zoznamNav[ID].usekPred == self.vlaknoUpdate.dictUseky[i].nazovGUI:   #ak sa nájde úsek previazaný s návestidlom
                         self.zoznamNav[ID].jeVolnyPred = self.vlaknoUpdate.dictUseky[i].jeVolny  #aktualizuj symbol návestidla podľa obsadenia úseku
-
-                    if self.zoznamNav[ID].usekPred == self.vlaknoUpdate.dictUseky[i].nazovGUI:   #ak sa nájde úsek previazaný s návestidlom
-                        self.zoznamNav[ID].usekOdozva = self.vlaknoUpdate.dictUseky[i].odozva  #aktualizuj symbol návestidla podľa LIfeSign úseku
-
+                        self.zoznamNav[ID].usekOdozva = self.vlaknoUpdate.dictUseky[i].odozva    #aktualizuj symbol návestidla podľa LIfeSign úseku
+                        
                     if self.zoznamNav[ID].usekZa == self.vlaknoUpdate.dictUseky[i].nazovGUI:   #ak sa nájde úsek previazaný s návestidlom
                         self.zoznamNav[ID].jeVolnyZa = self.vlaknoUpdate.dictUseky[i].jeVolny  #aktualizuj symbol návestidla podľa obsadenia úseku
 
                 self.zoznamNav[ID].update(self)
 
-        if objekt in ['update', 'priecestie']:  #aktualizácia priecestí
+        if objekt in ['update', 'priecestie']:  #aktualizácia priecestí počas aktualizácie celého okna (update) alebo len pri špecifickom volaní (pricestie)
             if clicked and ID in self.vlaknoUpdate.dictPriecestie:
                 self.vlaknoUpdate.dictPriecestie[ID].vyber = not self.vlaknoUpdate.dictPriecestie[ID].vyber
-                for i in self.vlaknoUpdate.dictPriecestie.keys():
-                    if i != ID:
-                        self.vlaknoUpdate.dictPriecestie[i].vyber = False
+            for i in self.vlaknoUpdate.dictPriecestie.keys():
+                if i != ID:
+                    self.vlaknoUpdate.dictPriecestie[i].vyber = False
 
             for i in self.vlaknoUpdate.dictPriecestie.keys():
                 self.vlaknoUpdate.dictPriecestie[i].update(self) 
 
-        if objekt in ['update', 'TS']:  #aktualizácia traťového súhlasu
+        if objekt in ['update', 'TS']:  #aktualizácia TS počas aktualizácie celého okna (update) alebo len pri špecifickom volaní (TS)
             for i in self.vlaknoUpdate.dictTS.keys():
                 self.vlaknoUpdate.dictTS[i].update(self)
                 self.ziadostAktivna = self.vlaknoUpdate.dictTS[i].ziadost
 
-        if objekt in ['update', 'Stanice']: #aktualizácia raidenia stanice
+        if objekt in ['update', 'Stanice']: #aktualizácia riadenia stn. počas aktualizácie celého okna (update) alebo len pri špecifickom volaní (Stanice)
             if clicked and ID in self.vlaknoUpdate.dictStanice:  
                 self.vlaknoUpdate.dictStanice[ID].vyber = not self.vlaknoUpdate.dictStanice[ID].vyber
             for i in self.vlaknoUpdate.dictStanice.keys():
@@ -205,27 +196,20 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         elif objekt == 'vyhybka':
             if id in self.vlaknoUpdate.dictUseky:  #ak sa výhybka nachádza v zozname
                 self.poslednaVyh = id   #zapíš ju ako poslednú kliknutú
-                if (id in [3,31] and self.vlaknoUpdate.dictStanice[1].dialkove) or (
-                id in [12,13,16,40,41,44] and self.vlaknoUpdate.dictStanice[2].dialkove) or (
-                id in [26,54] and self.vlaknoUpdate.dictStanice[3].dialkove):   #ak má precovisko aktívne riadenie 
-                    if id in [12, 13]:  #úprava pre výhybkovú spojku
-                        self.vlaknoUpdate.dictUseky[12].vyber = not self.vlaknoUpdate.dictUseky[12].vyber
-                        self.vlaknoUpdate.dictUseky[13].vyber = not self.vlaknoUpdate.dictUseky[13].vyber
-                        self.vlaknoUpdate.dictUseky[12].update(self)
-                        self.vlaknoUpdate.dictUseky[13].update(self)
+
+                if (self.poslednaVyh in [3,31] and self.vlaknoUpdate.dictStanice[1].dialkove) or (
+                self.poslednaVyh in [12,13,16,40,41,44] and self.vlaknoUpdate.dictStanice[2].dialkove) or (
+                self.poslednaVyh in [26,54] and self.vlaknoUpdate.dictStanice[3].dialkove):   #ak má precovisko aktívne riadenie 
                     
-                    elif id in [40, 41]:  #úprava pre výhybkovú spojku
-                        self.vlaknoUpdate.dictUseky[40].vyber = not self.vlaknoUpdate.dictUseky[40].vyber
-                        self.vlaknoUpdate.dictUseky[41].vyber = not self.vlaknoUpdate.dictUseky[41].vyber
-                        self.vlaknoUpdate.dictUseky[40].update(self)
-                        self.vlaknoUpdate.dictUseky[41].update(self)
+                    self.vlaknoUpdate.dictUseky[self.poslednaVyh].vyber = not self.vlaknoUpdate.dictUseky[self.poslednaVyh].vyber
+                    self.vlaknoUpdate.dictUseky[self.poslednaVyh].update(self)
 
-                    else:
-                        self.vlaknoUpdate.dictUseky[id].vyber = not self.vlaknoUpdate.dictUseky[id].vyber
-                        self.vlaknoUpdate.dictUseky[id].update(self)
+                    if self.vlaknoUpdate.dictUseky[self.poslednaVyh].spojka is True:    #úprava pre výhybkovú spojku
+                        self.vlaknoUpdate.dictUseky[self.vlaknoUpdate.dictUseky[self.poslednaVyh].druhaVymena].vyber = not self.vlaknoUpdate.dictUseky[self.vlaknoUpdate.dictUseky[self.poslednaVyh].druhaVymena].vyber
+                        self.vlaknoUpdate.dictUseky[self.vlaknoUpdate.dictUseky[self.poslednaVyh].druhaVymena].update(self)
 
-                    if self.vlaknoUpdate.dictUseky[id].vyber:  #je výhybka vybraná obsluhou?
-                        self.comboShowHide('vyhybka')  #ak áno zobraz kontextové okno akcií
+                    if self.vlaknoUpdate.dictUseky[self.poslednaVyh].vyber:  #ak je výhybka vybraná obsluhou
+                        self.comboShowHide('vyhybka')  #zobraz kontextové okno akcií
                     else:
                         self.comboShowHide()  #ak nie skry kontextové okno
 
@@ -249,12 +233,12 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         elif objekt == 'TS':
             self.poslednyTS = id 
 
-            if (self.vlaknoUpdate.dictTS[self.poslednyTS].ID == 1 and self.vlaknoUpdate.dictStanice[1].dialkove) or (   #ak máRadošina diaľkové riadenie
+            if (self.vlaknoUpdate.dictTS[self.poslednyTS].ID == 1 and self.vlaknoUpdate.dictStanice[1].dialkove) or (   #ak má Radošina diaľkové riadenie
             self.vlaknoUpdate.dictTS[self.poslednyTS].ID in [2,3,4] and self.vlaknoUpdate.dictStanice[2].dialkove) or ( #ak majú Zbehy diaľkové riadenie
             self.vlaknoUpdate.dictTS[self.poslednyTS].ID == 5 and self.vlaknoUpdate.dictStanice[3].dialkove):    #ak má Hlohovec diaľkové riadenie 
                 
-                if (self.vlaknoUpdate.dictTS[self.poslednyTS].ID == 4) or (
-                self.vlaknoUpdate.dictTS[self.poslednyTS].ID in [1,2] and (not self.vlaknoUpdate.dictStanice[1].dialkove or not self.vlaknoUpdate.dictStanice[2].dialkove)):
+                if (self.vlaknoUpdate.dictTS[self.poslednyTS].ID == 4) or (self.vlaknoUpdate.dictTS[self.poslednyTS].ID in [1,2] and (
+                not self.vlaknoUpdate.dictStanice[1].dialkove or not self.vlaknoUpdate.dictStanice[2].dialkove)):
                     self.vlaknoUpdate.dictTS[id].vybrane = not self.vlaknoUpdate.dictTS[id].vybrane 
 
                     if self.vlaknoUpdate.dictTS[id].vybrane:
@@ -382,180 +366,189 @@ class App(QMainWindow): #hlavná triedy vizualizácie
 
         self.ui.combo_priec.setCurrentIndex(0) #resetuj index vybranej akcie z kontextového menu  
 
-    def akciaNavestidlo(self, index, ID):   #vyhodnotenie vybranej akcie z kontextového menu
+    def akciaNavestidlo(self, index, typ):   #vyhodnotenie vybranej akcie z kontextového menu
         self.comboShowHide()    #po výbere skry menu
 
-        if ((ID in [1,2]) and index == 1) and (self.posledneNav not in [10,11,42,43,50,51,76,77]):  #výber vlakovej cesty
-            self.vyberCestu('Vlak')
+        #----------------------------výber typu vlakovej cesty------------------------------------------------------------------
+        if ((typ in ['hlavne', 'kombi']) and index == 1):   #výber vlakovej cesty
+            if self.zoznamNav[self.posledneNav].nazov not in ['R_k1_fik','R_k2_fik','DR_k1_fik','DR_k2_fik',
+                                                              'H_k1_fik','H_k2_fik','DH_k1_fik','DH_k2_fik']:  
+                self.vyberCestu('Vlak')
 
-        elif (ID == 2 and index == 2) or (ID == 3 and index == 1):  #výber posunovej cesty
-            if self.posledneNav in [1,4,5,18,19,20,21,22,23,24,35,38,39]:
+            else:
+                self.vypisHlasenia('Nie je možné postaviť vlakovú cestu')
+
+        elif (typ == 'kombi' and index == 2) or (typ == 'zriad' and index == 1):  #výber posunovej cesty
+            if self.zoznamNav[self.posledneNav].nazov in ['R_Se1','R_L1','R_L2',
+                                                          'Z_Se1','Z_Se2','Z_Se3','Z_S1','Z_S2','Z_L1','Z_L2',
+                                                          'H_Se1','H_S1','H_S2']:
                 self.vyberCestu('Posun')
 
             else:
                 self.vypisHlasenia('Nie je možné postaviť posunovú cestu')
 
-        elif (ID == 1 and index == 3) or (ID == 4 and index == 1) or (ID == 2 and index == 4) or (ID == 3 and index == 2):    #rušenie cesty
-            self.koncoveNav = self.posledneNav
-            self.posledneNav = 0
-
-            if ID == 4: #predhlášky od jednotlivých staníc
-                if self.koncoveNav in [6,49]:
-                    self.prikazDoPLC(odchod=True, nazov='odchodR', prikaz='/False')
-                if self.koncoveNav in [14,60]:
-                    self.prikazDoPLC(odchod=True, nazov='odchodZR', prikaz='/False')
-                elif self.koncoveNav in [15,61]:
-                    self.prikazDoPLC(odchod=True, nazov='odchodZL', prikaz='/False')
-                elif self.koncoveNav in [26,66]:
-                    self.prikazDoPLC(odchod=True, nazov='odchodZH', prikaz='/False')
-                    self.prikazDoPLC(prikaz='/False', nazov='ZBE', predhl=True)
-                elif self.koncoveNav in [40,74]:
-                    self.prikazDoPLC(odchod=True, nazov='odchodH', prikaz='/False')
-                    self.prikazDoPLC(prikaz='/False', nazov='HLO', predhl=True)
-
-            if self.koncoveNav in [26,66]:
-                for nav in [30,44,69]:
-                    self.zoznamNav[nav].predhlaska = False
-
-            elif self.koncoveNav in [40,74]:
-                for nav in [31,45,70]:
-                    self.zoznamNav[nav].predhlaska = False
-
-            self.zoznamNav[self.koncoveNav].vybrane = False
-            self.zoznamNav[self.koncoveNav].update(self)
-            self.szz.rusenieCesty(Disp=True)
-
-        elif self.pociatocneNav in [3,12,13,27,37,46,58,59,67,68,71] and ID in [10,12,13] and index == 1: #stavanie vchodovej bez ochrannej dráhy
-            if not self.szz.typCesty:
+        #---------------------------stavanie jazdnej cesty------------------------------------------------------------------------
+        elif typ in ['ciel_kombi','ciel_fikt','ciel_hlavne'] and index == 1 and not self.szz.typCesty: #stavanie vchodovej bez OD
+            if self.zoznamNav[self.pociatocneNav].nazov in ['R_S','DR_S',
+                                                            'Z_L','Z_BL','Z_S','DZ_L','DZ_BL','DZ_S',
+                                                            'H_L','DH_L']: #vybrané správne návestidlo   
                 self.postavCestu()
+            
             else:
-                self.vypisHlasenia('Nekorektný typ jazdnej cesty')
+                self.vypisHlasenia('Nesprávny výber')
 
-        elif ((ID in [10,12,13]) and (index == 2) and (not self.szz.typCesty)): #stavanie vchodovej cesty s ochrannou dráhou
-            if self.pociatocneNav in [12,13,27,58,59,67]:
-                self.postavCestu(True)
+        elif typ in ['ciel_kombi','ciel_fikt','ciel_hlavne'] and index == 2 and not self.szz.typCesty: #stavanie vchodovej cesty s OD
+            if self.zoznamNav[self.pociatocneNav].nazov in ['Z_L','Z_BL','Z_S','DZ_L','DZ_BL','DZ_S']: #vybrané správne návestidlo
+                self.postavCestu(Ochr = True)
 
             else:
                 self.vypisHlasenia('Jazdná cesta nemá definovanú ochrannú dráhu')
                 self.ukonciStavanie()
-            
-        elif (self.pociatocneNav in [4,5,20,21,22,23,38,39,47,48,62,63,64,65,72,73]) and ((ID in [10,12]) and (index == 1) and (not self.szz.typCesty)): #stavanie odchodovej cesty
-            if self.pociatocneNav in [4,5,47,48]:
-                if self.vlaknoUpdate.dictTS[1].prijem:
-                    self.postavCestu()
-                else:
-                    self.ukonciStavanie(TS=True)
 
-            elif self.pociatocneNav in [20,62]:
-                if self.vlaknoUpdate.dictTS[2].prijem:
-                    self.postavCestu()
-                else:
-                    self.ukonciStavanie(TS=True)
-                
-            elif self.pociatocneNav in [21,63]:
-                if self.posledneNav in [14,60]:                    
-                    if self.vlaknoUpdate.dictTS[2].prijem:
+        elif typ in ['ciel_kombi','ciel_fikt'] and index == 1 and not self.szz.typCesty: #stavanie odchodovej cesty
+            if self.zoznamNav[self.pociatocneNav].nazov in ['R_L1','R_L2','DR_L1','DR_L2']: #kontrola počiatočného návestidla RAD
+                if self.vlaknoUpdate.dictTS[1].prijem:  #kontrola TS
                         self.postavCestu()
-                    else:
-                        self.ukonciStavanie(TS=True)
+                
+                else:                    
+                    self.ukonciStavanie(TS=True)
 
-                elif self.posledneNav in [15,61]:                    
-                    if self.vlaknoUpdate.dictTS[4].volnost: 
-                        if self.vlaknoUpdate.dictTS[4].prijem:
+
+            elif self.zoznamNav[self.pociatocneNav].nazov in ['Z_S1','Z_S2','Z_L1','Z_L2','DZ_S1','DZ_S2','DZ_L1','DZ_L2']:
+                if self.zoznamNav[self.pociatocneNav].nazov in ['Z_S1','DZ_S1'] and self.vlaknoUpdate.dictTS[2].prijem: #kontrola TS
+                    self.postavCestu()
+                    
+                elif self.zoznamNav[self.pociatocneNav].nazov in ['Z_S2','DZ_S2']:
+                    if self.zoznamNav[self.posledneNav].nazov in ['Z_L_fik','DZ_L_fik'] and self.vlaknoUpdate.dictTS[2].prijem:
+
+                        self.postavCestu()
+
+                    elif self.zoznamNav[self.posledneNav].nazov in ['Z_BL_fik','DZ_BL_fik'] and self.vlaknoUpdate.dictTS[4].prijem:
+                        if self.vlaknoUpdate.dictTS[4].volnost:
+
                             self.postavCestu()
+                        
+                        else:
+                            self.ukonciStavanie(volnost=True)
+
+                elif self.pociatocneNav in [22,23,64,65]:
+                    if self.vlaknoUpdate.odhlaskaLo:                    
+                        if self.vlaknoUpdate.dictTS[3].prijem:
+                            self.postavCestu()
+                        
                         else:
                             self.ukonciStavanie(TS=True)
+                    
                     else:
-                        self.ukonciStavanie(volnost=True)
+                        self.ukonciStavanie(odhl=True)
 
-            elif self.pociatocneNav in [22,23,64,65]:
-                if self.vlaknoUpdate.odhlaskaLo:                    
-                    if self.vlaknoUpdate.dictTS[3].prijem:
-                        self.postavCestu()
-                    else:
-                        self.ukonciStavanie(TS=True)
                 else:
-                    self.ukonciStavanie(odhl=True)
-
-            elif self.pociatocneNav in [38,39,72,73]:
-                if self.vlaknoUpdate.odhlaskaSo:
-                    if self.vlaknoUpdate.dictTS[5].prijem:
-                        self.postavCestu()
+                    self.ukonciStavanie(TS=True)
+                    
+            elif self.zoznamNav[self.pociatocneNav].nazov in ['H_S1','H_S2','DH_S1','DH_S2']: #kontrola počiatočného návestidla HLO
+                    if self.vlaknoUpdate.odhlaskaSo:    #kontrola odhlášky
+                        
+                        if self.vlaknoUpdate.dictTS[5].prijem:  #kontrola TS
+                            self.postavCestu()
+                        
+                        else:
+                            self.ukonciStavanie(TS=True)
+                    
                     else:
-                        self.ukonciStavanie(TS=True)
-                else:
-                    self.ukonciStavanie(odhl=True)
+                        self.ukonciStavanie(odhl=True)
 
-        elif (ID == 10 and index == 3) or (ID == 11 and index == 1):    #stavanie posunovej cesty
-            self.postavCestu()
+            else:
+                self.vypisHlasenia('Nesprávny výber')
 
-        elif ((ID == 1 and index == 2) or (ID == 2 and index == 3) or (ID == 5 and index == 1)) and (self.posledneNav not in [10,11,42,43,50,51,76,77]): #Privolávacia návesť
-            self.zoznamNav[self.posledneNav].vybrane = False
-            
-            if self.zoznamNav[self.posledneNav].znak == 'Stoj':
-                self.zoznamNav[self.posledneNav].znak = 'PN'
-                self.prikazDoPLC(prikaz='/PN', id=self.zoznamNav[self.posledneNav].ID, nazov=self.zoznamNav[self.posledneNav].nazov)  
-                self.prikazDoPLC(prikaz='/PN', znak=True)
-                self.zoznamNav[self.posledneNav].update(self)
+        elif self.szz.typCesty:   #je vybraná posunová cesta pre stavanie
+            if (typ == 'ciel_kombi' and index == 3) or (typ == 'ciel_zriad' and index == 1):    
+                self.postavCestu()
+
+        #---------------------------rušenie vlakovej cesty------------------------------------------------------------------------
+        elif (typ == 'hlavne' and index == 3) or (typ == 'kombi' and index == 4) or (typ == 'zriad' and index == 2) or (typ == 'fikt' and index == 1):    #rušenie cesty
+            self.koncoveNav = self.posledneNav
+            self.posledneNav = 0
+
+            if typ == 'fikt': #zrušenie predhlášky v prípade rušenia odchodovej cesty
+                if self.zoznamNav[self.koncoveNav].nazov in ['R_S_fik','DR_S_fik']:
+                    self.prikazDoPLC(odchod=True, nazov='odchodR', prikaz='/False')
+
+                elif self.zoznamNav[self.koncoveNav].nazov in ['Z_L_fik','DZ_L_fik']:
+                    self.prikazDoPLC(odchod=True, nazov='odchodZR', prikaz='/False')
+
+                elif self.zoznamNav[self.koncoveNav].nazov in ['Z_BL_fik','DZ_BL_fik']:
+                    self.prikazDoPLC(odchod=True, nazov='odchodZL', prikaz='/False')
+
+                elif self.zoznamNav[self.koncoveNav].nazov in ['Z_S_fik','DZ_S_fik']:
+                    self.prikazDoPLC(odchod=True, nazov='odchodZH', prikaz='/False')
+                    self.prikazDoPLC(prikaz='/False', nazov='ZBE', predhl=True)
+                    for nav in [30,44,69]:  #zmazanie predhlášky na návestidle AH Lo
+                        self.zoznamNav[nav].predhlaska = False
+
+                elif self.zoznamNav[self.koncoveNav].nazov in ['H_L_fik','DH_L_fik']:
+                    self.prikazDoPLC(odchod=True, nazov='odchodH', prikaz='/False')
+                    self.prikazDoPLC(prikaz='/False', nazov='HLO', predhl=True)
+                    for nav in [31,45,70]:  #zmazanie predhlášky na návestidle AH So
+                        self.zoznamNav[nav].predhlaska = False                
+
+            self.zoznamNav[self.koncoveNav].vybrane = False
+            self.zoznamNav[self.koncoveNav].update(self)
+            self.szz.rusenieCesty(Disp=True)
+  
+        #---------------------------aktivácia privolávacej návesti------------------------------------------------------------------------         
+        elif (typ == 'hlavne' and index == 2) or (typ == 'kombi' and index == 3) or (typ == 'oddiel' and index == 1):
+            if self.zoznamNav[self.posledneNav].nazov not in ['R_k1_fik','R_k2_fik','DR_k1_fik','DR_k2_fik',
+                                                          'H_k1_fik','H_k2_fik','DH_k1_fik','DH_k2_fik']: #kontrola správneho návestidla    
+                self.zoznamNav[self.posledneNav].vybrane = False
                 
-                if self.zoznamNav[self.posledneNav].zavisle != -1:
-                    self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].znak = 'PN'
-                    self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].update(self)
+                if self.zoznamNav[self.posledneNav].znak == 'Stoj' and self.zoznamNav[self.posledneNav].znak != 'PN': #rozsvietenie privolávacej návesti
+                    self.zmenaNavZnaku(navest = 'PN')
 
-            elif self.zoznamNav[self.posledneNav].znak == 'PN':
-                self.zoznamNav[self.posledneNav].znak = 'Stoj'
-                self.prikazDoPLC(prikaz='/Stoj', id=self.zoznamNav[self.posledneNav].ID, nazov=self.zoznamNav[self.posledneNav].nazov)
-                self.prikazDoPLC(prikaz='/Stoj', znak=True)
-                self.zoznamNav[self.posledneNav].update(self) 
-
-                if self.zoznamNav[self.posledneNav].zavisle != -1:
-                    self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].znak = 'Stoj'
-                    self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].update(self)           
-
-        elif ((ID == 1 and index == 5) or (ID == 2 and index == 6) or (ID == 3 and index == 4) or (ID == 5 and index == 3)) and (self.posledneNav not in [10,11,42,43,50,51,76,77]): #Manuálne zadanie 'Stoj'
-            self.zoznamNav[self.posledneNav].vybrane = False
-
-            if (self.zoznamNav[self.posledneNav].pociatocne) or (self.zoznamNav[self.posledneNav].TZZ == 'AH' and self.zoznamNav[self.posledneNav].predhlaska):   #iba ak je návestidlo počiatočným návestidlom jazdnej cesty
-                self.zoznamNav[self.posledneNav].manual = True
-                self.zoznamNav[self.posledneNav].znak = 'Stoj'
-                self.prikazDoPLC(prikaz='/Stoj', id=self.zoznamNav[self.posledneNav].ID, nazov=self.zoznamNav[self.posledneNav].nazov)
-                self.prikazDoPLC(prikaz='/Stoj', znak=True)
-                self.zoznamNav[self.posledneNav].update(self)
-
-                if self.zoznamNav[self.posledneNav].zavisle != -1:
-                    self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].znak = 'Stoj'
-                    self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].update(self)
+                elif self.zoznamNav[self.posledneNav].znak == 'PN': #zhasnutie privolávacej návesti
+                    self.zmenaNavZnaku(navest = 'Stoj')
+                                
+                elif self.zoznamNav[self.posledneNav].znak != 'Stoj' and self.zoznamNav[self.posledneNav].znak != 'PN':
+                    self.vypisHlasenia('Nie je možné rozsvietiť privolávaciu návesť')
 
             else:
-                self.vypisHlasenia('Nesprávne zadanie STOJ na návestidle')
+                self.vypisHlasenia('Nesprávny výber návestidla')
 
-        elif ((ID == 1 and index == 4) or (ID == 2 and index == 5) or (ID == 3 and index == 3) or (ID == 5 and index == 2)) and (self.posledneNav not in [10,11,42,43,50,51,76,77]): #Manuálne zadanie 'Volno'
-            self.zoznamNav[self.posledneNav].vybrane = False
+        #---------------------------manuálne rozsvietenie Stoj------------------------------------------------------------------------
+        elif (typ == 'hlavne' and index == 5) or (typ == 'kombi' and index == 6) or (typ == 'zriad' and index == 4) or (typ == 'oddiel' and index == 3):
+            if self.zoznamNav[self.posledneNav].nazov not in ['R_k1_fik','R_k2_fik','DR_k1_fik','DR_k2_fik',
+                                                              'H_k1_fik','H_k2_fik','DH_k1_fik','DH_k2_fik']: 
+                self.zoznamNav[self.posledneNav].vybrane = False
 
-            if (self.zoznamNav[self.posledneNav].pociatocne) or (self.zoznamNav[self.posledneNav].TZZ == 'AH' and self.zoznamNav[self.posledneNav].predhlaska):   #iba ak je návestidlo počiatočným návestidlom jazdnej cesty
-                self.zoznamNav[self.posledneNav].manual = True
-                if (ID in [1,5]) or (ID == 2 and not self.zoznamNav[self.posledneNav].typAktCes):
-                    self.zoznamNav[self.posledneNav].znak = 'Volno'
-                    self.prikazDoPLC(prikaz='/Volno', id=self.zoznamNav[self.posledneNav].ID, nazov=self.zoznamNav[self.posledneNav].nazov)
-                    self.prikazDoPLC(prikaz='/Volno', znak=True)
+                if (self.zoznamNav[self.posledneNav].pociatocne) or ( #iba ak je návestidlo počiatočným návestidlom jazdnej cesty
+                self.zoznamNav[self.posledneNav].TZZ == 'AH' and self.zoznamNav[self.posledneNav].predhlaska):  #alebo návestidlo AH s prijatou predhláškou 
+                    self.zoznamNav[self.posledneNav].manual = True
+                    self.zmenaNavZnaku(navest = 'Stoj')
 
-                    if self.zoznamNav[self.posledneNav].zavisle != -1:
-                        self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].znak = 'Volno'
-                        self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].update(self)
+                else:
+                    self.vypisHlasenia('Nesprávne zadanie STOJ na návestidle')
 
-                elif (ID == 3) or (ID == 2 and self.zoznamNav[self.posledneNav].typAktCes):
-                    self.zoznamNav[self.posledneNav].znak = 'Posun'
-                    self.prikazDoPLC(prikaz='/Posun', id=self.zoznamNav[self.posledneNav].ID, nazov=self.zoznamNav[self.posledneNav].nazov)
-                    self.prikazDoPLC(prikaz='/Posun', znak=True)
+        #---------------------------manuálne rozsvietenie Voľno------------------------------------------------------------------------
+        elif (typ == 'hlavne' and index == 4) or (typ == 'kombi' and index == 5) or (typ == 'zriad' and index == 3) or (typ == 'oddiel' and index == 2):
+            if  self.zoznamNav[self.posledneNav].nazov not in ['R_k1_fik','R_k2_fik','DR_k1_fik','DR_k2_fik',
+                                                              'H_k1_fik','H_k2_fik','DH_k1_fik','DH_k2_fik']:                                           
+                if self.zoznamNav[self.posledneNav].znak != 'PN':
+                    self.zoznamNav[self.posledneNav].vybrane = False
 
-                    if self.zoznamNav[self.posledneNav].zavisle != -1:
-                        self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].znak = 'Posun'
-                        self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].update(self)
+                    if (self.zoznamNav[self.posledneNav].pociatocne) or (   #iba ak je návestidlo počiatočným návestidlom jazdnej cesty
+                        self.zoznamNav[self.posledneNav].TZZ == 'AH' and self.zoznamNav[self.posledneNav].predhlaska):   #alebo návestidlo AH s prijatou predhláškou 
+                        self.zoznamNav[self.posledneNav].manual = True
+                    
+                        if (typ in ['hlavne','oddiel']) or (typ == 'kombi' and not self.zoznamNav[self.posledneNav].typAktCes):
+                            self.zmenaNavZnaku(navest = 'Volno')
 
-                self.zoznamNav[self.posledneNav].update(self)
+                        elif (typ == 'zriad') or (typ == 'kombi' and self.zoznamNav[self.posledneNav].typAktCes):
+                            self.zmenaNavZnaku(navest = 'Posun')
 
-            else:
-                self.vypisHlasenia('Nesprávne zadanie VOĽNO na návestidle')
+                    else:
+                        self.vypisHlasenia('Nesprávne zadanie VOĽNO na návestidle')
+
+                else:
+                    self.vypisHlasenia('Návestidlo má aktívnu privoláviacu návesť')
         
         else:
             if self.posledneNav != 0:
@@ -576,6 +569,17 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         self.ui.combo_ciel_ko.setCurrentIndex(0)
         self.ui.combo_ciel_fi.setCurrentIndex(0)
         self.ui.combo_ciel_hl.setCurrentIndex(0)
+
+    def zmenaNavZnaku(self, navest = ' '):    #zmena návestného znaku na návestidle
+        self.zoznamNav[self.posledneNav].znak = navest
+        prikaz = '/' + navest
+        self.prikazDoPLC(prikaz=prikaz, id=self.zoznamNav[self.posledneNav].ID, nazov=self.zoznamNav[self.posledneNav].nazov)  
+        self.prikazDoPLC(prikaz=prikaz, znak=True)
+        self.zoznamNav[self.posledneNav].update(self)
+    
+        if self.zoznamNav[self.posledneNav].zavisle != -1:  #úprava pre dispečerskú alikáciu
+                        self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].znak = navest
+                        self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].update(self)
 
     def akciaTS(self, index, id):   #metóda pre prácu s traťovým súhlasom 
         if (index == 1) and (id == 2):   #žiadosť o TS
@@ -605,19 +609,19 @@ class App(QMainWindow): #hlavná triedy vizualizácie
 
     def akciaStanica(self, index):  #metóda pre spracovanie signálov riadenia
         if index == 1: #žiadosť o prevzatie riadenia
-            if not self.vlaknoUpdate.dictStanice[self.lastStanica].dialkove:
-                if self.vlaknoUpdate.dictStanice[self.lastStanica].ziadost: #ak už je aktívna žiadosť
-                    self.prikazDoPLC(prikaz='/True', nazov=self.vlaknoUpdate.dictStanice[self.lastStanica].nazovGUI, ziadRiad=False)    #zruš ju
+            if not self.vlaknoUpdate.dictStanice[self.poslednaStn].dialkove:
+                if self.vlaknoUpdate.dictStanice[self.poslednaStn].ziadost: #ak už je aktívna žiadosť
+                    self.prikazDoPLC(prikaz='/True', nazov=self.vlaknoUpdate.dictStanice[self.poslednaStn].nazovGUI, ziadRiad=False)    #zruš ju
 
                 else:   #ak nie je žiadosť aktívna
-                    self.prikazDoPLC(prikaz='/True', nazov=self.vlaknoUpdate.dictStanice[self.lastStanica].nazovGUI, ziadRiad=True) #aktivuj ju
+                    self.prikazDoPLC(prikaz='/True', nazov=self.vlaknoUpdate.dictStanice[self.poslednaStn].nazovGUI, ziadRiad=True) #aktivuj ju
 
             else:
                 self.vypisHlasenia('Obsluha stanice prevedená na pracovisko vzdialenej obsluhy')
         
         elif index == 2: #potvrdenie žiadosti o prevzatie riadenia
-            if self.vlaknoUpdate.dictStanice[self.lastStanica].ziadost:
-                self.prikazDoPLC(nazov=self.vlaknoUpdate.dictStanice[self.lastStanica].nazovGUI, udelRiad=True)     
+            if self.vlaknoUpdate.dictStanice[self.poslednaStn].ziadost:
+                self.prikazDoPLC(nazov=self.vlaknoUpdate.dictStanice[self.poslednaStn].nazovGUI, udelRiad=True)     
 
             else:
                 self.vypisHlasenia('Žiadosť nebola prijatá')       
@@ -803,16 +807,16 @@ if __name__ == "__main__":
     widget.ui.groupPrehlad.setVisible(False)
 
     #prepojenia s metódou vyhodnotenia akcie z kontextového menu
-    widget.ui.combo_hlavne.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_hlavne.currentIndex(), 1)) #počiatok jazdnej cesty   
-    widget.ui.combo_kombi.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_kombi.currentIndex(), 2))
-    widget.ui.combo_zriad.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_zriad.currentIndex(), 3))
-    widget.ui.combo_fikt.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_fikt.currentIndex(), 4))
-    widget.ui.combo_oddielove.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_oddielove.currentIndex(), 5))
+    widget.ui.combo_hlavne.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_hlavne.currentIndex(), 'hlavne')) #počiatok jazdnej cesty   
+    widget.ui.combo_kombi.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_kombi.currentIndex(), 'kombi'))
+    widget.ui.combo_zriad.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_zriad.currentIndex(), 'zriad'))
+    widget.ui.combo_fikt.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_fikt.currentIndex(), 'fikt'))
+    widget.ui.combo_oddielove.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_oddielove.currentIndex(), 'oddiel'))
 
-    widget.ui.combo_ciel_ko.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_ciel_ko.currentIndex(), 10)) #koniec jazdnej cesty
-    widget.ui.combo_ciel_zr.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_ciel_zr.currentIndex(), 11))
-    widget.ui.combo_ciel_fi.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_ciel_fi.currentIndex(), 12))
-    widget.ui.combo_ciel_hl.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_ciel_hl.currentIndex(), 13))
+    widget.ui.combo_ciel_ko.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_ciel_ko.currentIndex(), 'ciel_kombi')) #koniec jazdnej cesty
+    widget.ui.combo_ciel_zr.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_ciel_zr.currentIndex(), 'ciel_zriad'))
+    widget.ui.combo_ciel_fi.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_ciel_fi.currentIndex(), 'ciel_fikt'))
+    widget.ui.combo_ciel_hl.currentIndexChanged.connect(lambda: widget.akciaNavestidlo(widget.ui.combo_ciel_hl.currentIndex(), 'ciel_hlavne'))
 
     widget.ui.combo_priec.currentIndexChanged.connect(lambda: widget.akciaPriecestie(widget.ui.combo_priec.currentIndex())) #priecestie
 

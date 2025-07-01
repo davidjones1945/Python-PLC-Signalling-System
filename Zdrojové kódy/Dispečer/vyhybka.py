@@ -1,5 +1,5 @@
 class Vyhybka:
-    def __init__(self, ID, IDsmer, nazovGUI, usek, enumIkon, dictIkon, app, spojka = False, zavisla = -1):
+    def __init__(self, ID, IDsmer, nazovGUI, usek, enumIkon, dictIkon, app, spojka = False, zavisla = -1, druhaVymena = -1):
         self.app = app  #inštancia spolupracujúcej triedy
         self.ID = ID    #ID výhybky
         self.IDsmer = IDsmer #ID pre načítanie smeru výhybky
@@ -28,6 +28,7 @@ class Vyhybka:
         self.zaver = False  #výhybka je pod záverom jazdnej cesty
 
         self.spojka = spojka #výhybka je súčasťou koľajovej spojky
+        self.druhaVymena = druhaVymena #ID druhej výmeny v koľajovej spojke
 
         self.prejazd = False #informácia o prejazde vlaku cez výhybkový úsek
 
