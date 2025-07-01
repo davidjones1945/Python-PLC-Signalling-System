@@ -3,7 +3,7 @@
  <class>ILTIS</class>
  <widget class="QMainWindow" name="ILTIS">
   <property name="windowModality">
-   <enum>Qt::NonModal</enum>
+   <enum>Qt::WindowModality::NonModal</enum>
   </property>
   <property name="geometry">
    <rect>
@@ -1254,7 +1254,7 @@ color: rgb(0, 0, 0);</string>
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; color:#d0d0d0;&quot;&gt;Lužianky&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="textFormat">
-     <enum>Qt::AutoText</enum>
+     <enum>Qt::TextFormat::AutoText</enum>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -1467,7 +1467,7 @@ color: rgb(0, 0, 0);</string>
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; color:#d0d0d0;&quot;&gt;AH Rišňovce&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="textFormat">
-     <enum>Qt::AutoText</enum>
+     <enum>Qt::TextFormat::AutoText</enum>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -1553,7 +1553,7 @@ color: rgb(0, 0, 0);</string>
      </font>
     </property>
     <property name="textFormat">
-     <enum>Qt::AutoText</enum>
+     <enum>Qt::TextFormat::AutoText</enum>
     </property>
     <property name="pixmap">
      <pixmap>img/Stanice/Pracovisko.bmp</pixmap>
@@ -1578,7 +1578,7 @@ color: rgb(0, 0, 0);</string>
      </font>
     </property>
     <property name="textFormat">
-     <enum>Qt::AutoText</enum>
+     <enum>Qt::TextFormat::AutoText</enum>
     </property>
     <property name="pixmap">
      <pixmap>img/Stanice/Pracovisko.bmp</pixmap>
@@ -1635,7 +1635,7 @@ color: rgb(0, 0, 0);</string>
      </font>
     </property>
     <property name="textFormat">
-     <enum>Qt::AutoText</enum>
+     <enum>Qt::TextFormat::AutoText</enum>
     </property>
     <property name="pixmap">
      <pixmap>img/Stanice/Pracovisko.bmp</pixmap>
@@ -2277,7 +2277,7 @@ font: 700 12pt &quot;Segoe UI&quot;;</string>
       </font>
      </property>
      <property name="textFormat">
-      <enum>Qt::AutoText</enum>
+      <enum>Qt::TextFormat::AutoText</enum>
      </property>
      <property name="pixmap">
       <pixmap>img/Stanice/Pracovisko.bmp</pixmap>
@@ -2499,7 +2499,7 @@ font: 700 12pt &quot;Segoe UI&quot;;</string>
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; color:#d0d0d0;&quot;&gt;Radošina&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="textFormat">
-      <enum>Qt::AutoText</enum>
+      <enum>Qt::TextFormat::AutoText</enum>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -2869,7 +2869,7 @@ font: 700 12pt &quot;Segoe UI&quot;;</string>
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; color:#d0d0d0;&quot;&gt;Zbehy&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="textFormat">
-      <enum>Qt::AutoText</enum>
+      <enum>Qt::TextFormat::AutoText</enum>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -3362,7 +3362,7 @@ font: 700 12pt &quot;Segoe UI&quot;;</string>
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; color:#d0d0d0;&quot;&gt;Zbehy&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="textFormat">
-      <enum>Qt::AutoText</enum>
+      <enum>Qt::TextFormat::AutoText</enum>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -3386,7 +3386,7 @@ font: 700 12pt &quot;Segoe UI&quot;;</string>
       </font>
      </property>
      <property name="textFormat">
-      <enum>Qt::AutoText</enum>
+      <enum>Qt::TextFormat::AutoText</enum>
      </property>
      <property name="pixmap">
       <pixmap>img/Stanice/Pracovisko.bmp</pixmap>
@@ -3710,7 +3710,7 @@ font: 700 12pt &quot;Segoe UI&quot;;</string>
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; color:#d0d0d0;&quot;&gt;Hlohovec&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="textFormat">
-      <enum>Qt::AutoText</enum>
+      <enum>Qt::TextFormat::AutoText</enum>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -3943,7 +3943,7 @@ font: 700 12pt &quot;Segoe UI&quot;;</string>
       </font>
      </property>
      <property name="textFormat">
-      <enum>Qt::AutoText</enum>
+      <enum>Qt::TextFormat::AutoText</enum>
      </property>
      <property name="pixmap">
       <pixmap>img/Stanice/Pracovisko.bmp</pixmap>
@@ -4136,7 +4136,7 @@ font: 700 12pt &quot;Segoe UI&quot;;</string>
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; color:#d0d0d0;&quot;&gt;Radošina&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="textFormat">
-      <enum>Qt::AutoText</enum>
+      <enum>Qt::TextFormat::AutoText</enum>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -4826,7 +4826,7 @@ font: 700 12pt &quot;Segoe UI&quot;;</string>
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; color:#d0d0d0;&quot;&gt;Lužianky&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="textFormat">
-      <enum>Qt::AutoText</enum>
+      <enum>Qt::TextFormat::AutoText</enum>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -4972,7 +4972,7 @@ font: 700 12pt &quot;Segoe UI&quot;;</string>
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; color:#d0d0d0;&quot;&gt;Hlohovec&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="textFormat">
-      <enum>Qt::AutoText</enum>
+      <enum>Qt::TextFormat::AutoText</enum>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -5095,7 +5095,7 @@ font: 700 12pt &quot;Segoe UI&quot;;</string>
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; color:#d0d0d0;&quot;&gt;Zbehy&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="textFormat">
-      <enum>Qt::AutoText</enum>
+      <enum>Qt::TextFormat::AutoText</enum>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -6108,7 +6108,7 @@ color: rgb(0, 0, 0);</string>
 color: rgb(0,0,0)</string>
      </property>
      <property name="text">
-      <string>158.193.224.52:8041</string>
+      <string>158.193.224.220:8041</string>
      </property>
     </widget>
     <widget class="QPushButton" name="ButtonConnect">
@@ -6235,6 +6235,39 @@ background-color: rgb(0, 0, 0);</string>
      <property name="title">
       <string>Systém:</string>
      </property>
+     <widget class="QLabel" name="textChyba">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>30</y>
+        <width>471</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>12</pointsize>
+        <italic>false</italic>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(166, 166, 166);</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::TextFormat::AutoText</enum>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+      </property>
+     </widget>
     </widget>
     <widget class="QGroupBox" name="groupPoruchy">
      <property name="geometry">
@@ -6277,7 +6310,7 @@ color: rgb(166, 166, 166);</string>
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Strata spojenia s REST serverom&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="textFormat">
-       <enum>Qt::AutoText</enum>
+       <enum>Qt::TextFormat::AutoText</enum>
       </property>
       <property name="scaledContents">
        <bool>true</bool>
@@ -6307,7 +6340,7 @@ color: rgb(166, 166, 166);</string>
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Strata spojenia s ESA 44&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="textFormat">
-       <enum>Qt::AutoText</enum>
+       <enum>Qt::TextFormat::AutoText</enum>
       </property>
       <property name="scaledContents">
        <bool>true</bool>
@@ -6390,7 +6423,7 @@ color: rgb(0, 0, 0);</string>
       <string>Dispečerské pracovisko</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QPushButton" name="ButtonClose_1">
@@ -6431,7 +6464,7 @@ color: rgb(0, 0, 0);</string>
       <string>Verzia 1.1</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_6">
@@ -6447,7 +6480,7 @@ color: rgb(0, 0, 0);</string>
       <string>ILTIS-N</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_7">
@@ -6463,7 +6496,7 @@ color: rgb(0, 0, 0);</string>
       <string>Dávid Macko</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_8">
@@ -6479,7 +6512,7 @@ color: rgb(0, 0, 0);</string>
       <string>2024</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
    </widget>
@@ -6757,7 +6790,7 @@ color: rgb(0, 0, 0);</string>
      </rect>
     </property>
     <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
+     <enum>Qt::LayoutDirection::LeftToRight</enum>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(166, 166, 166);</string>

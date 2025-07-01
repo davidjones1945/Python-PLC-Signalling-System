@@ -2357,7 +2357,7 @@ class Ui_ILTIS(object):
 
         self.DateTime.setText(QCoreApplication.translate("ILTIS", u"01.01.1970 00:00:00", None))
         self.groupREST.setTitle(QCoreApplication.translate("ILTIS", u"Pripojenie k REST serveru", None))
-        self.Line_IP.setText(QCoreApplication.translate("ILTIS", u"158.193.224.52:8041", None))
+        self.Line_IP.setText(QCoreApplication.translate("ILTIS", u"158.193.224.220:8041", None))
         self.ButtonConnect.setText(QCoreApplication.translate("ILTIS", u"Pripoji\u0165", None))
         self.ButtonDisconnect.setText(QCoreApplication.translate("ILTIS", u"Odpiji\u0165", None))
         self.label_2.setText(QCoreApplication.translate("ILTIS", u"IP adresa REST API", None))

@@ -821,7 +821,7 @@ if __name__ == "__main__":
     widget.ui.combo_TS_DISP.currentIndexChanged.connect(lambda: widget.akciaTS(widget.ui.combo_TS_DISP.currentIndex(), 1))  #traťový súhlas
     widget.ui.combo_TS_ESA.currentIndexChanged.connect(lambda: widget.akciaTS(widget.ui.combo_TS_ESA.currentIndex(), 2))
 
-    widget.ui.combo_vyh.currentIndexChanged.connect(lambda: widget.szz.prestavenieVyh(widget.lastVyh ,widget.ui.combo_vyh.currentIndex()))  #prestavenie výmeny    
+    widget.ui.combo_vyh.currentIndexChanged.connect(lambda: widget.szz.prestavenieVyh(widget.poslednaVyh ,widget.ui.combo_vyh.currentIndex()))  #prestavenie výmeny    
 
     widget.ui.actionLupa_Radosina.triggered.connect(lambda: widget.lupa(1)) #práca s podrobnými obrazmi staníc
     widget.ui.actionLupa_Zbehy.triggered.connect(lambda: widget.lupa(2))

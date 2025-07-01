@@ -188,21 +188,21 @@ class Vyhybka:
             self.prejazd = False
 
             if self.spojka:
-                for i in self.app.workerThread.dictUseky.keys(): #vyberaj z úsekov
-                    spojka = getattr(self.app.workerThread.dictUseky[i], 'spojka', None)   #načítaj hodnotu atribútu 'spojka'
+                for i in self.app.vlaknoUpdate.dictUseky.keys(): #vyberaj z úsekov
+                    spojka = getattr(self.app.vlaknoUpdate.dictUseky[i], 'spojka', None)   #načítaj hodnotu atribútu 'spojka'
                     
                     if spojka is not  None: #ak hodnota existuje
-                        if (self.ID != self.app.workerThread.dictUseky[i].ID) and spojka and (self.ID != self.app.workerThread.dictUseky[i].jeVolny):  #ak hodnota neukazuje na vlastný objekt
-                            self.app.workerThread.dictUseky[i].zaver = False   #zruš záver sploupracujúcej výhybky
-                            self.app.workerThread.dictUseky[i].update(self)         
+                        if (self.ID != self.app.vlaknoUpdate.dictUseky[i].ID) and spojka and (self.ID != self.app.vlaknoUpdate.dictUseky[i].jeVolny):  #ak hodnota neukazuje na vlastný objekt
+                            self.app.vlaknoUpdate.dictUseky[i].zaver = False   #zruš záver sploupracujúcej výhybky
+                            self.app.vlaknoUpdate.dictUseky[i].update(self)         
             
         if self.jeVolny and not self.vlak and not self.posun and not self.prejazd:   #ak je výhybka voľná a bez jazdnej cesty
             if self.spojka: #ak je výhybka súčasťou koľajovej spojky
-                for i in self.app.workerThread.dictUseky.keys(): #vyberaj z úsekov
-                    spojka = getattr(self.app.workerThread.dictUseky[i], 'spojka', None)   #načítaj hodnotu atribútu 'spojka'
+                for i in self.app.vlaknoUpdate.dictUseky.keys(): #vyberaj z úsekov
+                    spojka = getattr(self.app.vlaknoUpdate.dictUseky[i], 'spojka', None)   #načítaj hodnotu atribútu 'spojka'
                     
                     if spojka is not  None: #ak hodnota existuje
-                        if (self.ID != self.app.workerThread.dictUseky[i].ID) and spojka:  #ak hodnota neukazuje na vlastný objekt
-                            if (self.app.workerThread.dictUseky[i].zaver) and not self.zaver:   #ak je záver druhej výhybky v koľajovej spojke aktívny
-                                self.app.workerThread.dictUseky[i].zaver = True   #aktivuj záver sploupracujúcej výhybky
-                                self.app.workerThread.dictUseky[i].update(self)         
+                        if (self.ID != self.app.vlaknoUpdate.dictUseky[i].ID) and spojka:  #ak hodnota neukazuje na vlastný objekt
+                            if (self.app.vlaknoUpdate.dictUseky[i].zaver) and not self.zaver:   #ak je záver druhej výhybky v koľajovej spojke aktívny
+                                self.app.vlaknoUpdate.dictUseky[i].zaver = True   #aktivuj záver sploupracujúcej výhybky
+                                self.app.vlaknoUpdate.dictUseky[i].update(self)         
