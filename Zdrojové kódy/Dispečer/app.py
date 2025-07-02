@@ -373,7 +373,11 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         if ((typ in ['hlavne', 'kombi']) and index == 1):   #výber vlakovej cesty
             if self.zoznamNav[self.posledneNav].nazov not in ['R_k1_fik','R_k2_fik','DR_k1_fik','DR_k2_fik',
                                                               'H_k1_fik','H_k2_fik','DH_k1_fik','DH_k2_fik']:  
-                self.vyberCestu('Vlak')
+                if self.zoznamNav[self.posledneNav].znak != 'PN':
+                    self.vyberCestu('Vlak')
+                
+                else:
+                    self.vypisHlasenia('Nemožno stavať od aktívnej privolávecej návesti')
 
             else:
                 self.vypisHlasenia('Nie je možné postaviť vlakovú cestu')
@@ -382,7 +386,11 @@ class App(QMainWindow): #hlavná triedy vizualizácie
             if self.zoznamNav[self.posledneNav].nazov in ['R_Se1','R_L1','R_L2',
                                                           'Z_Se1','Z_Se2','Z_Se3','Z_S1','Z_S2','Z_L1','Z_L2',
                                                           'H_Se1','H_S1','H_S2']:
-                self.vyberCestu('Posun')
+                if self.zoznamNav[self.posledneNav].znak != 'PN':
+                    self.vyberCestu('Posun')
+                
+                else:
+                    self.vypisHlasenia('Nemožno stavať od aktívnej privolávecej návesti')
 
             else:
                 self.vypisHlasenia('Nie je možné postaviť posunovú cestu')
@@ -635,6 +643,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
     def vyberCestu(self, typ):  #metóda pre zápis potrebných hodnôt pre výber jazdnej cesty
         if typ == 'Vlak':   #zapíše správny typ cesty
             self.szz.typCesty = False
+        
         elif typ == 'Posun':
             self.szz.typCesty = True
 
@@ -655,7 +664,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         self.zoznamNav[self.koncoveNav].vybrane = False
         self.zoznamNav[self.koncoveNav].update(self)
 
-        self.szz.stavanieCesty(OD=Ochr, Disp=True)
+        self.szz.stavanieCesty(OD = Ochr, Disp = True)
 
     def ukonciStavanie(self, TS=False, odhl=False, volnost=False):   #metóda slúži na ukončenie stavania VC v prípade zlého TS alebo obsadeného medzist. úseku
         self.zoznamNav[self.pociatocneNav].stavanieOd = False
@@ -666,8 +675,10 @@ class App(QMainWindow): #hlavná triedy vizualizácie
 
         if odhl:
             self.vypisHlasenia('Chýbajúca odhláška za vlakom')
+        
         elif TS:
             self.vypisHlasenia('Neudelený traťový súhlas')
+        
         elif volnost:
             self.vypisHlasenia('Obsadený medzistaničný úsek')
 
