@@ -581,23 +581,26 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                         self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].znak = navest
                         self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].update(self)
 
-    def akciaTS(self, index, id):   #metóda pre prácu s traťovým súhlasom 
-        if (index == 1) and (id == 2):   #žiadosť o TS
-            if not self.vlaknoUpdate.dictTS[self.poslednyTS].prijem:
-                if self.vlaknoUpdate.dictTS[self.poslednyTS].volnost: 
+    def akciaTS(self, index, typ):   #metóda pre prácu s traťovým súhlasom 
+        if (index == 1) and (typ == 'esa'):   #žiadosť o TS
+            if not self.vlaknoUpdate.dictTS[self.poslednyTS].prijem:    #kontrola udelenia TS
+                if self.vlaknoUpdate.dictTS[self.poslednyTS].volnost:   #kontrola voľnosti úseku
                     self.prikazDoPLC('ZUS/' + str(self.poslednyTS) + '/True')
+                
                 else:
                     self.vypisHlasenia('Obsadený medzistaničný úsek')
+            
             else:
                 self.vypisHlasenia('Traťový súhlas je prijatý')
 
-        elif (index == 2) and (id == 2):   #zrušenie žiadosti o TS
+        elif (index == 2) and (typ == 'esa'):   #zrušenie žiadosti o TS
             self.prikazDoPLC('ZUS/' + str(self.poslednyTS) + '/False')        
 
-        elif ((index == 1 and id == 1) or (index == 3 and id ==2))  and (self.vlaknoUpdate.dictTS[self.poslednyTS].prijem is True):   #udelenie TS
-            self.prikazDoPLC('UTS/' + str(self.poslednyTS))
+        elif (index == 1 and typ == 'disp') or (index == 3 and typ =='esa'):  #udelenie TS
+            if self.vlaknoUpdate.dictTS[self.poslednyTS].prijem is True:   #kontrola príjmu TS
+                self.prikazDoPLC('UTS/' + str(self.poslednyTS))
           
-        elif (index == 4) and (id == 2):    #zrušenie blokovej podmienky
+        elif (index == 4) and (typ == 'esa'):    #zrušenie blokovej podmienky
             self.prikazDoPLC('ZBP/' + str(self.poslednyTS))
 
         elif index != 0:
@@ -822,8 +825,8 @@ if __name__ == "__main__":
 
     widget.ui.combo_Riadenie.currentIndexChanged.connect(lambda: widget.akciaStanica(widget.ui.combo_Riadenie.currentIndex()))  #riadenie stanice
 
-    widget.ui.combo_TS_DISP.currentIndexChanged.connect(lambda: widget.akciaTS(widget.ui.combo_TS_DISP.currentIndex(), 1))  #traťový súhlas
-    widget.ui.combo_TS_ESA.currentIndexChanged.connect(lambda: widget.akciaTS(widget.ui.combo_TS_ESA.currentIndex(), 2))
+    widget.ui.combo_TS_DISP.currentIndexChanged.connect(lambda: widget.akciaTS(widget.ui.combo_TS_DISP.currentIndex(), 'disp'))  #traťový súhlas
+    widget.ui.combo_TS_ESA.currentIndexChanged.connect(lambda: widget.akciaTS(widget.ui.combo_TS_ESA.currentIndex(), 'esa'))
 
     widget.ui.combo_vyh.currentIndexChanged.connect(lambda: widget.szz.prestavenieVyh(widget.poslednaVyh ,widget.ui.combo_vyh.currentIndex()))  #prestavenie výmeny    
 
