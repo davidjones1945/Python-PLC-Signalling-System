@@ -177,9 +177,9 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         if objekt == 'navestidlo': # ak bolo vybrané návestidlo
             self.posledneNav = id   #zápis posledného kliknutého návestidla  
 
-            if ((self.posledneNav in range(1, 11) or self.posledneNav in range(46, 55)) and self.vlaknoUpdate.dictStanice[1].dialkove) or (
-            (self.posledneNav in range(12, 34) or self.posledneNav in range(56, 69)) and self.vlaknoUpdate.dictStanice[2].dialkove) or (
-            (self.posledneNav in range(35, 45) or self.posledneNav in range(70, 77)) and self.vlaknoUpdate.dictStanice[3].dialkove):
+            if ((self.posledneNav in range(1, 12) or self.posledneNav in range(46, 55)) and self.vlaknoUpdate.dictStanice[1].dialkove) or (
+            (self.posledneNav in range(12, 34) or self.posledneNav in range(56, 70)) and self.vlaknoUpdate.dictStanice[2].dialkove) or (
+            (self.posledneNav in range(35, 45) or self.posledneNav in range(70, 78)) and self.vlaknoUpdate.dictStanice[3].dialkove):
                 
                 self.update(self.posledneNav, True, objekt='navestidla') #aktualizuj symbol návestidla
 
@@ -396,16 +396,13 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                 self.vypisHlasenia('Nie je možné postaviť posunovú cestu')
 
         #---------------------------stavanie jazdnej cesty------------------------------------------------------------------------
-        elif typ in ['ciel_kombi','ciel_fikt','ciel_hlavne'] and index == 1 and not self.szz.typCesty: #stavanie vchodovej bez OD
+        elif typ in ['ciel_kombi','ciel_hlavne'] and index == 1 and not self.szz.typCesty: #stavanie vchodovej bez OD
             if self.zoznamNav[self.pociatocneNav].nazov in ['R_S','DR_S',
                                                             'Z_L','Z_BL','Z_S','DZ_L','DZ_BL','DZ_S',
                                                             'H_L','DH_L']: #vybrané správne návestidlo   
                 self.postavCestu()
-            
-            else:
-                self.vypisHlasenia('Nesprávny výber')
 
-        elif typ in ['ciel_kombi','ciel_fikt','ciel_hlavne'] and index == 2 and not self.szz.typCesty: #stavanie vchodovej cesty s OD
+        elif typ in ['ciel_kombi','ciel_hlavne'] and index == 2 and not self.szz.typCesty: #stavanie vchodovej cesty s OD
             if self.zoznamNav[self.pociatocneNav].nazov in ['Z_L','Z_BL','Z_S','DZ_L','DZ_BL','DZ_S']: #vybrané správne návestidlo
                 self.postavCestu(Ochr = True)
 

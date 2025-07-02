@@ -6108,7 +6108,7 @@ color: rgb(0, 0, 0);</string>
 color: rgb(0,0,0)</string>
      </property>
      <property name="text">
-      <string>158.193.224.220:8041</string>
+      <string>localhost:8041</string>
      </property>
     </widget>
     <widget class="QPushButton" name="ButtonConnect">

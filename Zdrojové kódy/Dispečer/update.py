@@ -122,16 +122,16 @@ class DataUpdate(QThread):
             if data is not None:
                 for index in self.dictUseky.keys(): #čítanie stavov koľajových úsekov
                     if index in list(range(1,10)) + list(range(29,38)):
-                        self.dictUseky[index].jeVolny = data['RAD;RAD-ZBE'][self.dictUseky[index].ID]
+                        self.dictUseky[index].jeVolny = bool(data['RAD;RAD-ZBE'][self.dictUseky[index].ID])
 
                     elif index in list(range(10,18)) + list(range(38,46)):
-                        self.dictUseky[index].jeVolny = data['ZBE'][self.dictUseky[index].ID]
+                        self.dictUseky[index].jeVolny = bool(data['ZBE'][self.dictUseky[index].ID])
 
                     elif index in list(range(18,21)) + list(range(22,25)) + list(range(46,52)):
-                        self.dictUseky[index].jeVolny = data['P1;P2;ZBE-HLO'][self.dictUseky[index].ID]
+                        self.dictUseky[index].jeVolny = bool(data['P1;P2;ZBE-HLO'][self.dictUseky[index].ID])
 
                     elif index in list(range(25,29)) + list(range(53,57)):
-                        self.dictUseky[index].jeVolny = data['HLO'][self.dictUseky[index].ID]
+                        self.dictUseky[index].jeVolny = bool(data['HLO'][self.dictUseky[index].ID])
 
                     elif index in [21,52]:  #špeciálny prípad kedy sa dopytuje aj na LifeSigh ESA 44
                         if data['ZbeLuz'] is None:
