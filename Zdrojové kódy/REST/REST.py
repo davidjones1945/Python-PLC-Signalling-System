@@ -111,7 +111,7 @@ def FlipFlop(Set, Reset):   #metóda SR obvodu
     return outFF
 
 @app.put('/Cesta/{start}/{end}/{typ}/{od}/{stav}/{rus}/{meno}')   #metóda spracovávajúca časové pečiatky z dispečerskej aplikácie a staničnej aplikácie Zbehy
-async def writeCesta(start: int, end: int, typ: bool, od: bool, stav: bool, rus: bool, meno: str):
+async def writeCesta(start: int, end: int, typ: str, od: bool, stav: bool, rus: bool, meno: str):
     dataCesta['pociatocne'] = start
     dataCesta['koncove'] = end
     dataCesta['typCesty'] = typ

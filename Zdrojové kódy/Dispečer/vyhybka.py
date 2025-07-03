@@ -21,9 +21,10 @@ class Vyhybka:
         self.stavaniePosun = False   #výhybka vybraná pre stavanie posunovej cesty
         self.stavanieOchr = False   #výhybka vybraná pre stavanie posunovej cesty
 
-        self.vlak = False   #cez výhybku je postavená vlaková cesta
-        self.posun = False  #cez výhybku je postavená posunová cesta
-        self.ochr = False   #cez výhybku je postavená ochranná dráha
+        self.cesta = ' '
+        # self.vlak = False   #cez výhybku je postavená vlaková cesta
+        # self.posun = False  #cez výhybku je postavená posunová cesta
+        # self.ochr = False   #cez výhybku je postavená ochranná dráha
 
         self.zaver = False  #výhybka je pod záverom jazdnej cesty
 
@@ -49,13 +50,13 @@ class Vyhybka:
             if self.jeVolny:    #ak je úsek výhybky voľný
                 if self.smer:   #ak je výhybka prestavená v priamom smere
                     if self.vyber:  #ak je výhybka vybraná obsluhou
-                        if self.vlak:  #počas vlakovej cesty 
+                        if self.cesta == 'Vlak': #self.vlak:  #počas vlakovej cesty 
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VLAK_P_V.value])
 
-                        elif self.posun:    #počas posunovej cesty
+                        elif self.cesta == 'Posun': #self.posun:    #počas posunovej cesty
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.POSUN_P_V.value])
 
-                        elif self.ochr: #počas ochrannej dráhy  
+                        elif self.cesta == 'OchrDr': #self.ochr: #počas ochrannej dráhy  
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.OCHRANA_P_V.value])
 
                         elif self.zaver:  #ak je pod záverom
@@ -84,13 +85,13 @@ class Vyhybka:
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STAVANIE_PC_P_P.value])
 
                     elif self.zaver:  #ak je pod záverom
-                        if self.ochr:   #pre ochrannú dráhu
+                        if self.cesta == 'OchrDr': #elf.ochr:   #pre ochrannú dráhu
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.OCHRANA_P.value])
 
-                        elif self.vlak: #pre vlakovú cestu
+                        elif self.cesta == 'Vlak': #self.vlak: #pre vlakovú cestu
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VLAK_P.value])
 
-                        elif self.posun:    #pre posunovú cestu
+                        elif self.cesta == 'Posun': #self.posun:    #pre posunovú cestu
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.POSUN_P.value])
 
                         else:   #kvôli bočnej ochrane
@@ -101,13 +102,13 @@ class Vyhybka:
 
                 else:   #ak je výhybka prestavená v odbočnom smere
                     if self.vyber:  #ak je výhybka vybraná obsluhou
-                        if self.vlak:   #počas vlakovej cesty 
+                        if self.cesta == 'Vlak': #self.vlak:   #počas vlakovej cesty 
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VLAK_M_V.value])
 
-                        elif self.posun:    #počas posunovej cesty 
+                        elif self.cesta == 'Posun': #self.posun:    #počas posunovej cesty 
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.POSUN_M_V.value])
 
-                        elif self.ochr: #počas ochrannej dráhy    
+                        elif self.cesta == 'OchrDr': #self.ochr: #počas ochrannej dráhy    
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.OCHRANA_M_V.value])
 
                         else:   #základný obraz vabranej výhybky
@@ -133,13 +134,13 @@ class Vyhybka:
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STAVANIE_PC_O_M.value])
 
                     elif self.zaver:  #ak je pod záverom
-                        if self.ochr:   #pre ochrannú dráhu
+                        if self.cesta == 'OchrDr': #self.ochr:   #pre ochrannú dráhu
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.OCHRANA_M.value])
 
-                        elif self.vlak: #pre vlakovú cestu
+                        elif self.cesta == 'Vlak': #self.vlak: #pre vlakovú cestu
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VLAK_M.value])
 
-                        elif self.posun:    #pre posunovú cestu
+                        elif self.cesta == 'Posun': #self.posun:    #pre posunovú cestu
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.POSUN_M.value])
 
                     else:   #základný obraz výhybky
@@ -179,9 +180,10 @@ class Vyhybka:
             self.prest = False  #ukonči prestavovanie
 
     def rusenieCesty(self): #metóda pre rušenie cesty jazdou vlaku
-        if (self.vlak or self.posun) and not self.jeVolny:  #ak je úsek výhybky súčasťou jazdnej cesty a je obsadený
-            self.vlak = False   #zruš jazdnú cestu
-            self.posun = False
+        if (self.cesta == 'Vlak' or self.cesta == 'Posun') and not self.jeVolny:  #ak je úsek výhybky súčasťou jazdnej cesty a je obsadený
+            self.cesta = ' '
+            # self.vlak = False   #zruš jazdnú cestu
+            # self.posun = False
             self.prejazd = True
 
         if self.jeVolny and self.prejazd:
@@ -197,7 +199,7 @@ class Vyhybka:
                             self.app.vlaknoUpdate.dictUseky[i].zaver = False   #zruš záver sploupracujúcej výhybky
                             self.app.vlaknoUpdate.dictUseky[i].update(self)         
             
-        if self.jeVolny and not self.vlak and not self.posun and not self.prejazd:   #ak je výhybka voľná a bez jazdnej cesty
+        if self.jeVolny and self.cesta != 'Vlak' and self.cesta != 'Posun' and not self.prejazd:   #ak je výhybka voľná a bez jazdnej cesty
             if self.spojka: #ak je výhybka súčasťou koľajovej spojky
                 for i in self.app.vlaknoUpdate.dictUseky.keys(): #vyberaj z úsekov
                     spojka = getattr(self.app.vlaknoUpdate.dictUseky[i], 'spojka', None)   #načítaj hodnotu atribútu 'spojka'

@@ -23,16 +23,17 @@ class Navestidlo:
         self.zaverVC = False    #je vykonaný źáver vlakovej cesty
         self.zaverPC = False    #je vykonaný źáver posunovej cesty
 
-        self.vlak = False   #v úseku pred návestidlom je postavená vlaková cesta
-        self.posun = False  #v úseku pred návestidlom je postavená posunová cesta
-        self.ochr = False  #v úseku pred návestidlom je postavená ochranná dráha 
+        self.cesta = ' '
+        # self.vlak = False   #v úseku pred návestidlom je postavená vlaková cesta
+        # self.posun = False  #v úseku pred návestidlom je postavená posunová cesta
+        # self.ochr = False  #v úseku pred návestidlom je postavená ochranná dráha 
 
         self.rusenie = False    #je aktívne rušenie cesty
 
         self.znak = 'Stoj'  #aktuálny typ návestného znaku
 
         self.pociatocne = False #návestidlo je počiatočným návestidlom postavenej jazdnej cesty
-        self.typAktCes = False #typ cesty počiatočného návestidla (0-vlaková, 1-posunová)
+        self.typAktCes = ' ' #typ cesty počiatočného návestidla (0-vlaková, 1-posunová)
         self.manual = False #manuálne ovládanie návesti na počiatočnom návestidle
 
         self.OD = False #za návestidlom pokračuje ochranná dráha
@@ -55,7 +56,7 @@ class Navestidlo:
             if self.usekOdozva: #ak je z úseku pred návestidlom aktívna odozva
                 if self.jeVolnyPred:    #ak je úsek pred návestidlom voľný
                     if self.vybrane:    #ak je návestidlo vybrané obsluhou
-                        if self.posun:  #počas posunu
+                        if self.cesta == 'Posun': #self.posun:  #počas posunu
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_PC_VYB.value])
 
                         elif self.zaverVC:    #počas záveru vlakovej cesty
@@ -112,13 +113,13 @@ class Navestidlo:
                         else:   #základný obraz počiatočného návestidla
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_STAVANIE_START.value])
 
-                    elif self.vlak: #ak je úsek pred návestidlom súčasťou vlakovej cesty
+                    elif self.cesta == 'Vlak': #self.vlak: #ak je úsek pred návestidlom súčasťou vlakovej cesty
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_VC.value])
 
-                    elif self.posun:   #ak je úsek pred návestidlom súčasťou posunovej cesty
+                    elif self.cesta == 'Posun': #self.posun:   #ak je úsek pred návestidlom súčasťou posunovej cesty
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_PC.value])
 
-                    elif self.ochr:   #ak je úsek pred návestidlom súčasťou posunovej cesty
+                    elif self.cesta == 'OchrDr': #self.ochr:   #ak je úsek pred návestidlom súčasťou posunovej cesty
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_OD.value])
 
                     elif self.stavanieDo:   #ak je návestidlo vybrané ako koncové návestidlo jazdnej cety
@@ -337,9 +338,10 @@ class Navestidlo:
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_OBS.value])
 
     def rusenieCesty(self): #metóda volaná pri rušení jazdnej cesty
-        if (self.vlak or self.posun or self.zaverVC or self.zaverPC) and not self.jeVolnyPred:    #ak je úsek pred návestidlom obsadený a návestidlo má príznak vlakovej cesty alebo jej záveru
-            self.vlak = False
-            self.posun = False
+        if (self.cesta == 'Vlak' or self.cesta == 'Posun' or self.zaverVC or self.zaverPC) and not self.jeVolnyPred:    #ak je úsek pred návestidlom obsadený a návestidlo má príznak vlakovej cesty alebo jej záveru
+            self.cesta = ' '
+            #self.vlak = False
+            #self.posun = False
             self.zaverVC = False
             self.zaverPC = False
             if self.OD: #ak je za návestidlom ochranná dráha

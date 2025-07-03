@@ -37,7 +37,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         self.vlaknoDatum.start()
 
         self.vlaknoUpdate.dataUpdated.connect(self.update) #definícia prepojenia vláken a metód
-        self.vlaknoUpdate.dataUpdated.connect(lambda: self.szz.stavanieCesty(True, Disp=True))
+        self.vlaknoUpdate.dataUpdated.connect(lambda: self.szz.update(Disp=True))
 
         self.vlaknoDatum.dataUpdated.connect(self.aktualizaciaCasu)
         
@@ -396,13 +396,13 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                 self.vypisHlasenia('Nie je možné postaviť posunovú cestu')
 
         #---------------------------stavanie jazdnej cesty------------------------------------------------------------------------
-        elif typ in ['ciel_kombi','ciel_hlavne'] and index == 1 and not self.szz.typCesty: #stavanie vchodovej bez OD
+        elif typ in ['ciel_kombi','ciel_hlavne'] and index == 1 and self.szz.typCesty == 'Vlak': #stavanie vchodovej bez OD
             if self.zoznamNav[self.pociatocneNav].nazov in ['R_S','DR_S',
                                                             'Z_L','Z_BL','Z_S','DZ_L','DZ_BL','DZ_S',
                                                             'H_L','DH_L']: #vybrané správne návestidlo   
                 self.postavCestu()
 
-        elif typ in ['ciel_kombi','ciel_hlavne'] and index == 2 and not self.szz.typCesty: #stavanie vchodovej cesty s OD
+        elif typ in ['ciel_kombi','ciel_hlavne'] and index == 2 and self.szz.typCesty == 'Vlak': #stavanie vchodovej cesty s OD
             if self.zoznamNav[self.pociatocneNav].nazov in ['Z_L','Z_BL','Z_S','DZ_L','DZ_BL','DZ_S']: #vybrané správne návestidlo
                 self.postavCestu(Ochr = True)
 
@@ -410,7 +410,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                 self.vypisHlasenia('Jazdná cesta nemá definovanú ochrannú dráhu')
                 self.ukonciStavanie()
 
-        elif typ in ['ciel_kombi','ciel_fikt'] and index == 1 and not self.szz.typCesty: #stavanie odchodovej cesty
+        elif typ in ['ciel_kombi','ciel_fikt'] and index == 1 and self.szz.typCesty == 'Vlak': #stavanie odchodovej cesty
             if self.zoznamNav[self.pociatocneNav].nazov in ['R_L1','R_L2','DR_L1','DR_L2']: #kontrola počiatočného návestidla RAD
                 if self.vlaknoUpdate.dictTS[1].prijem:  #kontrola TS
                         self.postavCestu()
@@ -465,7 +465,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
             else:
                 self.vypisHlasenia('Nesprávny výber')
 
-        elif self.szz.typCesty:   #je vybraná posunová cesta pre stavanie
+        elif self.szz.typCesty == 'Posun':   #je vybraná posunová cesta pre stavanie
             if (typ == 'ciel_kombi' and index == 3) or (typ == 'ciel_zriad' and index == 1):    
                 self.postavCestu()
 
@@ -639,10 +639,10 @@ class App(QMainWindow): #hlavná triedy vizualizácie
 
     def vyberCestu(self, typ):  #metóda pre zápis potrebných hodnôt pre výber jazdnej cesty
         if typ == 'Vlak':   #zapíše správny typ cesty
-            self.szz.typCesty = False
+            self.szz.typCesty = 'Vlak'
         
         elif typ == 'Posun':
-            self.szz.typCesty = True
+            self.szz.typCesty = 'Posun'
 
         self.szz.vyberCesty = True #definuje aktívny výber vlakovej cesty
 
@@ -716,10 +716,10 @@ class App(QMainWindow): #hlavná triedy vizualizácie
 
                 if nazov == 'stavanie':
                     if prikaz == 'True':
-                        URL = adresa + 'Cesta/' + str(start) + '/' + str(end) + '/' + str(self.szz.typCesty) + '/True/True/False/DISP'
+                        URL = adresa + 'Cesta/' + str(start) + '/' + str(end) + '/' + self.szz.typCesty + '/True/True/False/DISP'
 
                     else:
-                        URL = adresa + 'Cesta/' + str(start) + '/' + str(end) + '/' + str(self.szz.typCesty) + '/False/True/False/DISP'
+                        URL = adresa + 'Cesta/' + str(start) + '/' + str(end) + '/' + self.szz.typCesty + '/False/True/False/DISP'
 
                 elif nazov == 'rusenie':
                     URL = adresa + 'Cesta/' + str(start) + '/' + str(end) + '/False/False/False/True/DISP'
