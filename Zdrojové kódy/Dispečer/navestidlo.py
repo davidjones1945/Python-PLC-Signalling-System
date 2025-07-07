@@ -180,9 +180,6 @@ class Navestidlo:
                     elif self.znak == 'PN':  #ak je aktuálny typ návestného znaku 'Privolávacia návesť'
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_PN.value])
 
-                    # elif self.zhasnute: #ak je návestidlo zhasnuté
-                    #    getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.ZHASNUTE.value])
-
                     else:   #základný obraz návestidla
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ.value])
 
@@ -218,9 +215,6 @@ class Navestidlo:
 
                     elif self.znak == 'PN':  #ak je aktuálny typ návestného znaku 'Privolávacia návesť'
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_OBS_PN.value])
-
-                    # elif self.zhasnute:
-                    #     getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.ZHASNUTE_OBS.value])
 
                     else:   #základný obraz návestidla
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_OBS.value])
@@ -337,12 +331,10 @@ class Navestidlo:
     def rusenieCesty(self): #metóda volaná pri rušení jazdnej cesty
         if (self.cesta == 'Vlak' or self.cesta == 'Posun' or self.zaverVC or self.zaverPC) and not self.jeVolnyPred:    #ak je úsek pred návestidlom obsadený a návestidlo má príznak vlakovej cesty alebo jej záveru
             self.cesta = ' '
-            #self.vlak = False
-            #self.posun = False
             self.zaverVC = False
             self.zaverPC = False
             if self.OD: #ak je za návestidlom ochranná dráha
-                self.app.workerThreadTimeOD.start_timer()    #spusti časový súbor rušenia ochrannej dráhy (30 s)
+                self.app.vlaknoCasOchrDrahy.start_timer()    #spusti časový súbor rušenia ochrannej dráhy (30 s)
             else:
                 self.stavanieDo = False
 

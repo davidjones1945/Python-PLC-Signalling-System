@@ -204,10 +204,6 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                     self.vlaknoUpdate.dictUseky[self.poslednaVyh].vyber = not self.vlaknoUpdate.dictUseky[self.poslednaVyh].vyber
                     self.vlaknoUpdate.dictUseky[self.poslednaVyh].update(self)
 
-                    if self.vlaknoUpdate.dictUseky[self.poslednaVyh].spojka is True:    #úprava pre výhybkovú spojku
-                        self.vlaknoUpdate.dictUseky[self.vlaknoUpdate.dictUseky[self.poslednaVyh].druhaVymena].vyber = not self.vlaknoUpdate.dictUseky[self.vlaknoUpdate.dictUseky[self.poslednaVyh].druhaVymena].vyber
-                        self.vlaknoUpdate.dictUseky[self.vlaknoUpdate.dictUseky[self.poslednaVyh].druhaVymena].update(self)
-
                     if self.vlaknoUpdate.dictUseky[self.poslednaVyh].vyber:  #ak je výhybka vybraná obsluhou
                         self.comboShowHide('vyhybka')  #zobraz kontextové okno akcií
                     else:
