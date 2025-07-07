@@ -11,18 +11,9 @@ class Usek:
         self.jeVolny = False    #informácia o voľnosti úseku
 
         self.stavanie = ' '
-        
-        # self.stavanieVlak = False   #prebieha stavanie vlakovej cesty
-        # self.stavaniePosun = False  #prebieha stavanie posunovej cesty
-        # self.stavanieOchr = False  #prebieha stavanie ochrannej dráhy
+        self.cesta = ' '
 
         self.vyberVlak = False  #úsek je vybraný pre stavanie vlakovej cesty
-        #self.vyberPosun = False #úsek je vybraný pre stavanie posunovej cesty
-
-        self.cesta = ' '
-        # self.vlak = False   #v úseku je postavená vlaková cesta
-        # self.posun = False  # v úseku je postavená posunová cesta
-        # self.ochr = False   #v úseku je postavená ochrnná dráha
 
         self.zaver = False  #úsek je pod záverom jazdnej cesty
 

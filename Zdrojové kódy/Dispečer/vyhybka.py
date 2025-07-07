@@ -1,5 +1,5 @@
 class Vyhybka:
-    def __init__(self, ID, IDsmer, nazovGUI, usek, enumIkon, dictIkon, app, spojka = False, zavisla = -1, druhaVymena = -1):
+    def __init__(self, ID:int, IDsmer:int, nazovGUI:str, usek:str, enumIkon, dictIkon, app, spojka:bool = False, zavisla:int = -1, druhaVymena:int = -1):
         self.app = app  #inštancia spolupracujúcej triedy
         self.ID = ID    #ID výhybky
         self.IDsmer = IDsmer #ID pre načítanie smeru výhybky
@@ -10,28 +10,23 @@ class Vyhybka:
         self.enumIkon = enumIkon    #prepojenie so symbolmi
         self.dictIkon = dictIkon
 
-        self.jeVolny = False     #informácia o voľnosti úseku
-        self.vyber = False  #informácia o výbere výhybky pre obsluhu
+        self.jeVolny:bool = False     #informácia o voľnosti úseku
+        self.vyber:bool = False  #informácia o výbere výhybky pre obsluhu
 
-        self.smer = True    #aktuálny smer výhybky (1-priamy, 0-odbočný)
-        self.lastSmer = True    #vnútorná pamäťová premenná predošlého smeru výhybky
-        self.prest = False  #aktuálne prestavovanie výhybky (1-áno, 0-nie)
+        self.smer:bool = True    #aktuálny smer výhybky (1-priamy, 0-odbočný)
+        self.lastSmer:bool = True    #vnútorná pamäťová premenná predošlého smeru výhybky
+        self.prest:bool = False  #aktuálne prestavovanie výhybky (1-áno, 0-nie)
 
-        self.stavanieVlak = False   #výhybka vybraná pre stavanie vlakovej cesty
-        self.stavaniePosun = False   #výhybka vybraná pre stavanie posunovej cesty
-        self.stavanieOchr = False   #výhybka vybraná pre stavanie posunovej cesty
+        self.stavanie:str = ' '
 
-        self.cesta = ' '
-        # self.vlak = False   #cez výhybku je postavená vlaková cesta
-        # self.posun = False  #cez výhybku je postavená posunová cesta
-        # self.ochr = False   #cez výhybku je postavená ochranná dráha
+        self.cesta:str = ' '
 
-        self.zaver = False  #výhybka je pod záverom jazdnej cesty
+        self.zaver:bool = False  #výhybka je pod záverom jazdnej cesty
 
         self.spojka = spojka #výhybka je súčasťou koľajovej spojky
         self.druhaVymena = druhaVymena #ID druhej výmeny v koľajovej spojke
 
-        self.prejazd = False #informácia o prejazde vlaku cez výhybkový úsek
+        self.prejazd:bool = False #informácia o prejazde vlaku cez výhybkový úsek
 
         self.zavisla = zavisla  #závislé symboly výhybiek v dispečerskej aplikácii
 
@@ -66,22 +61,22 @@ class Vyhybka:
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.PRIAMA_VYBER.value])
 
                     elif self.prest:    #ak sa výhybka prestavuje do odbočnej polohy
-                        if self.stavanieVlak:   #ak sa stavia vlaková cesta 
+                        if self.stavanie == 'Vlak':   #ak sa stavia vlaková cesta 
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STAVANIE_VC_O_P.value])
                         
-                        elif self.stavaniePosun:    #ak sa stavia posunová cesta 
+                        elif self.stavanie == 'Posun':    #ak sa stavia posunová cesta 
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STAVANIE_PC_O_P.value])
                             
-                        elif self.stavanieOchr:    #ak sa stavia posunová cesta 
+                        elif self.stavanie == 'OchrDr':    #ak sa stavia posunová cesta 
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STAVANIE_OD_O_P.value])
 
                         else:   #základný obraz prestavujúcej sa výmeny
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.PREST_M.value])
 
-                    elif self.stavanieVlak: #ak je výhybka súčasťou vybranej vlakovej cesty
+                    elif self.stavanie == 'Vlak': #ak je výhybka súčasťou vybranej vlakovej cesty
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STAVANIE_VC_P_P.value])
 
-                    elif self.stavaniePosun:    #ak je výhybka súčasťou vybranej posunovej cesty
+                    elif self.stavanie == 'Posun':    #ak je výhybka súčasťou vybranej posunovej cesty
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STAVANIE_PC_P_P.value])
 
                     elif self.zaver:  #ak je pod záverom
@@ -115,22 +110,22 @@ class Vyhybka:
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.ODB_VYBER.value])
 
                     elif self.prest:    #ak sa výhybka prestavuje do priamej polohy
-                        if self.stavanieVlak:   #ak sa stavia vlaková cesta 
+                        if self.stavanie == 'Vlak':   #ak sa stavia vlaková cesta 
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STAVANIE_VC_P_M.value])
 
-                        elif self.stavaniePosun:    #ak sa stavia posunová cesta 
+                        elif self.stavanie == 'Posun':    #ak sa stavia posunová cesta 
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STAVANIE_PC_P_M.value])
 
-                        elif self.stavanieOchr:    #ak sa stavia posunová cesta 
+                        elif self.stavanie == 'OchrDr':    #ak sa stavia posunová cesta 
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STAVANIE_OD_P_M.value])
 
                         else:   #základný obraz prestavujúcej sa výmeny
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.PREST_P.value])
 
-                    elif self.stavanieVlak: #ak je výhybka súčasťou vybranej vlakovej cesty
+                    elif self.stavanie == 'Vlak': #ak je výhybka súčasťou vybranej vlakovej cesty
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STAVANIE_VC_O_M.value])
 
-                    elif self.stavaniePosun:    #ak je výhybka súčasťou vybranej posunovej cesty
+                    elif self.stavanie == 'Posun':    #ak je výhybka súčasťou vybranej posunovej cesty
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STAVANIE_PC_O_M.value])
 
                     elif self.zaver:  #ak je pod záverom
