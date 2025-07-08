@@ -433,8 +433,8 @@ async def read():
             'SmerVyh': bin_array_M5_smerVyh, 'Priecestie': bin_array_M1_priecestie,
             'TS': dataTS, 'Riadenie': dataRiadenie, 'Cesta': dataCesta, 'Navest': dataNavest}
 
-@app.put('/write/vyhybka/{meno}/{smer}')    #metóda pre ovládanie prestavovania výmen
-async def writeVyhybka(meno: str, smer: bool):
+@app.put('/write/vyhybka/{meno}/{smer}/{auto}')    #metóda pre ovládanie prestavovania výmen
+async def writeVyhybka(meno: str, smer: bool, auto:bool):
     global plc
     global zapis
     global citanie
@@ -451,10 +451,28 @@ async def writeVyhybka(meno: str, smer: bool):
                 address = 'MX4.0'
 
         elif meno in ['ZBE_V1', 'ZBE_V2', 'DISP_ZBE_V1', 'DISP_ZBE_V2']:
-            if smer:
-                address = 'MX4.3'
+            if auto:
+                if smer:
+                    address = 'MX4.3'
+                
+                else:
+                    address = 'MX4.2'
+            
             else:
-                address = 'MX4.2'
+                if meno in ['ZBE_V1', 'DISP_ZBE_V1']:
+                    if smer:
+                        address = 'MX5.7'
+
+                    else:
+                        address = 'MX5.6'
+
+                elif meno in ['ZBE_V2', 'DISP_ZBE_V2']:
+                    if smer:
+                        address = 'MX6.4'
+
+                    else:
+                        address = 'MX6.3'
+
 
         elif meno in ['ZBE_V3', 'DISP_ZBE_V3']:
             if smer:

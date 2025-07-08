@@ -676,14 +676,14 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         elif volnost:
             self.vypisHlasenia('Obsadený medzistaničný úsek')
 
-    def prikazDoPLC(self, prikaz='_', id=0, nazov='_', OD=False, vyh=False, odchod=False, priec=False, predhl=False, ziadRiad=False, udelRiad=False, cesta=False, cas=False, znak=False):  #metóda pre odosielanie dát do PLC
+    def prikazDoPLC(self, prikaz='_', id=0, nazov='_', OD=False, vyh=False, odchod=False, priec=False, predhl=False, ziadRiad=False, udelRiad=False, cesta=False, cas=False, znak=False, auto=False):  #metóda pre odosielanie dát do PLC
         adresa = self.citajAdresu()
         if id == 0:
             if OD:  #príkaz do PLC pre ochrannú dráhu
                 URL = adresa + 'write/OchrDr/' + nazov + prikaz
             
             elif vyh: #prestavenie výhybky
-                URL = adresa + 'write/vyhybka/' + nazov + prikaz
+                URL = adresa + 'write/vyhybka/' + nazov + prikaz + auto
             
             elif odchod:
                 URL = adresa + 'odchod/' + nazov + prikaz

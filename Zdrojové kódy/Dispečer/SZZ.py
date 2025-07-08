@@ -615,9 +615,9 @@ class SZZ:
                     self.app.vlaknoUpdate.dictUseky[self.app.vlaknoUpdate.dictUseky[vyhybka].zavisla].vyber = False 
 
                 if self.app.vlaknoUpdate.dictUseky[vyhybka].smer:
-                    self.app.prikazDoPLC(prikaz='/True', nazov=self.app.vlaknoUpdate.dictUseky[vyhybka].nazovGUI, vyh=True)
+                    self.app.prikazDoPLC(prikaz='/True', nazov=self.app.vlaknoUpdate.dictUseky[vyhybka].nazovGUI, auto='/' + str(auto), vyh=True)
                 
                 else:
-                    self.app.prikazDoPLC(prikaz='/False', nazov=self.app.vlaknoUpdate.dictUseky[vyhybka].nazovGUI, vyh=True)
+                    self.app.prikazDoPLC(prikaz='/False', nazov=self.app.vlaknoUpdate.dictUseky[vyhybka].nazovGUI, auto='/' + str(auto), vyh=True)
 
             self.app.ui.combo_vyh.setCurrentIndex(0)    #vynulovanie výberového menu pre ďalšie použitie
