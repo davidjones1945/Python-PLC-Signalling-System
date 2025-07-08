@@ -226,13 +226,13 @@ class DataUpdate(QThread):
                         self.app_instance.szz.typCesty = data['Cesta']['typCesty']
                         ochr = data['Cesta']['OD']
                         self.app_instance.szz.stavanieCesty(Disp=True, OD=ochr, server=True)
-                        self.app_instance.prikazDoPLC(cesta=True)
+                        self.app_instance.prikazDoPLC(adresat='cesta')
 
                 if data['Cesta']['rusenie']:
                     if data['Cesta']['koncove'] in self.app_instance.zoznamNav.keys() and data['Cesta']['odosielatel'] != 'DISP':
                         self.app_instance.koncoveNav = data['Cesta']['koncove']
                         self.app_instance.szz.rusenieCesty(Disp=True, server=True)
-                        self.app_instance.prikazDoPLC(cesta=True)
+                        self.app_instance.prikazDoPLC(adresat='cesta')
 
                 if data['Navest']['ID'] != 0 and data['Navest']['ID'] in self.app_instance.zoznamNav.keys() and data['Navest']['odosielatel'] != 'DISP':
                     self.app_instance.zoznamNav[data['Navest']['ID']].znak = data['Navest']['znak']
@@ -244,7 +244,7 @@ class DataUpdate(QThread):
                         self.app_instance.zoznamNav[self.app_instance.zoznamNav[data['Navest']['ID']].zavisle].manual = True
                         self.app_instance.zoznamNav[self.app_instance.zoznamNav[data['Navest']['ID']].zavisle].update(self)
 
-                    self.app_instance.prikazDoPLC(znak=True)
+                    self.app_instance.prikazDoPLC(adresat='znak')
 
                 self.dataUpdated.emit(self.dictUseky, self.dictTS)
             sleep(0.1)

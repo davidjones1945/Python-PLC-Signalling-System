@@ -344,7 +344,7 @@ class Navestidlo:
             self.znak = 'Stoj'
             self.pociatocne = False
             self.manual = False
-            self.app.prikazDoPLC(prikaz='/Stoj',id=self.ID, nazov=self.nazov)
+            self.app.prikazDoPLC(adresat='navestidlo', prikaz='/Stoj', id=self.ID, nazov=self.nazov)
 
     def ruseniePredhlasky(self):    #metóda pre rušenie predhlášky pri prejatzde vlaku okolo hradla na trati
         if (not self.jeVolnyPred) and (not self.jeVolnyZa):

@@ -110,7 +110,7 @@ class SZZ:
                                 self.app.zoznamNav[self.app.zoznamNav[self.app.pociatocneNav].zavisle].znak = 'Posun'                              
                             
                             if not server:
-                                self.app.prikazDoPLC(prikaz='/Posun', id=self.app.zoznamNav[self.app.pociatocneNav].ID, nazov=self.app.zoznamNav[self.app.pociatocneNav].nazov)
+                                self.app.prikazDoPLC(adresat='navestidlo', prikaz='/Posun', id=self.app.zoznamNav[self.app.pociatocneNav].ID, nazov=self.app.zoznamNav[self.app.pociatocneNav].nazov)
                             break
                     
                     else:   #rozsvietenie návesti pre vlakovú cestu
@@ -123,18 +123,18 @@ class SZZ:
                                 self.app.zoznamNav[self.app.zoznamNav[self.app.pociatocneNav].zavisle].pociatocne = True
 
                             if (self.app.vlaknoUpdate.dictUseky[i].jeVolny) or (usek == '0'):
-                                self.app.zoznamNav[self.app.pociatocneNav].znak = 'Volno' 
+                                self.app.zoznamNav[self.app.pociatocneNav].znak = 'Vlak' 
                                 
                                 if Disp: #úprava pre dispečerskú aplikáciu
-                                    self.app.zoznamNav[self.app.zoznamNav[self.app.pociatocneNav].zavisle].znak = 'Volno'
+                                    self.app.zoznamNav[self.app.zoznamNav[self.app.pociatocneNav].zavisle].znak = 'Vlak'
                                 
                                 if not server:
-                                    self.app.prikazDoPLC(prikaz='/Volno', id=self.app.zoznamNav[self.app.pociatocneNav].ID, nazov=self.app.zoznamNav[self.app.pociatocneNav].nazov)
+                                    self.app.prikazDoPLC(adresat='navestidlo', prikaz='/Vlak', id=self.app.zoznamNav[self.app.pociatocneNav].ID, nazov=self.app.zoznamNav[self.app.pociatocneNav].nazov)
                                 break
 
                 if self.ochrDraha:  #zápis ochrannej dráhy do PLC
                     if not server:
-                        self.app.prikazDoPLC(prikaz='/True', nazov=self.stavanaCesta, OD=True)
+                        self.app.prikazDoPLC( adresat='OchDr', prikaz='/True', nazov=self.stavanaCesta)
                 
                 self.app.zoznamNav[self.app.pociatocneNav].update(self)
                 self.app.zoznamNav[self.app.koncoveNav].update(self)
@@ -148,35 +148,35 @@ class SZZ:
                 self.spravnaPolohaVymen = False #reset premennej
 
             if not server and self.typCesty == 'Vlak':  #zápis príznaku odchodovej cesty pre traťový súhlas a voľnosť trate
-                self.app.prikazDoPLC(cesta=True, nazov='stavanie', prikaz=str(OD))
+                self.app.prikazDoPLC(adresat='cesta', nazov='stavanie', prikaz=str(OD))
 
                 if self.app.pociatocneNav in [4,5,47,48]:
-                    self.app.prikazDoPLC(odchod=True, nazov='odchodR', prikaz='/True')
+                    self.app.prikazDoPLC(adresat='odchod/', nazov='odchodR', prikaz='/True')
                 
                 elif self.app.pociatocneNav in [20,62]:
-                    self.app.prikazDoPLC(odchod=True, nazov='odchodZR', prikaz='/True')
+                    self.app.prikazDoPLC(adresat='odchod/', nazov='odchodZR', prikaz='/True')
 
                 elif self.app.pociatocneNav in [21,63]:
                     if self.app.koncoveNav in [14,60]:
-                        self.app.prikazDoPLC(odchod=True, nazov='odchodZR', prikaz='/True')
+                        self.app.prikazDoPLC(adresat='odchod/', nazov='odchodZR', prikaz='/True')
 
                     elif self.app.koncoveNav in [15,61]:
-                        self.app.prikazDoPLC(odchod=True, nazov='odchodZL', prikaz='/True')
+                        self.app.prikazDoPLC(adresat='odchod/', nazov='odchodZL', prikaz='/True')
 
                 elif self.app.pociatocneNav in [22,23,64,65]:
-                    self.app.prikazDoPLC(odchod=True, nazov='odchodZH', prikaz='/True')
-                    self.app.prikazDoPLC(prikaz='/True', nazov='ZBE', predhl=True)  #v prípade AH odoslanie predhlášky na hradlo
+                    self.app.prikazDoPLC(adresat='odchod/', nazov='odchodZH', prikaz='/True')
+                    self.app.prikazDoPLC(adresat='predhl/', prikaz='/True', nazov='ZBE')  #v prípade AH odoslanie predhlášky na hradlo
                     for nav in [30,44,69]:
                         if nav in self.app.zoznamNav.keys():
-                            self.app.prikazDoPLC(prikaz='/Volno', id=self.app.zoznamNav[nav].ID, nazov=self.app.zoznamNav[nav].nazov)
+                            self.app.prikazDoPLC(adresat='navestidlo', prikaz='/Volno', id=self.app.zoznamNav[nav].ID, nazov=self.app.zoznamNav[nav].nazov)
                             break 
 
                 elif self.app.pociatocneNav in [38,39,72,73]:
-                    self.app.prikazDoPLC(odchod=True, nazov='odchodH', prikaz='/True')
-                    self.app.prikazDoPLC(prikaz='/True', nazov='HLO', predhl=True)
+                    self.app.prikazDoPLC(adresat='odchod/', nazov='odchodH', prikaz='/True')
+                    self.app.prikazDoPLC(adresat='predhl/', prikaz='/True', nazov='HLO')
                     for nav in [31,45,70]:
                         if nav in self.app.zoznamNav.keys():
-                            self.app.prikazDoPLC(prikaz='/Volno', id=self.app.zoznamNav[nav].ID, nazov=self.app.zoznamNav[nav].nazov)
+                            self.app.prikazDoPLC(adresat='navestidlo', prikaz='/Volno', id=self.app.zoznamNav[nav].ID, nazov=self.app.zoznamNav[nav].nazov)
                             break 
 
                 self.app.pociatocneNav = 0
@@ -281,7 +281,7 @@ class SZZ:
                     if Disp: #úprava pre dispečerskú aplikáciu
                         self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].znak = navest
                     
-                    self.app.prikazDoPLC(prikaz='/' + navest, id=self.app.zoznamNav[nav].ID, nazov=self.app.zoznamNav[nav].nazov)                                
+                    self.app.prikazDoPLC(adresat='navestidlo', prikaz='/' + navest, id=self.app.zoznamNav[nav].ID, nazov=self.app.zoznamNav[nav].nazov)                                
 
             else:   #ak je úsek obsadený
                 if self.app.zoznamNav[nav].znak == 'Stoj':
@@ -290,7 +290,7 @@ class SZZ:
                     self.app.zoznamNav[nav].znak = 'Stoj' #rozsvietenie zakazujúcej návesti na návestidle
                     if Disp: #úprava pre dispečerskú aplikáciu
                         self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].znak = 'Stoj' 
-                    self.app.prikazDoPLC(prikaz='/Stoj', id=self.app.zoznamNav[nav].ID, nazov=self.app.zoznamNav[nav].nazov)                                                                
+                    self.app.prikazDoPLC(adresat='navestidlo', prikaz='/Stoj', id=self.app.zoznamNav[nav].ID, nazov=self.app.zoznamNav[nav].nazov)                                                                
     
     def update(self, Disp:bool=False):     
         #------------AKTUALIZÁCIA VÝMEN-----------------
@@ -344,7 +344,7 @@ class SZZ:
                 if (self.app.zoznamNav[self.app.koncoveNav].nazov in zaverTab.dictVC[id]['stop']):   #ak nájdeš cestu s koncovým návestuidlom, ktoré obsluha vybrala                    
                     for nav in self.app.zoznamNav.keys(): #vyberaj z návestidiel                        
                         if (self.app.zoznamNav[nav].nazov in zaverTab.dictVC[id]['start'])  and (
-                        (self.app.zoznamNav[nav].znak == 'Volno') or (self.app.zoznamNav[nav].znak == 'Posun')):
+                        (self.app.zoznamNav[nav].znak == 'Vlak') or (self.app.zoznamNav[nav].znak == 'Posun')):
                         #ak nájdeš návestidlo s povoľujúcim znakom zapísané ako počiatočné návestidlo vybranej jazdnej cesty
                             if ((self.app.zoznamNav[self.app.koncoveNav].OD is True) and ('UsekyOD' in zaverTab.dictVC[id].keys())) or (self.app.zoznamNav[self.app.koncoveNav].OD is False):
                             #ak je za koncovým návestidlom cesty aktívna ochranná dráha a je v jazdnej ceste definovaná ALEBO nie
@@ -373,10 +373,10 @@ class SZZ:
                                                         self.app.zoznamNav[self.app.zoznamNav[self.app.koncoveNav].zavisle].OD = False
                                                     
                                                     if not server:
-                                                        self.app.prikazDoPLC(prikaz='/False', nazov=self.rusenaCesta, OD=True)
+                                                        self.app.prikazDoPLC(adresat='write/OchrDr/', prikaz='/False', nazov=self.rusenaCesta)
 
                                                 if not server:
-                                                    self.app.prikazDoPLC(prikaz='/Stoj', id=self.app.zoznamNav[nav].ID, nazov=self.app.zoznamNav[nav].nazov)
+                                                    self.app.prikazDoPLC(adresat='navestidlo', prikaz='/Stoj', id=self.app.zoznamNav[nav].ID, nazov=self.app.zoznamNav[nav].nazov)
                                                 break
                                     if self.rusenaCesta != ' ': #po úspešnom vyhľadaní rušenej cesty sa opúšťajú vyhľadávacie cykly
                                         break
@@ -550,7 +550,7 @@ class SZZ:
 
                 self.rusenaCesta = ' '
                 if not server:
-                    self.app.prikazDoPLC(cesta=True, nazov='rusenie')
+                    self.app.prikazDoPLC(adresat='cesta', nazov='rusenie')
                 
                 self.app.koncoveNav = 0
                 self.ochrDraha = False
@@ -592,7 +592,7 @@ class SZZ:
                                             self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].ochr = False
                                             self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].update(self)
 
-                    self.app.prikazDoPLC(prikaz='/False', nazov=id, OD=True)
+                    self.app.prikazDoPLC(adresat='write/OchrDr/', prikaz='/False', nazov=id)
 
     def prestavenieVyh(self, vyhybka:int, index:int, auto:bool=False):  #metóda pre ručné prestavovanie výmen
             self.app.ui.combo_vyh.hide()
@@ -615,9 +615,9 @@ class SZZ:
                     self.app.vlaknoUpdate.dictUseky[self.app.vlaknoUpdate.dictUseky[vyhybka].zavisla].vyber = False 
 
                 if self.app.vlaknoUpdate.dictUseky[vyhybka].smer:
-                    self.app.prikazDoPLC(prikaz='/True', nazov=self.app.vlaknoUpdate.dictUseky[vyhybka].nazovGUI, auto='/' + str(auto), vyh=True)
+                    self.app.prikazDoPLC(adresat='vymena', prikaz='/True', nazov=self.app.vlaknoUpdate.dictUseky[vyhybka].nazovGUI, auto='/' + str(auto))
                 
                 else:
-                    self.app.prikazDoPLC(prikaz='/False', nazov=self.app.vlaknoUpdate.dictUseky[vyhybka].nazovGUI, auto='/' + str(auto), vyh=True)
+                    self.app.prikazDoPLC(adresat='vymena', prikaz='/False', nazov=self.app.vlaknoUpdate.dictUseky[vyhybka].nazovGUI, auto='/' + str(auto))
 
             self.app.ui.combo_vyh.setCurrentIndex(0)    #vynulovanie výberového menu pre ďalšie použitie

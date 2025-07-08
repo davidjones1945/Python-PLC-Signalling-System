@@ -64,6 +64,6 @@ class LifeSign(QThread): #LifeSign aplikácie
 
     def run(self):
         while not self.isInterruptionRequested():
-            self.app_instance.prikazDoPLC(cas=True)
+            self.app_instance.prikazDoPLC(adresat='cas')
             self.sleep(5)   #5 sekúnd
 
