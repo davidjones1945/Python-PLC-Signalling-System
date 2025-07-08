@@ -13,7 +13,7 @@ class RiadenieObsluhy:
 
         self.vyber = False #informácia o výbere priecestia užívateľom
 
-    def update(self):
+    def update(self, app):
         if self.dialkove: #diaľkové ovládanie stanice
             if self.ziadost: #ak je aktívna žiadosť o lokálnu obsluhu
                 getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.DIALKOVE_ZIADOST.value])

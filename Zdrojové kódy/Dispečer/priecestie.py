@@ -16,7 +16,7 @@ class Priecestie:
 
         self.vyber:bool = False  #informácia o výbere priecestia užívateľom
 
-    def update(self):
+    def update(self, app):
         if self.jeVolny: #ak je úsek voľný    
             if self.otvorene: #ak je priecestie otvorené
                 if self.vyber:  #ak je vybrané užívateľom
