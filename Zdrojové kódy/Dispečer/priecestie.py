@@ -1,5 +1,5 @@
 class Priecestie:
-    def __init__(self, ID, nazovGUI, enumIkon, dictIkon, app):
+    def __init__(self, ID:int, nazovGUI:str, enumIkon, dictIkon, app):
         self.app = app  #inštancia spolupracujúcej triedy
         self.ID = ID    #ID úseku s priecestím
 
@@ -8,15 +8,15 @@ class Priecestie:
         self.enumIkon = enumIkon    #prepojenie so symbolmi
         self.dictIkon = dictIkon
 
-        self.predzvananie = False   #plynie predzváňací čas priecestia
-        self.otvorene = False   #otvorené priecestie
-        self.zatvorene = False  #zatvorené priecestie
+        self.predzvananie:bool = False   #plynie predzváňací čas priecestia
+        self.otvorene:bool = False   #otvorené priecestie
+        self.zatvorene:bool = False  #zatvorené priecestie
 
-        self.jeVolny = False    #informácia o obsadenosti úseku s priecestím
+        self.jeVolny:bool = False    #informácia o obsadenosti úseku s priecestím
 
-        self.vyber = False  #informácia o výbere priecestia užívateľom
+        self.vyber:bool = False  #informácia o výbere priecestia užívateľom
 
-    def update(self, app):
+    def update(self):
         if self.jeVolny: #ak je úsek voľný    
             if self.otvorene: #ak je priecestie otvorené
                 if self.vyber:  #ak je vybrané užívateľom

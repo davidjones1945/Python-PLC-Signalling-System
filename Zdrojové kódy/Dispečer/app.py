@@ -540,7 +540,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                         self.zoznamNav[self.posledneNav].manual = True
                     
                         if (typ in ['hlavne','oddiel']) or (typ == 'kombi' and not self.zoznamNav[self.posledneNav].typAktCes):
-                            self.zmenaNavZnaku(navest = 'Volno')
+                            self.zmenaNavZnaku(navest = 'Vlak')
 
                         elif (typ == 'zriad') or (typ == 'kombi' and self.zoznamNav[self.posledneNav].typAktCes):
                             self.zmenaNavZnaku(navest = 'Posun')

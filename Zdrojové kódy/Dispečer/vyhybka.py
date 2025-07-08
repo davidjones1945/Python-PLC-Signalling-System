@@ -177,8 +177,6 @@ class Vyhybka:
     def rusenieCesty(self): #metóda pre rušenie cesty jazdou vlaku
         if (self.cesta == 'Vlak' or self.cesta == 'Posun') and not self.jeVolny:  #ak je úsek výhybky súčasťou jazdnej cesty a je obsadený
             self.cesta = ' '
-            # self.vlak = False   #zruš jazdnú cestu
-            # self.posun = False
             self.prejazd = True
 
         if self.jeVolny and self.prejazd:

@@ -1,5 +1,5 @@
 class Usek:
-    def __init__(self, ID, nazovGUI, enummIkon, dictIkon, app):
+    def __init__(self, ID:int, nazovGUI:str, enummIkon, dictIkon, app):
         self.app = app  #inštancia spolupracujúcej triedy
         self.ID = ID    #ID úseku
 
@@ -8,18 +8,18 @@ class Usek:
         self.enumIkon = enummIkon   #prepojenie so symbolmi
         self.dictIkon = dictIkon
 
-        self.jeVolny = False    #informácia o voľnosti úseku
+        self.jeVolny:bool = False    #informácia o voľnosti úseku
 
-        self.stavanie = ' '
-        self.cesta = ' '
+        self.stavanie:str = ' ' #typ cesty v úseku
+        self.cesta:str = ' '    #typ stavanej cesty v úseku
 
-        self.vyberVlak = False  #úsek je vybraný pre stavanie vlakovej cesty
+        self.vyberVlak:bool = False  #úsek je vybraný pre stavanie vlakovej cesty
 
-        self.zaver = False  #úsek je pod záverom jazdnej cesty
+        self.zaver:bool = False  #úsek je pod záverom jazdnej cesty
 
-        self.odozva = True  #odozva koľajového obvodu
+        self.odozva:bool = True  #odozva koľajového obvodu
 
-    def update(self, app):  #metóda pre aktualizáciu symbolu úseku
+    def update(self):  #metóda pre aktualizáciu symbolu úseku
         self.rusenieCesty()
 
         if self.odozva: #ak je prijatá informácia o stave úseku

@@ -236,11 +236,14 @@ async def writeUTS(index: int):
             try:
                 if address is not None:
                     plc.writeMem(address, value)
+            
             except RuntimeError:
                 zapis = False
                 sleep(0.1)
+            
             else:
                 break
+
         zapis = False
 
 @app.put('/ziadRiad/{index}/{value}')   #metóda spracovávajúca žiadosti o zmenu ovládania medzi aplikáciami
@@ -447,6 +450,7 @@ async def writeVyhybka(meno: str, smer: bool, auto:bool):
         if meno in ['RAD_V1', 'DISP_RAD_V1']:
             if smer:
                 address = 'MX4.1'
+            
             else:
                 address = 'MX4.0'
 
@@ -477,12 +481,14 @@ async def writeVyhybka(meno: str, smer: bool, auto:bool):
         elif meno in ['ZBE_V3', 'DISP_ZBE_V3']:
             if smer:
                 address = 'MX4.5'
+            
             else:
                 address = 'MX4.4'
 
         elif meno in ['HLO_V1', 'DISP_HLO_V1']:
             if smer:
                 address = 'MX4.7'
+            
             else:
                 address = 'MX4.6'
 
