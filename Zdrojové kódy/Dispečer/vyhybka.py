@@ -1,5 +1,5 @@
 class Vyhybka:
-    def __init__(self, ID:int, IDsmer:int, nazovGUI:str, usek:str, enumIkon, dictIkon, app, spojka:bool = False, zavisla:int = -1, druhaVymena:int = -1):
+    def __init__(self, ID:int, IDsmer:int, nazovGUI:str, usek:str, enumIkon:enumerate, dictIkon:dict, app:object, spojka:bool = False, zavisla:int = -1, druhaVymena:int = -1):
         self.app = app  #inštancia spolupracujúcej triedy
         self.ID = ID    #ID výhybky
         self.IDsmer = IDsmer #ID pre načítanie smeru výhybky

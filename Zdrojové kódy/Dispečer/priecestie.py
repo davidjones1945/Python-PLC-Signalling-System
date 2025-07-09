@@ -1,5 +1,5 @@
 class Priecestie:
-    def __init__(self, ID:int, nazovGUI:str, enumIkon, dictIkon, app):
+    def __init__(self, ID:int, nazovGUI:str, enumIkon:enumerate, dictIkon:dict, app:object):
         self.app = app  #inštancia spolupracujúcej triedy
         self.ID = ID    #ID úseku s priecestím
 

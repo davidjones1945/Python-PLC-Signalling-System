@@ -1,5 +1,5 @@
 class Navestidlo:
-    def __init__(self, ID:int, nazov:str, nazovGUI:str, enumIkon, dictIkon, app, usekPred:str = 'X', zavisle:int = -1,  usekZa:str = 'X', oddielove:bool = False, TZZ:str = ' ', comboBox:str = ' '):
+    def __init__(self, ID:int, nazov:str, nazovGUI:str, enumIkon:enumerate, dictIkon:dict, app:object, usekPred:str = 'X', zavisle:int = -1,  usekZa:str = 'X', oddielove:bool = False, TZZ:str = ' ', comboBox:str = ' '):
         self.app = app  #inštancia spolupracujúcej triedy
         self.ID = ID    #ID návestidla
 

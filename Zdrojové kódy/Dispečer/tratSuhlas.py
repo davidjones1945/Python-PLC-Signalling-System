@@ -1,5 +1,5 @@
 class TratSuhlas:
-    def __init__(self, ID:int, nazovGUI:str, enumIkon, dictIkon, app, typ):
+    def __init__(self, ID:int, nazovGUI:str, enumIkon:enumerate, dictIkon:dict, app:object, typ:str):
         self.app = app #inštancia spolupracujúcej triedy
         self.ID =ID #ID traťového súhlasu
 

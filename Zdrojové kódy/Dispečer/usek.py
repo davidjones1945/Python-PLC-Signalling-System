@@ -1,5 +1,5 @@
 class Usek:
-    def __init__(self, ID:int, nazovGUI:str, enummIkon, dictIkon, app):
+    def __init__(self, ID:int, nazovGUI:str, enummIkon:enumerate, dictIkon:dict, app:object):
         self.app = app  #inštancia spolupracujúcej triedy
         self.ID = ID    #ID úseku
 

@@ -136,6 +136,7 @@ class DataUpdate(QThread):
                     elif index in [21,52]:  #špeciálny prípad kedy sa dopytuje aj na LifeSigh ESA 44
                         if data['ZbeLuz'] is None:
                             self.dictUseky[index].odozva = False
+                        
                         else:
                             self.dictUseky[index].odozva = True
                             self.dictUseky[index].jeVolny = data['ZbeLuz']
