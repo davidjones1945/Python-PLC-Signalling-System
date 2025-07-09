@@ -46,7 +46,7 @@ class Navestidlo:
 
         self.comboBox = comboBox #dafinícia priradeného comboBox-u k návestidlu
 
-    def update(self, app):  #metóda pre aktualizáciu symbolu návestidla
+    def update(self, app:object):  #metóda pre aktualizáciu symbolu návestidla
         if not self.oddielove:  #ak nie je oddielové
             self.rusenieCesty()
             self.zmenaNavesti()

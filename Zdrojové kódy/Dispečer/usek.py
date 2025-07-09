@@ -19,7 +19,7 @@ class Usek:
 
         self.odozva:bool = True  #odozva koľajového obvodu
 
-    def update(self, app):  #metóda pre aktualizáciu symbolu úseku
+    def update(self, app:object):  #metóda pre aktualizáciu symbolu úseku
         self.rusenieCesty()
 
         if self.odozva: #ak je prijatá informácia o stave úseku

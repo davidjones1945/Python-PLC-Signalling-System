@@ -41,8 +41,8 @@ class App(QMainWindow): #hlavná triedy vizualizácie
 
         self.vlaknoDatum.dataUpdated.connect(self.aktualizaciaCasu)
         
-        self.vlaknoDlhyCasVlak.finished.connect(lambda: self.szz.rusenieCesty(cas=True))
-        self.vlaknoDlhyCasPosun.finished.connect(lambda: self.szz.rusenieCesty(cas=True))
+        self.vlaknoDlhyCasVlak.finished.connect(lambda: self.szz.uplynutieCasSuboru(Disp=True))
+        self.vlaknoDlhyCasPosun.finished.connect(lambda: self.szz.uplynutieCasSuboru(Disp=True))
         self.vlaknoCasOchrDrahy.finished.connect(lambda: self.szz.rusenieOD(Disp=True))    
 
         self.posledneNav:int = 0  #posledné kliknuté návestidlo

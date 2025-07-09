@@ -22,7 +22,7 @@ class TratSuhlas:
 
         self.porBP:bool = False #došlo k poruche blokovej podmienky
 
-    def update(self, app):
+    def update(self, app:object):
         self.setPrijem()
 
         if self.enumIkon != None:   #ak existuje priradený enum symbolov

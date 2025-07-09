@@ -36,7 +36,7 @@ class Vyhybka:
         #    1   |   1   || prestavovanie + > -
         #    0   |   1   || prestavovanie - > +
    
-    def update(self, app):  #metóda pre aktualizáciu symbolu výhybky
+    def update(self, app:object):  #metóda pre aktualizáciu symbolu výhybky
         self.prestavenieEnd()
         self.rusenieCesty()        
         self.lastSmer = self.smer   #zápis aktuálneho smeru výhybky ako predošlého smeru
