@@ -646,7 +646,8 @@ class App(QMainWindow): #hlavná triedy vizualizácie
 
         self.zoznamNav[self.pociatocneNav].stavanieOd = True
         self.zoznamNav[self.pociatocneNav].typAktCes = self.szz.typCesty #zapíše počiatočnému návestidlu typ cesty
-        self.zoznamNav[self.zoznamNav[self.pociatocneNav].zavisle].typAktCes = self.szz.typCesty #zapíše závislému návestidlu od počiatočného typ cesty
+        if self.zoznamNav[self.pociatocneNav].zavisle != -1:
+            self.zoznamNav[self.zoznamNav[self.pociatocneNav].zavisle].typAktCes = self.szz.typCesty #zapíše závislému návestidlu od počiatočného typ cesty
         self.zoznamNav[self.pociatocneNav].vybrane = False
         self.zoznamNav[self.pociatocneNav].update(self)
 
