@@ -111,7 +111,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
     def aktualizaciaCasu(self, cas):    #metóda pre aktualizáciu času v GUI
         self.ui.DateTime.setText(cas)
 
-    def update(self, ID = -1, clicked=False, objekt='update'): #metóda pre aktualizáciu symbolov objektov
+    def update(self, ID:int = -1, clicked:bool=False, objekt:str='update'): #metóda pre aktualizáciu symbolov objektov
         if objekt in ['update', 'useky']:   #aktualizácia úsekov počas aktualizácie celého okna (update) alebo len pri špecifickom volaní (useky)
             for i in self.vlaknoUpdate.dictUseky.keys():
                 self.vlaknoUpdate.dictUseky[i].update(self)
@@ -173,7 +173,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
             for i in self.vlaknoUpdate.dictStanice.keys():
                 self.vlaknoUpdate.dictStanice[i].update(self)
 
-    def clickObjekt(self, id, objekt):  #metóda spracovávajúca kliknutie na objekt
+    def clickObjekt(self, id:int, objekt:str):  #metóda spracovávajúca kliknutie na objekt
         if objekt == 'navestidlo': # ak bolo vybrané návestidlo
             self.posledneNav = id   #zápis posledného kliknutého návestidla  
 
@@ -261,7 +261,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
             else:
                 self.comboShowHide()            
 
-    def comboShowHide(self, nazov = ' '):   #metóda pre zobrazovanie výberových ponúk pre návestidlá
+    def comboShowHide(self, nazov:str=' '):   #metóda pre zobrazovanie výberových ponúk pre návestidlá
         if nazov == 'vchodove': #zobrazí menu pre vchodové návestidlo
             self.ui.combo_hlavne.show()
             self.ui.combo_fikt.hide()
@@ -347,7 +347,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
             self.ui.combo_priec.hide()
             self.ui.combo_Riadenie.hide()
 
-    def akciaPriecestie(self, index):   #vyhodnotenie vybranej akcie z kontextového menu
+    def akciaPriecestie(self, index:int):   #vyhodnotenie vybranej akcie z kontextového menu
         self.comboShowHide()    #po výbere skry menu
 
         if index == 1:  #zatvorenie priecetia
@@ -362,7 +362,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
 
         self.ui.combo_priec.setCurrentIndex(0) #resetuj index vybranej akcie z kontextového menu  
 
-    def akciaNavestidlo(self, index, typ):   #vyhodnotenie vybranej akcie z kontextového menu
+    def akciaNavestidlo(self, index:int, typ:str):   #vyhodnotenie vybranej akcie z kontextového menu
         self.comboShowHide()    #po výbere skry menu
 
         #----------------------------výber typu vlakovej cesty------------------------------------------------------------------
@@ -571,7 +571,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         self.ui.combo_ciel_fi.setCurrentIndex(0)
         self.ui.combo_ciel_hl.setCurrentIndex(0)
 
-    def zmenaNavZnaku(self, navest = ' '):    #zmena návestného znaku na návestidle
+    def zmenaNavZnaku(self, navest:str=' '):    #zmena návestného znaku na návestidle
         self.zoznamNav[self.posledneNav].znak = navest
         prikaz = '/' + navest
         self.prikazDoPLC(adresat='navestidlo', prikaz=prikaz, id=self.zoznamNav[self.posledneNav].ID, nazov=self.zoznamNav[self.posledneNav].nazov)  
@@ -582,7 +582,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                         self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].znak = navest
                         self.zoznamNav[self.zoznamNav[self.posledneNav].zavisle].update(self)
 
-    def akciaTS(self, index, typ):   #metóda pre prácu s traťovým súhlasom 
+    def akciaTS(self, index:int, typ:str):   #metóda pre prácu s traťovým súhlasom 
         if (index == 1) and (typ == 'esa'):   #žiadosť o TS
             if not self.vlaknoUpdate.dictTS[self.poslednyTS].prijem:    #kontrola udelenia TS
                 if self.vlaknoUpdate.dictTS[self.poslednyTS].volnost:   #kontrola voľnosti úseku
@@ -611,7 +611,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         self.ui.combo_TS_ESA.setCurrentIndex(0)
         self.ui.combo_TS_DISP.setCurrentIndex(0) 
 
-    def akciaStanica(self, index):  #metóda pre spracovanie signálov riadenia
+    def akciaStanica(self, index:int):  #metóda pre spracovanie signálov riadenia
         if index == 1: #žiadosť o prevzatie riadenia
             if not self.vlaknoUpdate.dictStanice[self.poslednaStn].dialkove:
                 if self.vlaknoUpdate.dictStanice[self.poslednaStn].ziadost: #ak už je aktívna žiadosť
@@ -633,7 +633,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         self.comboShowHide()
         widget.ui.combo_Riadenie.setCurrentIndex(0)
 
-    def vyberCestu(self, typ):  #metóda pre zápis potrebných hodnôt pre výber jazdnej cesty
+    def vyberCestu(self, typ:str):  #metóda pre zápis potrebných hodnôt pre výber jazdnej cesty
         if typ == 'Vlak':   #zapíše správny typ cesty
             self.szz.typCesty = 'Vlak'
         
@@ -650,7 +650,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         self.zoznamNav[self.pociatocneNav].vybrane = False
         self.zoznamNav[self.pociatocneNav].update(self)
 
-    def postavCestu(self, Ochr=False):  #metóda, ktorá vydá príkaz pre postavenie vybranej cesty algoritmom SZZ
+    def postavCestu(self, Ochr:bool=False):  #metóda, ktorá vydá príkaz pre postavenie vybranej cesty algoritmom SZZ
         self.szz.vyberCesty = False
         self.koncoveNav = self.posledneNav
         self.posledneNav = 0
@@ -660,7 +660,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
 
         self.szz.stavanieCesty(OD = Ochr, Disp = True)
 
-    def ukonciStavanie(self, TS=False, odhl=False, volnost=False):   #metóda slúži na ukončenie stavania VC v prípade zlého TS alebo obsadeného medzist. úseku
+    def ukonciStavanie(self, TS:bool=False, odhl:bool=False, volnost:bool=False):   #metóda slúži na ukončenie stavania VC v prípade zlého TS alebo obsadeného medzist. úseku
         self.zoznamNav[self.pociatocneNav].stavanieOd = False
         self.zoznamNav[self.pociatocneNav].update(self)
         self.szz.vyberCesty = False
@@ -676,7 +676,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         elif volnost:
             self.vypisHlasenia('Obsadený medzistaničný úsek')
 
-    def prikazDoPLC(self, prikaz:str=' ', id:int=0, nazov:str=' ', adresat:str=' ', auto=False):  #metóda pre odosielanie dát do PLC
+    def prikazDoPLC(self, prikaz:str=' ', id:int=0, nazov:str=' ', adresat:str=' ', auto:bool=False):  #metóda pre odosielanie dát do PLC
         adresa = self.citajAdresu()
         if adresat == 'cas':    #odosielanie času do aplikácie
             URL = adresa + 'CasP/disp'
@@ -743,7 +743,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         
         requests.put(URL)
                 
-    def lupa(self, index):  #metóda pre prácu s podrobnými obrazmi staníc
+    def lupa(self, index:int):  #metóda pre prácu s podrobnými obrazmi staníc
         if index == 1:
             self.ui.RadosinaLupa.setVisible(True)
             self.ui.ZbehyLupa.setVisible(False)
@@ -764,7 +764,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
             self.ui.ZbehyLupa.setVisible(False)
             self.ui.HlohovecLupa.setVisible(False)
 
-    def vypisHlasenia(self, hlasenie):  #metóda pre výpis varovného hlásenia pri zlej obsluhe
+    def vypisHlasenia(self, hlasenie:str):  #metóda pre výpis varovného hlásenia pri zlej obsluhe
         cas = arrow.now().format('HH:mm:ss')
         self.ui.textHlasenia.append(hlasenie + ' - ' + cas)
 
