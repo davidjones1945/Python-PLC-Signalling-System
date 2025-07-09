@@ -58,7 +58,7 @@ class SZZ:
                                     self.spravnaPolohaVymen = False
 
                                 if not server:  #povel pre prestavenie fyzickej výmeny 
-                                    self.prestavenieVyh(vyhybka=i, index=1, auto=True)
+                                    self.prestavenieVyh(vyhybka=i, i=1, auto=True)
 
         else:
             self.app.vypisHlasenia('Počiatočné alebo koncové návestidlo nie je definované')
@@ -68,13 +68,13 @@ class SZZ:
             if self.spravnaPolohaVymen:           
                 #------------ZÁVER BEZVÝHYBKOVÝCH ÚSEKOV------------               
                 for i in self.app.vlaknoUpdate.dictUseky.keys():   #vyberaj zo všetkých úsekov
-                    self.zaverUsekov(index=i, zoznam='Useky', typZaveru=self.typCesty)  #vytvor záver jazdnej cesty                     
+                    self.zaverUsekov(i=i, zoznam='Useky', typZaveru=self.typCesty)  #vytvor záver jazdnej cesty                     
 
                     if self.ochrDraha: #ak má cesta definovanú ochrannú dráhu
-                        self.zaverUsekov(index=i, zoznam='UsekyOD', typZaveru='OchrDr') #vytvor záver úsekov ochrannej dráhy   
+                        self.zaverUsekov(i=i, zoznam='UsekyOD', typZaveru='OchrDr') #vytvor záver úsekov ochrannej dráhy   
 
                     if self.typCesty == 'Posun':   #v prípade posunu na obsadenú koľaj sa vytvorí záver cieľovej koľaje
-                        self.zaverUsekov(index=i, zoznam='dopUseky', typZaveru=self.typCesty)
+                        self.zaverUsekov(i=i, zoznam='dopUseky', typZaveru=self.typCesty)
                 
                 #------------ZÁVER VÝHYBKOVÝCH ÚSEKOV------------ 
                 for i in self.app.vlaknoUpdate.dictUseky.keys():   #vyberaj zo všetkých úsekov
@@ -243,24 +243,24 @@ class SZZ:
                     return 1
         return 2
 
-    def predbeznyZaverCesty(self, index:int, typ:str):
-        self.app.vlaknoUpdate.dictUseky[index].stavanie = typ
-        self.app.vlaknoUpdate.dictUseky[index].update(self)
+    def predbeznyZaverCesty(self, i:int, typ:str):
+        self.app.vlaknoUpdate.dictUseky[i].stavanie = typ
+        self.app.vlaknoUpdate.dictUseky[i].update(self)
 
         for nav in self.app.zoznamNav.keys(): #vyberaj z návestidiel 
-            if (self.app.vlaknoUpdate.dictUseky[index].nazovGUI == self.app.zoznamNav[nav].usekPred) and (
+            if (self.app.vlaknoUpdate.dictUseky[i].nazovGUI == self.app.zoznamNav[nav].usekPred) and (
             self.app.zoznamNav[nav].ID != self.app.koncoveNav) and (self.app.zoznamNav[nav].zavisle != self.app.zoznamNav[self.app.koncoveNav].ID):   
             #ak je návestidlo vo vnútri cesty a nie je definované ako koncové ani ako závislé návestidlo ku koncovému (Dispečer)
                 self.app.zoznamNav[nav].cesta = typ  #zmeň jeho symbol 
                 self.app.zoznamNav[nav].update(self)    
 
-    def zaverUsekov(self, index:int, zoznam:str, typZaveru:str, Disp:bool=False):
+    def zaverUsekov(self, i:int, zoznam:str, typZaveru:str, Disp:bool=False):
         for usek in zaverTab.dictVC[self.stavanaCesta][zoznam]:   #vyberaj z úsekov danej cesty                         
-            if self.app.vlaknoUpdate.dictUseky[index].nazovGUI == usek: #ak sa názvy zhodujú, definuj úsek ako záverovaný
+            if self.app.vlaknoUpdate.dictUseky[i].nazovGUI == usek: #ak sa názvy zhodujú, definuj úsek ako záverovaný
                 
-                self.app.vlaknoUpdate.dictUseky[index].stavanie = ' '                                    
-                self.app.vlaknoUpdate.dictUseky[index].cesta = typZaveru                                                                                                        
-                self.app.vlaknoUpdate.dictUseky[index].update(self)
+                self.app.vlaknoUpdate.dictUseky[i].stavanie = ' '                                    
+                self.app.vlaknoUpdate.dictUseky[i].cesta = typZaveru                                                                                                        
+                self.app.vlaknoUpdate.dictUseky[i].update(self)
 
                 if zoznam == 'Useky':
                     self.app.zoznamNav[self.app.koncoveNav].stavanieDo = False #úprava parametrov koncového mávestidla                      
@@ -272,8 +272,8 @@ class SZZ:
                         self.app.zoznamNav[self.app.zoznamNav[self.app.koncoveNav].zavisle].koncove = True
                         self.app.zoznamNav[self.app.zoznamNav[self.app.koncoveNav].zavisle].update(self)
 
-    def rozsvietNavest(self, navest:str, Disp:bool, nav:int, index:int, usek:str):                                      
-            if (self.app.vlaknoUpdate.dictUseky[index].jeVolny) or (usek == '0'):    #ak je úsek voľný
+    def rozsvietNavest(self, navest:str, Disp:bool, nav:int, i:int, usek:str):                                      
+            if (self.app.vlaknoUpdate.dictUseky[i].jeVolny) or (usek == '0'):    #ak je úsek voľný
                 if self.app.zoznamNav[nav].znak == navest:
                     return
                 else:
@@ -331,7 +331,7 @@ class SZZ:
                                                  
                         if usek is not None: #ak je úsek nájdený                                
                             if ((self.app.vlaknoUpdate.dictUseky[i].nazovGUI == usek) or (usek == '0')): #ak sa názvy úsekov zhodujú alebo nie je definovaný
-                                self.rozsvietNavest(navest=self.app.zoznamNav[nav].typAktCes, Disp=Disp, nav=nav, index=i, usek=usek)   #skontroluj závislosti pre automatickú zmenu návesti
+                                self.rozsvietNavest(navest=self.app.zoznamNav[nav].typAktCes, Disp=Disp, nav=nav, i=i, usek=usek)   #skontroluj závislosti pre automatickú zmenu návesti
 
                         else:   #ak hľadaný úsek neexistuje ukonči beh metódy
                             return
@@ -339,51 +339,7 @@ class SZZ:
     def rusenieCesty(self, cas = False, Disp = False, server=False):    #metóda pre rušenie jazdnej cesty
         if not cas: #ak nie je metóda volaná po uplynutí čaového súboru 
 
-            #------------HĽADANIE RUŠENEJ CESTY V ZÁVEROVEJ TABUĽKE------------
-            for id in zaverTab.dictVC.keys():   #vyberaj zo záverovej tabuľky                
-                if (self.app.zoznamNav[self.app.koncoveNav].nazov in zaverTab.dictVC[id]['stop']):   #ak nájdeš cestu s koncovým návestuidlom, ktoré obsluha vybrala                    
-                    for nav in self.app.zoznamNav.keys(): #vyberaj z návestidiel                        
-                        if (self.app.zoznamNav[nav].nazov in zaverTab.dictVC[id]['start'])  and (
-                        (self.app.zoznamNav[nav].znak == 'Vlak') or (self.app.zoznamNav[nav].znak == 'Posun')):
-                        #ak nájdeš návestidlo s povoľujúcim znakom zapísané ako počiatočné návestidlo vybranej jazdnej cesty
-                            if ((self.app.zoznamNav[self.app.koncoveNav].OD is True) and ('UsekyOD' in zaverTab.dictVC[id].keys())) or (self.app.zoznamNav[self.app.koncoveNav].OD is False):
-                            #ak je za koncovým návestidlom cesty aktívna ochranná dráha a je v jazdnej ceste definovaná ALEBO nie
-                                for usek in self.app.vlaknoUpdate.dictUseky.keys():    #vyberaj z úsekov
-                                    for vyh in zaverTab.dictVC[id].keys():  #hľadaj výhybky jazdnej cesty v záverovej tabuľke 
-                                        if self.app.vlaknoUpdate.dictUseky[usek].nazovGUI == vyh:  #ak ich nájdeš
-                                            if  (zaverTab.dictVC[id][vyh][0]) == (self.app.vlaknoUpdate.dictUseky[usek].smer): #ak je polohy výmen správna pre danú cestu                                                                                           
-                                                self.app.zoznamNav[nav].znak = 'Stoj' #zmeň znak na zakazujúci
-                                                self.app.zoznamNav[nav].pociatocne = False
-                                                self.app.zoznamNav[nav].manual = False
-                                                self.app.zoznamNav[nav].update(self)
-                                                
-                                                if Disp and (self.app.zoznamNav[nav].zavisle != -1): #úprava pre dispečerskú aplikáciu
-                                                    self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].znak = 'Stoj' 
-                                                    self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].pociatocne = False
-                                                    self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].manual = False
-                                                    self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].update(self)
-
-                                                self.rusenaCesta = id   #zapíš aktuálne vybranú cestu ako rušenú
-                                                
-                                                if self.app.zoznamNav[self.app.koncoveNav].OD:   #ak cesta obsahuje ochrannú dráhu
-                                                    self.ochrDraha = True
-                                                    self.app.zoznamNav[self.app.koncoveNav].OD = False
-                                                    
-                                                    if Disp: #úprava pre dispečerskú aplikáciu
-                                                        self.app.zoznamNav[self.app.zoznamNav[self.app.koncoveNav].zavisle].OD = False
-                                                    
-                                                    if not server:
-                                                        self.app.prikazDoPLC(adresat='write/OchrDr/', prikaz='/False', nazov=self.rusenaCesta)
-
-                                                if not server:
-                                                    self.app.prikazDoPLC(adresat='navestidlo', prikaz='/Stoj', id=self.app.zoznamNav[nav].ID, nazov=self.app.zoznamNav[nav].nazov)
-                                                break
-                                    if self.rusenaCesta != ' ': #po úspešnom vyhľadaní rušenej cesty sa opúšťajú vyhľadávacie cykly
-                                        break
-                                if self.rusenaCesta != ' ':
-                                    break   
-                    if self.rusenaCesta != ' ':
-                        break
+            self.hladanieRusenejcestyVZaverTab(Disp=Disp, server=server)    #nájdi rušenú cestu v záverovej tabuľke
 
             #------------KONTROLA VOĽNOSTI PRIBLIŽOVACIEHO ÚSEKU A SPUSTENIE RUŠENIA CESTY------------
             if self.rusenaCesta != ' ':
@@ -392,7 +348,7 @@ class SZZ:
                         self.app.zoznamNav[self.app.koncoveNav].rusenie = True   #zobraz pri symbole koncového návestidla fialový index
                         if self.app.vlaknoUpdate.dictUseky[i].jeVolny: #ak je voľný
                             cas = True  #zruš cestu okamžite
-                            self.app.zoznamNav[self.app.koncoveNav].zaverVC = False  #zruš jej záver
+                            self.app.zoznamNav[self.app.koncoveNav].zaverVC = False  #zruš príznak záveru na koncovom návestidle
                             self.app.zoznamNav[self.app.koncoveNav].zaverPC = False 
                             
                             if Disp and self.app.zoznamNav[self.app.koncoveNav].zavisle != -1: #úprava pre dispečerskú aplikáciu
@@ -408,7 +364,7 @@ class SZZ:
                                 if Disp: #úprava pre dispečerskú aplikáciu
                                     self.app.zoznamNav[self.app.zoznamNav[self.app.koncoveNav].zavisle].zaverVC = False
                                 
-                                self.app.workerThreadTimeVlak.pociatocneNav_timer()  #spusti časový súbor rušenia vlakovej cesty (3 min)
+                                self.app.vlaknoDlhyCasVlak.start_timer()  #spusti časový súbor rušenia vlakovej cesty (3 min)
                                 break
 
                             elif self.app.zoznamNav[self.app.koncoveNav].zaverPC:    #ak sa jedná o posunovú cestu
@@ -417,7 +373,7 @@ class SZZ:
                                 if Disp: #úprava pre dispečerskú aplikáciu
                                     self.app.zoznamNav[self.app.zoznamNav[self.app.koncoveNav].zavisle].zaverPC = False
                                 
-                                self.app.workerThreadTimePosun.pociatocneNav_timer() #spusti časový súbor rušenia posunovej cesty (1 min)
+                                self.app.vlaknoDlhyCasPosun.start_timer() #spusti časový súbor rušenia posunovej cesty (1 min)
                                 break
 
                 self.app.zoznamNav[self.app.koncoveNav].update(self) #aktualizuj symbol koncového návestidla
@@ -428,118 +384,92 @@ class SZZ:
         if cas: #ak je metóda volaná po uplynutí čaového súboru  
             if self.rusenaCesta != ' ':  
                 for i in self.app.vlaknoUpdate.dictUseky.keys():   #vyberaj zo všetkých úsekov
-                    #------------RUŠENIE ZÁVERU ÚSEKOV JAZDNEJ CESTY------------                
-                    for usek in zaverTab.dictVC[self.rusenaCesta]['Useky']:  #vyberaj z úsekov 
-                        if self.app.vlaknoUpdate.dictUseky[i].nazovGUI == usek:    #ak sa názvy úsekov zhodujú
-                            self.app.vlaknoUpdate.dictUseky[i].vlak = False    #zruš záver daného úseku
-                            self.app.vlaknoUpdate.dictUseky[i].posun = False                        
-                            
-                            if i in [12,13]:  #špeciálna úprava pre koľajovú spojku
-                                if (i == 12 and ((
-                                self.app.vlaknoUpdate.dictUseky[13].vlak is True) or (
-                                self.app.vlaknoUpdate.dictUseky[13].posun is True) or (
-                                self.app.vlaknoUpdate.dictUseky[13].ochr is True))) or (
-                                i == 13 and ((
-                                self.app.vlaknoUpdate.dictUseky[12].vlak is True) or (
-                                self.app.vlaknoUpdate.dictUseky[12].posun is True) or (
-                                self.app.vlaknoUpdate.dictUseky[12].ochr is True))
-                                ):
-                                    self.app.vlaknoUpdate.dictUseky[i].zaver = True
+                    #------------RUŠENIE ZÁVERU ÚSEKOV JAZDNEJ CESTY------------ 
+                    self.rusenieZaveruUsekov(i=i, zoznam='Useky', Disp=Disp)               
+                    # for usek in zaverTab.dictVC[self.rusenaCesta]['Useky']:  #vyberaj z úsekov 
+                    #     if self.app.vlaknoUpdate.dictUseky[i].nazovGUI == usek:    #ak sa názvy úsekov zhodujú
+                    #         self.app.vlaknoUpdate.dictUseky[i].cesta = ' '    #zruš záver daného úseku                       
+                    #         self.app.vlaknoUpdate.dictUseky[i].zaver = False
+
+                    #         if self.app.vlaknoUpdate.dictUseky[i].druhaVymena != -1:   #úprava pre spojku
+                    #             if self.app.vlaknoUpdate.dictUseky[self.app.vlaknoUpdate.dictUseky[i].druhaVymena].cesta != ' ':
+                    #                 self.app.vlaknoUpdate.dictUseky[i].zaver = True
+                                
+                    #             else:
+                    #                 self.app.vlaknoUpdate.dictUseky[i].zaver = False
+                    #                 self.app.vlaknoUpdate.dictUseky[self.app.vlaknoUpdate.dictUseky[i].druhaVymena] = False
+
+                    #         self.app.vlaknoUpdate.dictUseky[i].update(self)
+
+                    #         for nav in self.app.zoznamNav.keys(): #vyberaj z návestidiel                            
+                    #             if (self.app.vlaknoUpdate.dictUseky[i].nazovGUI == self.app.zoznamNav[nav].usekPred):
+                    #                 self.app.zoznamNav[nav].cesta = ' '  #uprav jeho symbol
+                    #                 self.app.zoznamNav[nav].update(self)
                                     
-                                else:
-                                    self.app.vlaknoUpdate.dictUseky[12].zaver = False
-                                    self.app.vlaknoUpdate.dictUseky[13].zaver = False
-                            
-                            elif i in [40,41]:  #špeciálna úprava pre koľajovú spojku
-                                if (i == 40 and ((
-                                self.app.vlaknoUpdate.dictUseky[41].vlak is True) or (
-                                self.app.vlaknoUpdate.dictUseky[41].posun is True) or (
-                                self.app.vlaknoUpdate.dictUseky[41].ochr is True))) or (
-                                i == 41 and ((
-                                self.app.vlaknoUpdate.dictUseky[40].vlak is True) or (
-                                self.app.vlaknoUpdate.dictUseky[40].posun is True) or (
-                                self.app.vlaknoUpdate.dictUseky[40].ochr is True))
-                                ):
-                                    self.app.vlaknoUpdate.dictUseky[i].zaver = True
-                                    
-                                else:
-                                    self.app.vlaknoUpdate.dictUseky[40].zaver = False
-                                    self.app.vlaknoUpdate.dictUseky[41].zaver = False
+                    #                 if Disp and self.app.zoznamNav[nav].zavisle != -1: #úprava pre dispečerskú aplikáciu
+                    #                     self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].cesta = ' '  #uprav jeho symbol
+                    #                     self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].update(self)
+                    self.rusenieZaveruUsekov(i=i, zoznam='dopUseky', Disp=Disp)
+                    # for usek in zaverTab.dictVC[self.rusenaCesta]['dopUseky']: #vyber úsek zo záverovej tabuľky
+                    #     if usek is not None:
+                    #         if self.app.vlaknoUpdate.dictUseky[i].nazovGUI == usek:    #ak sa názvy úsekov zhodujú
+                    #             self.app.vlaknoUpdate.dictUseky[i].cesta = ' '   #zruš záver úseku
+                    #             self.app.vlaknoUpdate.dictUseky[i].update(self)
 
-                            else:
-                                self.app.vlaknoUpdate.dictUseky[i].zaver = False
-
-                            self.app.vlaknoUpdate.dictUseky[i].update(self)
-
-                            for nav in self.app.zoznamNav.keys(): #vyberaj z návestidiel                            
-                                if (self.app.vlaknoUpdate.dictUseky[i].nazovGUI == self.app.zoznamNav[nav].usekPred): #and (self.app.zoznamNav[nav].ID != self.app.koncoveNav) and (
-                                    self.app.zoznamNav[nav].vlak = False  #uprav jeho symbol
-                                    self.app.zoznamNav[nav].posun = False
-                                    self.app.zoznamNav[nav].update(self)
-                                    
-                                    if Disp and self.app.zoznamNav[nav].zavisle != -1: #úprava pre dispečerskú aplikáciu
-                                        self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].vlak = False  #uprav jeho symbol
-                                        self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].posun = False
-                                        self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].update(self)
-
-                    for usek in zaverTab.dictVC[self.rusenaCesta]['dopUseky']: #vyber úsek zo záverovej tabuľky
-                        if usek is not None:
-                            if self.app.vlaknoUpdate.dictUseky[i].nazovGUI == usek:    #ak sa názvy úsekov zhodujú
-                                self.app.vlaknoUpdate.dictUseky[i].posun = False   #zruš záver úseku
-
-                                for nav in self.app.zoznamNav.keys(): #vyberaj z návestidiel                                
-                                    if (self.app.vlaknoUpdate.dictUseky[i].nazovGUI == self.app.zoznamNav[nav].usekPred): #and (self.app.zoznamNav[nav].ID != self.app.koncoveNav) and (
-                                        self.app.zoznamNav[nav].posun = False #uprav jeho symbol
-                                        self.app.zoznamNav[nav].update(self)
+                    #             for nav in self.app.zoznamNav.keys(): #vyberaj z návestidiel                                
+                    #                 if (self.app.vlaknoUpdate.dictUseky[i].nazovGUI == self.app.zoznamNav[nav].usekPred): #and (self.app.zoznamNav[nav].ID != self.app.koncoveNav) and (
+                    #                     self.app.zoznamNav[nav].cesta = ' ' #uprav jeho symbol
+                    #                     self.app.zoznamNav[nav].update(self)
                                         
-                                        if Disp and self.app.zoznamNav[nav].zavisle != -1: #úprava pre dispečerskú aplikáciu
-                                            self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].posun = False 
-                                            self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].update(self)
+                    #                     if Disp and self.app.zoznamNav[nav].zavisle != -1: #úprava pre dispečerskú aplikáciu
+                    #                         self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].cesta = ' '
+                    #                         self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].update(self)
 
                     if self.ochrDraha:  #ak sa ruší aj ochranná dráha
-                        for usek in zaverTab.dictVC[self.rusenaCesta]['UsekyOD']:  #vyberaj z úsekov 
-                            if self.app.vlaknoUpdate.dictUseky[i].nazovGUI == usek:    #ak sa názvy úsekov zhodujú
-                                self.app.vlaknoUpdate.dictUseky[i].ochr = False    #zruš záver daného úseku
-                                if i in [12,13]:  #špeciálna úprava pre koľajovú spojku
+                        self.rusenieOD(Disp=Disp)
+                        # for usek in zaverTab.dictVC[self.rusenaCesta]['UsekyOD']:  #vyberaj z úsekov 
+                        #     if self.app.vlaknoUpdate.dictUseky[i].nazovGUI == usek:    #ak sa názvy úsekov zhodujú
+                        #         self.app.vlaknoUpdate.dictUseky[i].ochr = False    #zruš záver daného úseku
+                        #         if i in [12,13]:  #špeciálna úprava pre koľajovú spojku
                                     
-                                    if i == 12 and ((self.app.vlaknoUpdate.dictUseky[13].vlak is True) or (self.app.vlaknoUpdate.dictUseky[13].posun is True) or (
-                                    self.app.vlaknoUpdate.dictUseky[13].ochr is True)):
-                                        self.app.vlaknoUpdate.dictUseky[12].zaver = False
+                        #             if i == 12 and ((self.app.vlaknoUpdate.dictUseky[13].vlak is True) or (self.app.vlaknoUpdate.dictUseky[13].posun is True) or (
+                        #             self.app.vlaknoUpdate.dictUseky[13].ochr is True)):
+                        #                 self.app.vlaknoUpdate.dictUseky[12].zaver = False
                                     
-                                    elif i == 13 and ((self.app.vlaknoUpdate.dictUseky[12].vlak is True) or (self.app.vlaknoUpdate.dictUseky[12].posun is True) or (
-                                    self.app.vlaknoUpdate.dictUseky[12].ochr is True)):
-                                        self.app.vlaknoUpdate.dictUseky[13].zaver = False
+                        #             elif i == 13 and ((self.app.vlaknoUpdate.dictUseky[12].vlak is True) or (self.app.vlaknoUpdate.dictUseky[12].posun is True) or (
+                        #             self.app.vlaknoUpdate.dictUseky[12].ochr is True)):
+                        #                 self.app.vlaknoUpdate.dictUseky[13].zaver = False
                                     
-                                    else:
-                                        self.app.vlaknoUpdate.dictUseky[12].zaver = False
-                                        self.app.vlaknoUpdate.dictUseky[13].zaver = False
+                        #             else:
+                        #                 self.app.vlaknoUpdate.dictUseky[12].zaver = False
+                        #                 self.app.vlaknoUpdate.dictUseky[13].zaver = False
 
-                                elif i in [40,41]:  #špeciálna úprava pre koľajovú spojku
-                                    if i == 40 and ((self.app.vlaknoUpdate.dictUseky[41].vlak is True) or (self.app.vlaknoUpdate.dictUseky[41].posun is True) or (
-                                    self.app.vlaknoUpdate.dictUseky[41].ochr is True)):
-                                        self.app.vlaknoUpdate.dictUseky[40].zaver = False
+                        #         elif i in [40,41]:  #špeciálna úprava pre koľajovú spojku
+                        #             if i == 40 and ((self.app.vlaknoUpdate.dictUseky[41].vlak is True) or (self.app.vlaknoUpdate.dictUseky[41].posun is True) or (
+                        #             self.app.vlaknoUpdate.dictUseky[41].ochr is True)):
+                        #                 self.app.vlaknoUpdate.dictUseky[40].zaver = False
                                     
-                                    elif i == 41 and ((self.app.vlaknoUpdate.dictUseky[40].vlak is True) or (self.app.vlaknoUpdate.dictUseky[40].posun is True) or (
-                                    self.app.vlaknoUpdate.dictUseky[40].ochr is True)):
-                                        self.app.vlaknoUpdate.dictUseky[41].zaver = False
+                        #             elif i == 41 and ((self.app.vlaknoUpdate.dictUseky[40].vlak is True) or (self.app.vlaknoUpdate.dictUseky[40].posun is True) or (
+                        #             self.app.vlaknoUpdate.dictUseky[40].ochr is True)):
+                        #                 self.app.vlaknoUpdate.dictUseky[41].zaver = False
                                     
-                                    else:
-                                        self.app.vlaknoUpdate.dictUseky[40].zaver = False
-                                        self.app.vlaknoUpdate.dictUseky[41].zaver = False
+                        #             else:
+                        #                 self.app.vlaknoUpdate.dictUseky[40].zaver = False
+                        #                 self.app.vlaknoUpdate.dictUseky[41].zaver = False
 
-                                else:
-                                    self.app.vlaknoUpdate.dictUseky[i].zaver = False
+                        #         else:
+                        #             self.app.vlaknoUpdate.dictUseky[i].zaver = False
 
-                                self.app.vlaknoUpdate.dictUseky[i].update(self)
+                        #         self.app.vlaknoUpdate.dictUseky[i].update(self)
 
-                                for nav in self.app.zoznamNav.keys(): #vyberaj z návestidiel                            
-                                    if (self.app.vlaknoUpdate.dictUseky[i].nazovGUI == self.app.zoznamNav[nav].usekPred): #and (self.app.zoznamNav[nav].ID != self.app.koncoveNav) and (
-                                        self.app.zoznamNav[nav].ochr = False  #uprav jeho symbol
-                                        self.app.zoznamNav[nav].update(self)
+                        #         for nav in self.app.zoznamNav.keys(): #vyberaj z návestidiel                            
+                        #             if (self.app.vlaknoUpdate.dictUseky[i].nazovGUI == self.app.zoznamNav[nav].usekPred): #and (self.app.zoznamNav[nav].ID != self.app.koncoveNav) and (
+                        #                 self.app.zoznamNav[nav].ochr = False  #uprav jeho symbol
+                        #                 self.app.zoznamNav[nav].update(self)
                                         
-                                        if Disp and self.app.zoznamNav[nav].zavisle != -1: #úprava pre dispečerskú aplikáciu
-                                            self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].ochr = False                                        
-                                            self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].update(self)
+                        #                 if Disp and self.app.zoznamNav[nav].zavisle != -1: #úprava pre dispečerskú aplikáciu
+                        #                     self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].ochr = False                                        
+                        #                     self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].update(self)
 
                 self.app.zoznamNav[self.app.koncoveNav].rusenie = False  #ukončenie rušenia jazdnej cesty
                 self.app.zoznamNav[self.app.koncoveNav].update(self)
@@ -555,6 +485,77 @@ class SZZ:
                 self.app.koncoveNav = 0
                 self.ochrDraha = False
 
+    def hladanieRusenejcestyVZaverTab(self, Disp:bool, server:bool):
+        for id in zaverTab.dictVC.keys():   #vyberaj zo záverovej tabuľky                
+            if (self.app.zoznamNav[self.app.koncoveNav].nazov in zaverTab.dictVC[id]['stop']):   #ak nájdeš cestu s koncovým návestuidlom, ktoré obsluha vybrala                    
+                for nav in self.app.zoznamNav.keys(): #vyberaj z návestidiel                        
+                    if (self.app.zoznamNav[nav].nazov in zaverTab.dictVC[id]['start'])  and (
+                    self.app.zoznamNav[nav].znak == 'Vlak' or self.app.zoznamNav[nav].znak == 'Posun' or (
+                    self.app.zoznamNav[nav].znak == 'Stoj' and self.app.zoznamNav[nav].manual)):
+                    #ak nájdeš návestidlo s povoľujúcim znakom alebo so Stoj v manuáln om režime zapísané ako počiatočné návestidlo vybranej jazdnej cesty
+                        if (self.app.zoznamNav[self.app.koncoveNav].OD is True and 'UsekyOD' in zaverTab.dictVC[id].keys()) or (self.app.zoznamNav[self.app.koncoveNav].OD is False):
+                        #ak je za koncovým návestidlom cesty aktívna ochranná dráha a je v jazdnej ceste definovaná ALEBO nie
+                            for usek in self.app.vlaknoUpdate.dictUseky.keys():    #vyberaj z úsekov
+                                for vyh in zaverTab.dictVC[id].keys():  #hľadaj výhybky jazdnej cesty v záverovej tabuľke 
+                                    if self.app.vlaknoUpdate.dictUseky[usek].nazovGUI == vyh:  #ak ich nájdeš
+                                        if  (zaverTab.dictVC[id][vyh][0]) == (self.app.vlaknoUpdate.dictUseky[usek].smer): #ak je polohy výmen správna pre danú cestu                                                                                           
+                                            self.app.zoznamNav[nav].znak = 'Stoj' #zmeň návesť počiatočného návestidla na Stoj
+                                            self.app.zoznamNav[nav].pociatocne = False
+                                            self.app.zoznamNav[nav].manual = False
+                                            self.app.zoznamNav[nav].update(self)
+                                            
+                                            if Disp and (self.app.zoznamNav[nav].zavisle != -1): #úprava pre dispečerskú aplikáciu
+                                                self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].znak = 'Stoj' 
+                                                self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].pociatocne = False
+                                                self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].manual = False
+                                                self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].update(self)
+
+                                            self.rusenaCesta = id   #zapíš aktuálne vybranú cestu ako rušenú
+                                            
+                                            if self.app.zoznamNav[self.app.koncoveNav].OD:   #ak cesta obsahuje ochrannú dráhu
+                                                self.ochrDraha = True
+                                                self.app.zoznamNav[self.app.koncoveNav].OD = False
+                                                
+                                                if Disp: #úprava pre dispečerskú aplikáciu
+                                                    self.app.zoznamNav[self.app.zoznamNav[self.app.koncoveNav].zavisle].OD = False
+                                                
+                                                if not server:
+                                                    self.app.prikazDoPLC(adresat='write/OchrDr/', prikaz='/False', nazov=self.rusenaCesta)
+
+                                            if not server:
+                                                self.app.prikazDoPLC(adresat='navestidlo', prikaz='/Stoj', id=self.app.zoznamNav[nav].ID, nazov=self.app.zoznamNav[nav].nazov)
+                                                
+                                            break
+                                
+                                if self.rusenaCesta != ' ': #po úspešnom vyhľadaní rušenej cesty sa opúšťa metóda
+                                    return
+
+    def rusenieZaveruUsekov(self, i:int, zoznam:str, Disp:bool):
+        for usek in zaverTab.dictVC[self.rusenaCesta][zoznam]:  #vyberaj z úsekov 
+            if self.app.vlaknoUpdate.dictUseky[i].nazovGUI == usek:    #ak sa názvy úsekov zhodujú
+                self.app.vlaknoUpdate.dictUseky[i].cesta = ' '    #zruš záver daného úseku                       
+                self.app.vlaknoUpdate.dictUseky[i].zaver = False
+
+                if zoznam == 'Useky':
+                    if hasattr(self.app.vlaknoUpdate.dictUseky[i], 'druhaVymena') and self.app.vlaknoUpdate.dictUseky[i].druhaVymena != -1: #úprava pre výhybkovú spojku
+                        if self.app.vlaknoUpdate.dictUseky[self.app.vlaknoUpdate.dictUseky[i].druhaVymena].cesta != ' ':
+                            self.app.vlaknoUpdate.dictUseky[i].zaver = True
+                        
+                        else:
+                            self.app.vlaknoUpdate.dictUseky[i].zaver = False
+                            self.app.vlaknoUpdate.dictUseky[self.app.vlaknoUpdate.dictUseky[i].druhaVymena].zaver = False
+
+                self.app.vlaknoUpdate.dictUseky[i].update(self)
+
+                for nav in self.app.zoznamNav.keys(): #vyberaj z návestidiel                            
+                    if (self.app.vlaknoUpdate.dictUseky[i].nazovGUI == self.app.zoznamNav[nav].usekPred):
+                        self.app.zoznamNav[nav].cesta = ' '  #uprav jeho symbol
+                        self.app.zoznamNav[nav].update(self)
+                        
+                        if Disp and self.app.zoznamNav[nav].zavisle != -1: #úprava pre dispečerskú aplikáciu
+                            self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].cesta = ' '  #uprav jeho symbol
+                            self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].update(self)
+    
     def rusenieOD(self, Disp = False):
         for id in zaverTab.dictVC.keys():   #vyberaj zo záverovej tabuľky             
             for nav in self.app.zoznamNav.keys(): #vyberaj z návestidiel    
@@ -570,7 +571,7 @@ class SZZ:
                     for i in self.app.vlaknoUpdate.dictUseky.keys():   #vyberaj zo všetkých úsekov 
                         for usek in zaverTab.dictVC[id]['UsekyOD']:  #vyberaj z úsekov 
                             if self.app.vlaknoUpdate.dictUseky[i].nazovGUI == usek:    #ak sa názvy úsekov zhodujú
-                                self.app.vlaknoUpdate.dictUseky[i].ochr = False    #zruš záver daného úseku
+                                self.app.vlaknoUpdate.dictUseky[i].cesta = ' '    #zruš záver daného úseku
                                 self.app.vlaknoUpdate.dictUseky[i].zaver = False
                                 self.app.vlaknoUpdate.dictUseky[i].update(self)
                                 
@@ -585,19 +586,19 @@ class SZZ:
                                 for nav in self.app.zoznamNav.keys(): #vyberaj z návestidiel                            
                                     if (self.app.vlaknoUpdate.dictUseky[i].nazovGUI == self.app.zoznamNav[nav].usekPred) and (self.app.zoznamNav[nav].ID != self.app.koncoveNav) and (
                                     self.app.zoznamNav[nav].zavisle != self.app.koncoveNav):  #ak sa návestidlo nachádza v úseku jazdnej cesty a nie je koncové návestidlo                                
-                                        self.app.zoznamNav[nav].ochr = False  #uprav jeho symbol
+                                        self.app.zoznamNav[nav].cesta = ' '  #uprav jeho symbol
                                         self.app.zoznamNav[nav].update(self)
                                         
                                         if Disp and self.app.zoznamNav[nav].zavisle != -1: #úprava pre dispečerskú aplikáciu
-                                            self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].ochr = False
+                                            self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].cesta = ' '
                                             self.app.zoznamNav[self.app.zoznamNav[nav].zavisle].update(self)
 
                     self.app.prikazDoPLC(adresat='write/OchrDr/', prikaz='/False', nazov=id)
 
-    def prestavenieVyh(self, vyhybka:int, index:int, auto:bool=False):  #metóda pre ručné prestavovanie výmen
+    def prestavenieVyh(self, vyhybka:int, i:int, auto:bool=False):  #metóda pre ručné prestavovanie výmen
             self.app.ui.combo_vyh.hide()
             
-            if self.app.vlaknoUpdate.dictUseky[vyhybka].jeVolny and self.app.vlaknoUpdate.dictUseky[vyhybka].cesta == ' ' and index == 1:          
+            if self.app.vlaknoUpdate.dictUseky[vyhybka].jeVolny and self.app.vlaknoUpdate.dictUseky[vyhybka].cesta == ' ' and i == 1:          
                 self.app.vlaknoUpdate.dictUseky[vyhybka].prest = True 
                 self.app.vlaknoUpdate.dictUseky[vyhybka].vyber = False
                 

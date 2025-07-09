@@ -18,7 +18,7 @@ class DataUpdate(QThread):
     predhlaskaHLO = False
 
     def __init__(self, app_instance):
-        self.dictUseky ={   #slovník úsekov
+        self.dictUseky:dict[int:object] ={   #slovník úsekov
             #------------------------------------------LOKALNE-----------------------------------------------------------------------------
             1: Usek(ID=0, nazovGUI='RAD_k1', enummIkon=ico.KolajSt1, dictIkon=ico.dictStanKolaj1, app=app_instance),
             2: Usek(ID=1, nazovGUI='RAD_k2', enummIkon=ico.KolajSt2, dictIkon=ico.dictStanKolaj2, app=app_instance),
@@ -79,7 +79,7 @@ class DataUpdate(QThread):
             56: Usek(ID=3, nazovGUI='DISP_HLO_k2', enummIkon=ico.KolajSt2, dictIkon=ico.dictStanKolaj2, app=app_instance),
         }
 
-        self.dictTS = { #slovník traťových súhlasov
+        self.dictTS:dict[int:object] = { #slovník traťových súhlasov
             1: TratSuhlas(ID=1, nazovGUI='RAD_trat_suhlas_doZ', enumIkon=ico.TrSP, dictIkon=ico.dictTrSP, app=app_instance, typ='L'),
             2: TratSuhlas(ID=2, nazovGUI='ZBE_trat_suhlas_doR', enumIkon=ico.TrSL, dictIkon=ico.dictTrSL, app=app_instance, typ='S'),
             3: TratSuhlas(ID=3, nazovGUI='ZBE_trat_suhlas_doH', enumIkon=ico.TrSP, dictIkon=ico.dictTrSP, app=app_instance, typ='L'),
@@ -92,7 +92,7 @@ class DataUpdate(QThread):
             10: TratSuhlas(ID=5, nazovGUI='DISP_HLO_trat_suhlas_doZ', enumIkon=ico.TrSL, dictIkon=ico.dictTrSL, app=app_instance, typ='S')
         }
 
-        self.dictPriecestie = { #slovník priecestí
+        self.dictPriecestie:dict[int:object] = { #slovník priecestí
             1:Priecestie(ID=1, nazovGUI='RAD_ZBE_priec', enumIkon=ico.Priecestie, dictIkon=ico.dictPriecestie, app=app_instance),
             2:Priecestie(ID=2, nazovGUI='H_ZBE_HLO_priec', enumIkon=ico.Priecestie, dictIkon=ico.dictPriecestie, app=app_instance),
             3:Priecestie(ID=3, nazovGUI='DISP_RAD_ZBE_priec', enumIkon=ico.Priecestie, dictIkon=ico.dictPriecestie, app=app_instance),
@@ -100,7 +100,7 @@ class DataUpdate(QThread):
             5:Priecestie(ID=5, nazovGUI='ZBE_HLO_priec', enumIkon=ico.Priecestie, dictIkon=ico.dictPriecestie, app=app_instance),
         } 
 
-        self.dictStanice = {    #slovník stníc
+        self.dictStanice:dict[int:object] = {    #slovník stníc
             1:RiadenieObsluhy(ID=1, nazovGUI='RAD_dialkove', enumIkon=ico.RiadenieRAD, dictIkon=ico.dictRiadenieRAD, app=app_instance),
             2:RiadenieObsluhy(ID=2, nazovGUI='ZBE_dialkove', enumIkon=ico.RiadenieZBE, dictIkon=ico.dictRiadenieZBE, app=app_instance),
             3:RiadenieObsluhy(ID=3, nazovGUI='HLO_dialkove', enumIkon=ico.RiadenieHLO, dictIkon=ico.dictRiadenieHLO, app=app_instance),
