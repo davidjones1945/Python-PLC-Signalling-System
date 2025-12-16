@@ -21,8 +21,6 @@ class Navestidlo:
         self.stavanieDo:bool = False #aktívne stavenie cesty k nívestidlu        
 
         self.zaver:str = 'X'
-        #self.zaverVC:bool = False    #je vykonaný źáver vlakovej cesty
-        #self.zaverPC:bool = False    #je vykonaný źáver posunovej cesty
 
         self.cesta:str = ' '    #typ cesty postavenej v úseku s návestidlom
 

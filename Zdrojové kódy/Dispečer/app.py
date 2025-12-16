@@ -11,7 +11,7 @@ from update import DataUpdate
 from datum import Datum
 from casSubory import DlhyCasPosun, DlhyCasVlak, CasOchrDr, LifeSign
 
-# Important: You need to run the following command to generate the ui_form.py file: pyside6-uic form.ui -o ui_form.py, or
+# Important: You need to run the following command to generate the ui_form.py file: pyside6-uic form.ui -o ui_form.py
 
 class App(QMainWindow): #hlavná triedy vizualizácie
     def __init__(self, parent=None):              
@@ -415,7 +415,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                     self.ukonciStavanie(TS=True)
 
 
-            elif self.zoznamNav[self.pociatocneNav].nazov in ['Z_S1','Z_S2','Z_L1','Z_L2','DZ_S1','DZ_S2','DZ_L1','DZ_L2']:
+            elif self.zoznamNav[self.pociatocneNav].nazov in ['Z_S1','Z_S2','Z_L1','Z_L2','DZ_S1','DZ_S2','DZ_L1','DZ_L2']: #kontrola počiatočného návestidla ZBE
                 if self.zoznamNav[self.pociatocneNav].nazov in ['Z_S1','DZ_S1'] and self.vlaknoUpdate.dictTS[2].prijem: #kontrola TS
                     self.postavCestu()
                     
@@ -595,7 +595,8 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                 self.vypisHlasenia('Traťový súhlas je prijatý')
 
         elif (index == 2) and (typ == 'esa'):   #zrušenie žiadosti o TS
-            self.prikazDoPLC(adresat='TS', prikaz='ZUS/' + str(self.poslednyTS) + '/False')        
+            self.prikazDoPLC(adresat='TS', prikaz='ZUS/' + str(self.poslednyTS) + '/False')   
+            self.ziadostAktivna = False    
 
         elif (index == 1 and typ == 'disp') or (index == 3 and typ =='esa'):  #udelenie TS
             if self.vlaknoUpdate.dictTS[self.poslednyTS].prijem is True:   #kontrola príjmu TS
@@ -634,14 +635,8 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         widget.ui.combo_Riadenie.setCurrentIndex(0)
 
     def vyberCestu(self, typ:str):  #metóda pre zápis potrebných hodnôt pre výber jazdnej cesty
-        if typ == 'Vlak':   #zapíše správny typ cesty
-            self.szz.typCesty = 'Vlak'
-        
-        elif typ == 'Posun':
-            self.szz.typCesty = 'Posun'
-
+        self.szz.typCesty = typ #zapíše správny typ cesty
         self.szz.vyberCesty = True #definuje aktívny výber vlakovej cesty
-
         self.pociatocneNav = self.posledneNav   #vybrané návestidlo označí za počiatočné
 
         self.zoznamNav[self.pociatocneNav].stavanieOd = True
