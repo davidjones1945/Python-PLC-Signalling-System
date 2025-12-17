@@ -432,7 +432,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                         else:
                             self.ukonciStavanie(volnost=True)
 
-                elif self.pociatocneNav in [22,23,64,65]:
+                elif self.zoznamNav[self.pociatocneNav].nazov in ['Z_L1', 'Z_L2', 'DZ_L1', 'DZ_L2']:
                     if self.vlaknoUpdate.odhlaskaLo:                    
                         if self.vlaknoUpdate.dictTS[3].prijem:
                             self.postavCestu()
