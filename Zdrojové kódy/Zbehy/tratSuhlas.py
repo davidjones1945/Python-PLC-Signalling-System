@@ -1,5 +1,5 @@
 class TratSuhlas:
-    def __init__(self, ID, nazovGUI, enumIkon, dictIkon, app, typ):
+    def __init__(self, ID:int, nazovGUI:str, enumIkon:enumerate, dictIkon:dict, app:object, typ:str):
         self.app = app #inštancia spolupracujúcej triedy
         self.ID =ID #ID traťového súhlasu
 
@@ -10,19 +10,19 @@ class TratSuhlas:
 
         self.typ = typ  #smer súhlasu (L - lichý, S - sudý)
 
-        self.smer = False   #smer udeleného TS
-        self.volnost = False #vošnosť medzistaničného úseku
-        self.ziadost = False    #žiadosť o TS
+        self.smer:bool = False   #smer udeleného TS
+        self.volnost:bool = False #vošnosť medzistaničného úseku
+        self.ziadost:bool = False    #žiadosť o TS
 
-        self.prijem = False #príjem TS
+        self.prijem:bool = False #príjem TS
 
-        self.odchod=False   #aktívna odchodová cesta do úseku
+        self.odchod:bool = False   #aktívna odchodová cesta do úseku
 
-        self.vybrane = False    #výber objektu užívateľom
+        self.vybrane:bool = False    #výber objektu užívateľom
 
-        self.porBP = False #došlo k poruche blokovej podmienky
+        self.porBP:bool = False #došlo k poruche blokovej podmienky
 
-    def update(self, app):
+    def update(self, app:object):
         self.setPrijem()
 
         if self.enumIkon != None:   #ak existuje priradený enum symbolov
@@ -67,11 +67,13 @@ class TratSuhlas:
         if self.typ == 'S': 
             if self.smer:
                 self.prijem = True
+            
             else:
                 self.prijem = False
 
         elif self.typ == 'L':
             if self.smer:
                 self.prijem = False
+            
             else:
                 self.prijem = True
