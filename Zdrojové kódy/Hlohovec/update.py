@@ -9,7 +9,7 @@ from priecestie import Priecestie
 from riadenieObsluhy import RiadenieObsluhy
 import ico
 
-class dataUpdate(QThread):
+class DataUpdate(QThread):
     dataUpdated = Signal(dict, dict)
 
     odhlaskaSo = False
