@@ -1,5 +1,4 @@
 from PySide6.QtWidgets import QApplication, QMainWindow
-from PySide6.QtCore import QThread, Signal, QTimer
 import sys
 import requests
 import arrow
