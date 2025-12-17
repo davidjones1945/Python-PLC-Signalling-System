@@ -4,7 +4,6 @@ import ico
 class ZoznamNavestidiel:
     def __init__(self, parent):
         self.zoznamNav:dict[int:object] = {    #slovník návestidiel
-            #------------------------------------------RADOSINA-----------------------------------------------------------------------------
             1: Navestidlo(ID=1, nazov='R_Se1', usekPred='RAD_Sk', usekZa='RAD_V1', nazovGUI='RAD_zr_do_st_odZ', enumIkon=ico.NavZriadL, dictIkon=ico.dictZriadovacieL,app=parent, comboBox='zriadovacie'),
             2: Navestidlo(ID=2, nazov='R_Se1p', usekPred='RAD_Sk', nazovGUI='RAD_zr_zo_st_odZ', enumIkon=ico.NavZriadP, dictIkon=ico.dictZriadovacieP, app=parent, comboBox='zriadovacie'),
             3: Navestidlo(ID=3, nazov='R_S', usekPred='RAD_ZBE_TU1', usekZa='RAD_Sk', nazovGUI='RAD_S', enumIkon=ico.NavVchodL, dictIkon=ico.dictVchodoveL, zavisle=46, app=parent, comboBox='vchodove'),
