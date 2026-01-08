@@ -65,9 +65,9 @@ dataTS = {  #slovník s dátami o traťových súhlasoch, odchodových cestách,
 }
 
 dataRiadenie = {    #slovník s dátami o spôsobe riadenia zabzar
-    'dialkoveRAD': True,
-    'dialkoveZBE': True,
-    'dialkoveHLO': True,
+    'dialkoveRAD': False,
+    'dialkoveZBE': False,
+    'dialkoveHLO': False,
 
     'ziadostRAD': False,
     'ziadostZBE': False,
@@ -77,7 +77,7 @@ dataRiadenie = {    #slovník s dátami o spôsobe riadenia zabzar
 dataCesta = {
     'pociatocne': 0,
     'koncove': 0,
-    'typCesty': False, #True - posun, False - vlak
+    'typCesty': 'X',
     'OD': False,
     'stavanie': False,
     'rusenie': False,
@@ -110,8 +110,8 @@ def FlipFlop(Set, Reset):   #metóda SR obvodu
 
     return outFF
 
-@app.put('/Cesta/{start}/{end}/{typ}/{od}/{stav}/{rus}/{meno}')   #metóda spracovávajúca časové pečiatky z dispečerskej aplikácie a staničnej aplikácie Zbehy
-async def writeCesta(start: int, end: int, typ: bool, od: bool, stav: bool, rus: bool, meno: str):
+@app.put('/cesta/{start}')   #metóda spracovávajúca časové pečiatky z dispečerskej aplikácie a staničnej aplikácie Zbehy
+async def writeCesta(start: int, end: int, typ: str, od: bool, stav: bool, rus: bool, meno: str):
     dataCesta['pociatocne'] = start
     dataCesta['koncove'] = end
     dataCesta['typCesty'] = typ
@@ -120,7 +120,7 @@ async def writeCesta(start: int, end: int, typ: bool, od: bool, stav: bool, rus:
     dataCesta['rusenie'] = rus
     dataCesta['odosielatel'] = meno
 
-@app.put('/Navest/{ID}/{znak}/{meno}')   #metóda spracovávajúca časové pečiatky z dispečerskej aplikácie a staničnej aplikácie Zbehy
+@app.put('/navest/{ID}')   #metóda spracovávajúca časové pečiatky z dispečerskej aplikácie a staničnej aplikácie Zbehy
 async def writeNavest(ID: int, znak: str, meno: str):
     dataNavest['ID'] = ID
     dataNavest['znak'] = znak
@@ -137,11 +137,11 @@ async def writeCasPec(index: str):
     elif index == 'zbe':
         casovaPeciatkaILTISzbe = aktualnyCas
 
-@app.put('/ziadostZBP/{value}')   #metóda spracovávajúca žiadosti o blokovej podmienke od ESA-44
-async def writeZBP(value: bool):
+@app.put('/ziadostZBP/{hodnota}')   #metóda spracovávajúca žiadosti o blokovej podmienke od ESA-44
+async def writeZBP(hodnota: bool):
     global dataTS
 
-    dataTS['ziadZBP'] = value
+    dataTS['ziadZBP'] = hodnota
 
 @app.get('/hlasenieESA')    #metóda spätného hlásenia pre ESA 44
 async def writeESA():
@@ -177,25 +177,18 @@ async def writeVolnost(value: bool):
     usekZL = value
     casovaPeciatkaESA = arrow.now()
 
-@app.put('/ZUS/{index}/{value}')    #metóda pre zápis žiadsti o traťový súhlas
-async def writeZUS(index: int, value: bool):
+@app.put('/ZUS/{index}')    #metóda pre zápis žiadsti o traťový súhlas
+async def writeZUS(index: int, hodnota: bool):
     global dataTS
 
     if index in [1,2,6,7]:
-        dataTS['ZUS_RZ'] = value
+        dataTS['ZUS_RZ'] = hodnota
 
     elif index in [4,9]:
-        dataTS['ZUS_LZ'] = value
+        dataTS['ZUS_LZ'] = hodnota
 
     elif index == 11:
-        dataTS['ZTS_L'] = value
-
-@app.put('/ZBP/{index}')    #metóda pre zápis príznaku rušenia blokovej podmienky
-async def writeZUS(index: int):
-    global dataTS
-
-    if index in [4,9]:
-        dataTS['ZBP'] = True
+        dataTS['ZTS_L'] = hodnota
 
 @app.put('/UTS/{index}')    #metóda pre zmenu smeru traťového súhlasu
 async def writeUTS(index: int):
@@ -243,18 +236,25 @@ async def writeUTS(index: int):
                 break
         zapis = False
 
-@app.put('/ziadRiad/{index}/{value}')   #metóda spracovávajúca žiadosti o zmenu ovládania medzi aplikáciami
-async def writeZiadRiad(index: str, value: bool):
+@app.put('/ZBP/{index}')    #metóda pre zápis príznaku rušenia blokovej podmienky
+async def writeZUS(index: int):
+    global dataTS
+
+    if index in [4,9]:
+        dataTS['ZBP'] = True
+
+@app.put('/ziadRiad/{index}')   #metóda spracovávajúca žiadosti o zmenu ovládania medzi aplikáciami
+async def writeZiadRiad(index: str, hodnota: bool):
     global dataRiadenie
 
     if index in ['RAD_dialkove', 'DISP_RAD_dialkove']:
-        dataRiadenie['ziadostRAD'] = value
+        dataRiadenie['ziadostRAD'] = hodnota
     
     elif index in ['ZBE_dialkove', 'DISP_ZBE_dialkove']:
-        dataRiadenie['ziadostZBE'] = value
+        dataRiadenie['ziadostZBE'] = hodnota
     
     elif index in ['HLO_dialkove', 'DISP_HLO_dialkove']:
-        dataRiadenie['ziadostHLO'] = value
+        dataRiadenie['ziadostHLO'] = hodnota
 
 @app.put('/udelRiad/{index}')   #metóda spracovávajúca pokyny pre zmenu ovládania medzi aplikáciami
 async def writeUdelRiad(index: str):
@@ -272,14 +272,14 @@ async def writeUdelRiad(index: str):
         dataRiadenie['ziadostHLO'] = False
         dataRiadenie['dialkoveHLO'] = not dataRiadenie['dialkoveHLO']
 
-@app.put('/odchod/{index}/{value}')  #metóda pre zápis aktívnych odchodových ciest
-async def writeOdchod(index: str, value: bool):
+@app.put('/odchod/{index}')  #metóda pre zápis aktívnych odchodových ciest
+async def writeOdchod(index: str, hodnota: bool):
     global dataTS
 
-    dataTS[index] = value
+    dataTS[index] = hodnota
 
-@app.put('/predhl/{index}/{value}') #metóda pre zápis preshlášok pre AH
-async def writePredhl(index: str, value: bool):
+@app.put('/predhl/{index}') #metóda pre zápis preshlášok pre AH
+async def writePredhl(index: str, hodnota: bool):
     global plc
     global zapis
     global citanie
@@ -297,7 +297,7 @@ async def writePredhl(index: str, value: bool):
         while True: #arbitrážny cyklus
             zapis = True
             try:
-                plc.writeMem(address, value)
+                plc.writeMem(address, hodnota)
 
             except RuntimeError:
                 zapis = False
@@ -308,7 +308,7 @@ async def writePredhl(index: str, value: bool):
 
         zapis = False
 
-@app.get('/read')   #metóda spätného hlásenia pre ILTIS-N
+@app.get('/citaj')   #metóda spätného hlásenia pre ILTIS-N
 async def read():
     global plc
     global zapis
@@ -433,7 +433,7 @@ async def read():
             'SmerVyh': bin_array_M5_smerVyh, 'Priecestie': bin_array_M1_priecestie,
             'TS': dataTS, 'Riadenie': dataRiadenie, 'Cesta': dataCesta, 'Navest': dataNavest}
 
-@app.put('/write/vyhybka/{meno}/{smer}')    #metóda pre ovládanie prestavovania výmen
+@app.put('/vymena/{meno}')    #metóda pre ovládanie prestavovania výmen
 async def writeVyhybka(meno: str, smer: bool):
     global plc
     global zapis
@@ -486,7 +486,7 @@ async def writeVyhybka(meno: str, smer: bool):
 
         zapis = False
 
-@app.put('/write/navestidlo/{stanica}/{meno}/{znak}')   #metóda pre zmenu návestného znaku na návestidlách
+@app.put('/navestidlo/{stanica}')   #metóda pre zmenu návestného znaku na návestidlách
 async def writeNavestidlo(stanica: str, meno: str, znak: str):
     global plc
     global zapis
@@ -607,8 +607,8 @@ async def writeNavestidlo(stanica: str, meno: str, znak: str):
 
         zapis = False
 
-@app.put('/write/OchrDr/{meno}/{value}')    #metóda re zápis stavaných ochranných dráh vlakových ciest
-async def writeOchrDr(meno: str, value: bool):
+@app.put('/ochranna_draha/{meno}')    #metóda re zápis stavaných ochranných dráh vlakových ciest
+async def writeOchrDr(meno: str, hodnota: bool):
     global plc
     global zapis
     global citanie
@@ -632,7 +632,7 @@ async def writeOchrDr(meno: str, value: bool):
         while True: #arbitrážny cyklus
             zapis = True
             try:
-                plc.writeMem(address, value)
+                plc.writeMem(address, hodnota)
             
             except RuntimeError:
                 zapis = False
@@ -643,8 +643,8 @@ async def writeOchrDr(meno: str, value: bool):
 
         zapis = False
 
-@app.put('/write/priecestie/{meno}/{value}')    #metóda pre manálne ovládanie priecestí
-async def writePriecestie(meno: str, value: bool):
+@app.put('/priecestie/{meno}')    #metóda pre manálne ovládanie priecestí
+async def writePriecestie(meno: str, hodnota: bool):
     global plc
     global zapis
     global citanie
@@ -665,7 +665,7 @@ async def writePriecestie(meno: str, value: bool):
         while True: #arbitrážny cyklus
             zapis = True
             try:
-                plc.writeMem(address, value)
+                plc.writeMem(address, hodnota)
             
             except RuntimeError:
                 zapis = False

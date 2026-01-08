@@ -38,11 +38,11 @@ class S71200:
             print(mem[0].lower(), bit)
 
         if area == 0x81:
-            self.plc.read_area(snap7.types.Areas.PE, 0, start, length)
-            mbyte = self.plc.read_area(snap7.types.Areas.PE, 0, start, length)        
+            self.plc.read_area(snap7.Area.PE, 0, start, length)
+            mbyte = self.plc.read_area(snap7.Area.PE, 0, start, length)        
         elif area == 0x83:
-            self.plc.read_area(snap7.types.Areas.MK, 0, start, length)
-            mbyte = self.plc.read_area(snap7.types.Areas.MK, 0, start, length)
+            self.plc.read_area(snap7.Area.MK, 0, start, length)
+            mbyte = self.plc.read_area(snap7.Area.MK, 0, start, length)
         
         if returnByte:
             return mbyte        
@@ -73,6 +73,6 @@ class S71200:
             set_int(data, 0, value)
 
         if area == 0x81:
-            return self.plc.write_area(snap7.types.Areas.PE, 0, start, data)        
+            return self.plc.write_area(snap7.Area.PE, 0, start, data)        
         elif area == 0x83:
-            return self.plc.write_area(snap7.types.Areas.MK, 0, start, data)
+            return self.plc.write_area(snap7.Area.MK, 0, start, data)
