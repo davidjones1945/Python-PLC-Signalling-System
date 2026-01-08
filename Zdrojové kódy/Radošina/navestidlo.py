@@ -1,5 +1,5 @@
 class Navestidlo:
-    def __init__(self, ID:int, nazov:str, nazovGUI:str, enumIkon:enumerate, dictIkon:dict, app:object, usekPred:str = 'X', zavisle:int = -1,  usekZa:str = 'X', oddielove:bool = False, TZZ:str = ' ', comboBox:str = ' '):
+    def __init__(self, ID, nazov, nazovGUI, enumIkon, dictIkon, app, usekPred = 'X', zavisle = -1,  usekZa = 'X', oddielove = False, TZZ = ' '):
         self.app = app  #inštancia spolupracujúcej triedy
         self.ID = ID    #ID návestidla
 
@@ -11,55 +11,56 @@ class Navestidlo:
 
         self.usekPred = usekPred    #úsek pred návestidlom (nitné kvôli správnemu symbolu)
         self.usekZa = usekZa #definícia prvého úseku za návestidlom
-        self.jeVolnyPred:bool = False    #voľnosť úseku pred návestidlom
-        self.jeVolnyZa:bool = False #voľnosť úseku za návestidlom
-        self.usekOdozva:bool = False  #úsek pred návestidlom je mŕtvy
+        self.jeVolnyPred = False    #voľnosť úseku pred návestidlom
+        self.jeVolnyZa = False #voľnosť úseku za návestidlom
+        self.usekOdozva = False  #úsek pred návestidlom je mŕtvy
 
-        self.vybrane:bool = False    #výber návestidla obsluhou
+        self.vybrane = False    #výber návestidla obsluhou
 
-        self.stavanieOd:bool = False #aktívne stavanie cesty od návestidla
-        self.stavanieDo:bool = False #aktívne stavenie cesty k nívestidlu        
+        self.stavanieOd = False #aktívne stavanie cesty od návestidla
+        self.stavanieDo = False #aktívne stavenie cesty k nívestidlu        
 
-        self.zaver:str = 'X'
+        self.zaverVC = False    #je vykonaný źáver vlakovej cesty
+        self.zaverPC = False    #je vykonaný źáver posunovej cesty
 
-        self.cesta:str = ' '    #typ cesty postavenej v úseku s návestidlom
+        self.vlak = False   #v úseku pred návestidlom je postavená vlaková cesta
+        self.posun = False  #v úseku pred návestidlom je postavená posunová cesta
+        self.ochr = False  #v úseku pred návestidlom je postavená ochranná dráha 
 
-        self.rusenie:bool = False    #je aktívne rušenie cesty
+        self.rusenie = False    #je aktívne rušenie cesty
 
-        self.znak:str = 'Stoj'  #aktuálny typ návestného znaku
+        self.znak = 'Stoj'  #aktuálny typ návestného znaku
 
-        self.pociatocne:bool = False #návestidlo je počiatočným návestidlom postavenej jazdnej cesty
-        self.typAktCes:str = ' ' #typ cesty počiatočného návestidla (0-vlaková, 1-posunová)
-        self.manual:bool = False #manuálne ovládanie návesti na počiatočnom návestidle
+        self.pociatocne = False #návestidlo je počiatočným návestidlom postavenej jazdnej cesty
+        self.typAktCes = False #typ cesty počiatočného návestidla (0-vlaková, 1-posunová)
+        self.manual = False #manuálne ovládanie návesti na počiatočnom návestidle
 
-        self.OD:bool = False #za návestidlom pokračuje ochranná dráha
-        self.koncove:bool = False
+        self.OD = False #za návestidlom pokračuje ochranná dráha
+        self.koncove = False
 
         self.TZZ = TZZ  #typ TZZ
         self.oddielove = oddielove  #definícia oddielového návestidla
-        self.zhasnute:bool = False #väzba TS na AB3
+        self.zhasnute = False #indikácia pre AB3
 
-        self.predhlaska:bool = False #príjem predhlášky na návestidlo
+        self.predhlaska = False #príjem predhlášky na návestidlo
 
         self.zavisle = zavisle  #definícia závislých symbolov jedného návestidla v dispečerskej aplikácii
 
-        self.comboBox = comboBox #dafinícia priradeného comboBox-u k návestidlu
-
-    def update(self, app:object):  #metóda pre aktualizáciu symbolu návestidla
+    def update(self, app):  #metóda pre aktualizáciu symbolu návestidla
         if not self.oddielove:  #ak nie je oddielové
             self.rusenieCesty()
             self.zmenaNavesti()
             if self.usekOdozva: #ak je z úseku pred návestidlom aktívna odozva
                 if self.jeVolnyPred:    #ak je úsek pred návestidlom voľný
                     if self.vybrane:    #ak je návestidlo vybrané obsluhou
-                        if self.cesta == 'Posun': #self.posun:  #počas posunu
+                        if self.posun:  #počas posunu
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_PC_VYB.value])
 
-                        elif self.zaver == 'Vlak':    #počas záveru vlakovej cesty
+                        elif self.zaverVC:    #počas záveru vlakovej cesty
                             if self.znak == 'Stoj': #ak je aktuálny typ návestného znaku 'Stoj'
                                 getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_ZAVER_VC_VYB.value])
                         
-                            elif self.znak == 'Vlak':  #ak je aktuálny typ návestného znaku 'Voľno'
+                            elif self.znak == 'Volno':  #ak je aktuálny typ návestného znaku 'Voľno'
                                 getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VOLNO_ZAVER_VC_VYB.value])
 
                             elif self.znak == 'Posun':  #ak je aktuálny typ návestného znaku 'Posun dovolený'
@@ -68,11 +69,11 @@ class Navestidlo:
                             elif self.znak == 'PN': #ak je aktuálny typ návestného znaku 'Privolávacia návesť'
                                 getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.PN_ZAVER_VC_VYB.value])
                         
-                        elif self.zaver == 'Posun':  #počas záveru posunovej cesty
+                        elif self.zaverPC:  #počas záveru posunovej cesty
                             if self.znak == 'Stoj': #ak je aktuálny typ návestného znaku 'Stoj'
                                 getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_ZAVER_PC_VYB.value])
                         
-                            elif self.znak == 'Vlak':  #ak je aktuálny typ návestného znaku 'Voľno'
+                            elif self.znak == 'Volno':  #ak je aktuálny typ návestného znaku 'Voľno'
                                 getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VOLNO_ZAVER_PC_VYB.value])
 
                             elif self.znak == 'Posun':  #ak je aktuálny typ návestného znaku 'Posun dovolený'
@@ -81,7 +82,7 @@ class Navestidlo:
                             elif self.znak == 'PN': #ak je aktuálny typ návestného znaku 'Privolávacia návesť'
                                 getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.PN_ZAVER_PC_VYB.value])
                         
-                        elif self.znak == 'Vlak':  #ak je aktuálny typ návestného znaku 'Voľno'
+                        elif self.znak == 'Volno':  #ak je aktuálny typ návestného znaku 'Voľno'
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VOLNO_V.value])                        
 
                         elif self.znak == 'Posun':  #ak je aktuálny typ návestného znaku 'Posun dovolený'
@@ -94,10 +95,10 @@ class Navestidlo:
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_V.value])                            
 
                     elif self.stavanieOd:   #ak je návestidlo vybrané ako počiatočné návestidlo jazdnej cety
-                        if self.zaver == 'Vlak':    #ak je návestidlo koncovým bodom inej vlakovej cesty
+                        if self.zaverVC:    #ak je návestidlo koncovým bodom inej vlakovej cesty
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VOLNO_STAVANIE_START.value])
                         
-                        elif self.zaver == 'Posun':  #ak je návestidlo koncovým bodom inej posunovej cesty
+                        elif self.zaverPC:  #ak je návestidlo koncovým bodom inej posunovej cesty
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.POSUN_STAVANIE_START.value])
                         
                         elif self.stavanieDo:   #ak je návestidlo vybrané ako koncové návestidlo inej jazdnej cety
@@ -109,20 +110,20 @@ class Navestidlo:
                         else:   #základný obraz počiatočného návestidla
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_STAVANIE_START.value])
 
-                    elif self.cesta == 'Vlak': #self.vlak: #ak je úsek pred návestidlom súčasťou vlakovej cesty
+                    elif self.vlak: #ak je úsek pred návestidlom súčasťou vlakovej cesty
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_VC.value])
 
-                    elif self.cesta == 'Posun': #self.posun:   #ak je úsek pred návestidlom súčasťou posunovej cesty
+                    elif self.posun:   #ak je úsek pred návestidlom súčasťou posunovej cesty
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_PC.value])
 
-                    elif self.cesta == 'OchrDr': #self.ochr:   #ak je úsek pred návestidlom súčasťou posunovej cesty
+                    elif self.ochr:   #ak je úsek pred návestidlom súčasťou posunovej cesty
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_OD.value])
 
                     elif self.stavanieDo:   #ak je návestidlo vybrané ako koncové návestidlo jazdnej cety
                         if self.znak == 'Stoj': #ak je aktuálny typ návestného znaku 'Stoj'
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_ZAVER_STAVANIE.value])
                         
-                        elif self.znak == 'Vlak':  #ak je aktuálny typ návestného znaku 'Voľno'
+                        elif self.znak == 'Volno':  #ak je aktuálny typ návestného znaku 'Voľno'
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VOLNO_ZAVER_STAVANIE.value])
                         
                         elif self.znak == 'Posun':  #ak je aktuálny typ návestného znaku 'Posun dovolený'
@@ -131,11 +132,11 @@ class Navestidlo:
                         elif self.znak == 'PN': #ak je aktuálny typ návestného znaku 'Privolávacia návesť'
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.PN_ZAVER_STAVANIE.value])
 
-                    elif self.zaver == 'Vlak':  #ak je návestidlo koncovým bodom vlakovej cesty
+                    elif self.zaverVC:  #ak je návestidlo koncovým bodom vlakovej cesty
                         if self.znak == 'Stoj': #ak je aktuálny typ návestného znaku 'Stoj'
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_ZAVER_VC.value])
                         
-                        elif self.znak == 'Vlak':  #ak je aktuálny typ návestného znaku 'Voľno'
+                        elif self.znak == 'Volno':  #ak je aktuálny typ návestného znaku 'Voľno'
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VOLNO_ZAVER_VC.value])
                         
                         elif self.znak == 'Posun':  #ak je aktuálny typ návestného znaku 'Posun dovolený'
@@ -144,11 +145,11 @@ class Navestidlo:
                         elif self.znak == 'PN': #ak je aktuálny typ návestného znaku 'Privolávacia návesť'
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.PN_ZAVER_VC.value])
 
-                    elif self.zaver == 'Posun':  #ak je návestidlo koncovým bodom posunovej cesty
+                    elif self.zaverPC:  #ak je návestidlo koncovým bodom posunovej cesty
                         if self.znak == 'Stoj': #ak je aktuálny typ návestného znaku 'Stoj'
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_ZAVER_PC.value])
                         
-                        elif self.znak == 'Vlak':  #ak je aktuálny typ návestného znaku 'Voľno'
+                        elif self.znak == 'Volno':  #ak je aktuálny typ návestného znaku 'Voľno'
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VOLNO_ZAVER_PC.value])
 
                         elif self.znak == 'Posun':  #ak je aktuálny typ návestného znaku 'Posun dovolený'
@@ -161,7 +162,7 @@ class Navestidlo:
                         if self.znak == 'Stoj': #ak je aktuálny typ návestného znaku 'Stoj'
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.RUSENIE.value])
                         
-                        elif self.znak == 'Vlak':  #ak je aktuálny typ návestného znaku 'Voľno'
+                        elif self.znak == 'Volno':  #ak je aktuálny typ návestného znaku 'Voľno'
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VOLNO_RUSENIE.value])
 
                         elif self.znak == 'Posun':  #ak je aktuálny typ návestného znaku 'Posun dovolený'
@@ -170,7 +171,7 @@ class Navestidlo:
                         elif self.znak == 'PN': #ak je aktuálny typ návestného znaku 'Privolávacia návesť'
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.PN_RUSENIE.value])
 
-                    elif self.znak == 'Vlak':  #ak je aktuálny typ návestného znaku 'Voľno'
+                    elif self.znak == 'Volno':  #ak je aktuálny typ návestného znaku 'Voľno'
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VOLNO.value])
 
                     elif self.znak == 'Posun':  #ak je aktuálny typ návestného znaku 'Posun dovolený'
@@ -179,16 +180,19 @@ class Navestidlo:
                     elif self.znak == 'PN':  #ak je aktuálny typ návestného znaku 'Privolávacia návesť'
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_PN.value])
 
+                    # elif self.zhasnute: #ak je návestidlo zhasnuté
+                    #    getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.ZHASNUTE.value])
+
                     else:   #základný obraz návestidla
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ.value])
 
                 else:   #ak je úsek pred návestidlom obsadený
 
                     if self.vybrane:    #ak je návestidlo vybrané obsluhou
-                        if self.zaver == 'Vlak':    #ak je vytvorený záver posunovej cesty
+                        if self.zaverPC:    #ak je vytvorený záver posunovej cesty
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_ZAVER_PC_VYB.value])
 
-                        elif self.znak == 'Vlak':  #ak je aktuálny typ návestného znaku 'Voľno'
+                        elif self.znak == 'Volno':  #ak je aktuálny typ návestného znaku 'Voľno'
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VOLNO_OBS_V.value])
 
                         elif self.znak == 'Posun':  #ak je aktuálny typ návestného znaku 'Posun dovolený'
@@ -203,10 +207,10 @@ class Navestidlo:
                     elif self.stavanieOd:   #ak je návestidlo vybrané ako počiatočné návestidlo jazdnej cety
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_STAVANIE_START_OBS.value])
 
-                    elif self.zaver == 'Posun':  #ak je návestidlo koncovým bodom posunovej cesty
+                    elif self.zaverPC:  #ak je návestidlo koncovým bodom posunovej cesty
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_ZAVER_PC.value])
 
-                    elif self.znak == 'Vlak':  #ak je aktuálny typ návestného znaku 'Voľno'
+                    elif self.znak == 'Volno':  #ak je aktuálny typ návestného znaku 'Voľno'
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VOLNO_OBS.value])
 
                     elif self.znak == 'Posun':  #ak je aktuálny typ návestného znaku 'Posun dovolený'
@@ -215,12 +219,15 @@ class Navestidlo:
                     elif self.znak == 'PN':  #ak je aktuálny typ návestného znaku 'Privolávacia návesť'
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_OBS_PN.value])
 
+                    # elif self.zhasnute:
+                    #     getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.ZHASNUTE_OBS.value])
+
                     else:   #základný obraz návestidla
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_OBS.value])
             
             else:   #úsek pred návestidlom je mŕtvy
                 if self.vybrane:    #ak je návestidlo vybrané obsluhou
-                    if self.znak == 'Vlak':  #ak je aktuálny typ návestného znaku 'Voľno'
+                    if self.znak == 'Volno':  #ak je aktuálny typ návestného znaku 'Voľno'
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VOLNO_MRTVE_V.value])
 
                     elif self.znak == 'Posun':  #ak je aktuálny typ návestného znaku 'Posun dovolený'
@@ -235,7 +242,7 @@ class Navestidlo:
                 elif self.stavanieOd:   #ak je návestidlo vybrané ako počiatočné návestidlo jazdnej cety
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_STAVANIE_START_MRTVE.value])
 
-                elif self.znak == 'Vlak':  #ak je aktuálny typ návestného znaku 'Voľno'
+                elif self.znak == 'Volno':  #ak je aktuálny typ návestného znaku 'Voľno'
                             getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VOLNO_MRTVE.value])
 
                 elif self.znak == 'Posun':  #ak je aktuálny typ návestného znaku 'Posun dovolený'
@@ -275,7 +282,7 @@ class Navestidlo:
                     if self.vybrane:    #ak je návestidlo vybrané obsluhou
                         if self.predhlaska and self.jeVolnyZa:    #ak je úsek za návestidlom voľný
                             if self.manual:
-                                if self.znak == 'Vlak':
+                                if self.znak == 'Volno':
                                     getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VOLNO_V.value])
                         
                                 elif self.znak == 'Stoj':
@@ -292,7 +299,7 @@ class Navestidlo:
 
                     elif self.predhlaska and self.jeVolnyZa:      #ak je úsek za návestidlom voľný
                         if self.manual:
-                            if self.znak == 'Vlak':
+                            if self.znak == 'Volno':
                                 getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.VOLNO.value])
                         
                             elif self.znak == 'Stoj':
@@ -328,21 +335,23 @@ class Navestidlo:
                         getattr(self.app.ui, self.nazovGUI).setIcon(self.dictIkon[self.enumIkon.STOJ_OBS.value])
 
     def rusenieCesty(self): #metóda volaná pri rušení jazdnej cesty
-        if (self.cesta in ['Vlak', 'Posun'] or self.zaver in ['Vlak', 'Posun']) and not self.jeVolnyPred:    #ak je úsek pred návestidlom obsadený a návestidlo má príznak vlakovej cesty alebo jej záveru
-            self.cesta = ' '
-            self.zaver = 'X'
+        if (self.vlak or self.posun or self.zaverVC or self.zaverPC) and not self.jeVolnyPred:    #ak je úsek pred návestidlom obsadený a návestidlo má príznak vlakovej cesty alebo jej záveru
+            self.vlak = False
+            self.posun = False
+            self.zaverVC = False
+            self.zaverPC = False
             if self.OD: #ak je za návestidlom ochranná dráha
-                self.app.vlaknoCasOchrDrahy.start_timer()    #spusti časový súbor rušenia ochrannej dráhy (30 s)
+                self.app.workerThreadTimeOD.start_timer()    #spusti časový súbor rušenia ochrannej dráhy (30 s)
             else:
                 self.stavanieDo = False
 
     def zmenaNavesti(self): #metóda zobrazí zakazujúci návestný znak po prejazde vlaku za návestidlo
-        if ((self.znak == 'Vlak') and (not self.jeVolnyZa)) or (
+        if ((self.znak in 'Volno') and (not self.jeVolnyZa)) or (
         (self.znak == 'Posun') and (not self.jeVolnyZa) and self.jeVolnyPred):
             self.znak = 'Stoj'
             self.pociatocne = False
             self.manual = False
-            self.app.prikazDoPLC(adresat='navestidlo', prikaz='/Stoj', id=self.ID, nazov=self.nazov)
+            self.app.prikazDoPLC(prikaz='/Stoj',id=self.ID, nazov=self.nazov)
 
     def ruseniePredhlasky(self):    #metóda pre rušenie predhlášky pri prejatzde vlaku okolo hradla na trati
         if (not self.jeVolnyPred) and (not self.jeVolnyZa):

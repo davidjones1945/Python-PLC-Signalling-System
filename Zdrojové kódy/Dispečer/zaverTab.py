@@ -259,7 +259,7 @@ dictVC = {
         'UsekyOD': ['ZBE_V3', 'ZBE_Sk',
                     'DISP_ZBE_V3', 'DISP_ZBE_Sk'],
         'dopUseky': [],
-        'PU': 'LUZ_ZBE_TU1',
+        'PU': 'ZBE_LUZ_TU1',
         '1TU': '0'
     }, 
     'ZBE_LUZ_2o': {
