@@ -351,10 +351,10 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         self.comboShowHide()    #po výbere skry menu
 
         if index == 1:  #zatvorenie priecetia
-            self.prikazDoPLC(adresat='write/priecestie/', nazov=self.vlaknoUpdate.dictPriecestie[self.poslednePriec].nazovGUI, prikaz='/True')            
+            self.prikazDoPLC(adresat='priecestie/', prikaz='true', nazov='RAD_ZBE_priec')             
 
         elif index == 2:  #otvorenie priecestia
-            self.prikazDoPLC(adresat='write/priecestie/', nazov=self.vlaknoUpdate.dictPriecestie[self.poslednePriec].nazovGUI, prikaz='/False')
+            self.prikazDoPLC(adresat='priecestie/', prikaz='false', nazov='RAD_ZBE_priec')
         
         else:
             self.vlaknoUpdate.dictPriecestie[self.poslednePriec].vyber = False
@@ -396,7 +396,8 @@ class App(QMainWindow): #hlavná triedy vizualizácie
             if self.zoznamNav[self.pociatocneNav].nazov in ['R_S','DR_S',
                                                             'Z_L','Z_BL','Z_S','DZ_L','DZ_BL','DZ_S',
                                                             'H_L','DH_L']: #vybrané správne návestidlo   
-                self.postavCestu()
+                if self.postavCestu() == -1:
+                    self.ukonciStavanie()
 
         elif typ in ['ciel_kombi','ciel_hlavne'] and index == 2 and self.szz.typCesty == 'Vlak': #stavanie vchodovej cesty s OD
             if self.zoznamNav[self.pociatocneNav].nazov in ['Z_L','Z_BL','Z_S','DZ_L','DZ_BL','DZ_S']: #vybrané správne návestidlo
@@ -409,7 +410,8 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         elif typ in ['ciel_kombi','ciel_fikt'] and index == 1 and self.szz.typCesty == 'Vlak': #stavanie odchodovej cesty
             if self.zoznamNav[self.pociatocneNav].nazov in ['R_L1','R_L2','DR_L1','DR_L2']: #kontrola počiatočného návestidla RAD
                 if self.vlaknoUpdate.dictTS[1].prijem:  #kontrola TS
-                        self.postavCestu()
+                    if self.postavCestu() == -1:
+                        self.ukonciStavanie()
                 
                 else:                    
                     self.ukonciStavanie(TS=True)
@@ -461,8 +463,8 @@ class App(QMainWindow): #hlavná triedy vizualizácie
             else:
                 self.vypisHlasenia('Nesprávny výber')
 
-        elif self.szz.typCesty == 'Posun':   #je vybraná posunová cesta pre stavanie
-            if (typ == 'ciel_kombi' and index == 3) or (typ == 'ciel_zriad' and index == 1):    
+        elif typ in ['ciel_kombi','ciel_zriad'] and index == 3 and self.szz.typCesty == 'Posun': #stavanie posunovej cesty
+            if (typ == 'ciel_kombi' and index == 3) or (typ == 'ciel_zriad' and index == 1):
                 self.postavCestu()
 
         #---------------------------rušenie vlakovej cesty------------------------------------------------------------------------
@@ -472,23 +474,23 @@ class App(QMainWindow): #hlavná triedy vizualizácie
 
             if typ == 'fikt': #zrušenie predhlášky v prípade rušenia odchodovej cesty
                 if self.zoznamNav[self.koncoveNav].nazov in ['R_S_fik','DR_S_fik']:
-                    self.prikazDoPLC(adresat='odchod/', nazov='odchodR', prikaz='/False')
+                    self.prikazDoPLC(adresat='odchod/', nazov='odchodR', prikaz='false')
 
                 elif self.zoznamNav[self.koncoveNav].nazov in ['Z_L_fik','DZ_L_fik']:
-                    self.prikazDoPLC(adresat='odchod/', nazov='odchodZR', prikaz='/False')
+                    self.prikazDoPLC(adresat='odchod/', nazov='odchodZR', prikaz='false')
 
                 elif self.zoznamNav[self.koncoveNav].nazov in ['Z_BL_fik','DZ_BL_fik']:
-                    self.prikazDoPLC(adresat='odchod/', nazov='odchodZL', prikaz='/False')
+                    self.prikazDoPLC(adresat='odchod/', nazov='odchodZL', prikaz='false')
 
                 elif self.zoznamNav[self.koncoveNav].nazov in ['Z_S_fik','DZ_S_fik']:
-                    self.prikazDoPLC(adresat='odchod/', nazov='odchodZH', prikaz='/False')
-                    self.prikazDoPLC(adresat='predhl/', prikaz='/False', nazov='ZBE')
+                    self.prikazDoPLC(adresat='odchod/', nazov='odchodZH', prikaz='false')
+                    self.prikazDoPLC(adresat='predhl/', prikaz='false', nazov='ZBE')
                     for nav in [30,44,69]:  #zmazanie predhlášky na návestidle AH Lo
                         self.zoznamNav[nav].predhlaska = False
 
                 elif self.zoznamNav[self.koncoveNav].nazov in ['H_L_fik','DH_L_fik']:
-                    self.prikazDoPLC(adresat='odchod/', nazov='odchodH', prikaz='/False')
-                    self.prikazDoPLC(adresat='predhl/', prikaz='/False', nazov='HLO')
+                    self.prikazDoPLC(adresat='odchod/', nazov='odchodH', prikaz='false')
+                    self.prikazDoPLC(adresat='predhl/',  nazov='HLO', prikaz='false')
                     for nav in [31,45,70]:  #zmazanie predhlášky na návestidle AH So
                         self.zoznamNav[nav].predhlaska = False                
 
@@ -538,12 +540,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                     if (self.zoznamNav[self.posledneNav].pociatocne) or (   #iba ak je návestidlo počiatočným návestidlom jazdnej cesty
                         self.zoznamNav[self.posledneNav].TZZ == 'AH' and self.zoznamNav[self.posledneNav].predhlaska):   #alebo návestidlo AH s prijatou predhláškou 
                         self.zoznamNav[self.posledneNav].manual = True
-                    
-                        if (typ in ['hlavne','oddiel']) or (typ == 'kombi' and not self.zoznamNav[self.posledneNav].typAktCes):
-                            self.zmenaNavZnaku(navest = 'Vlak')
-
-                        elif (typ == 'zriad') or (typ == 'kombi' and self.zoznamNav[self.posledneNav].typAktCes):
-                            self.zmenaNavZnaku(navest = 'Posun')
+                        self.zmenaNavZnaku(navest=self.zoznamNav[self.posledneNav].typAktCes)
 
                     else:
                         self.vypisHlasenia('Nesprávne zadanie VOĽNO na návestidle')
@@ -574,8 +571,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
     def zmenaNavZnaku(self, navest:str=' '):    #zmena návestného znaku na návestidle
         self.zoznamNav[self.posledneNav].znak = navest
         prikaz = '/' + navest
-        self.prikazDoPLC(adresat='navestidlo', prikaz=prikaz, id=self.zoznamNav[self.posledneNav].ID, nazov=self.zoznamNav[self.posledneNav].nazov)  
-        self.prikazDoPLC(adresat='navestidlo', prikaz=prikaz, znak=True)
+        self.prikazDoPLC(adresat='navestidlo', prikaz=prikaz, nazov=self.zoznamNav[self.posledneNav].nazov)  
         self.zoznamNav[self.posledneNav].update(self)
     
         if self.zoznamNav[self.posledneNav].zavisle != -1:  #úprava pre dispečerskú alikáciu
@@ -586,7 +582,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         if (index == 1) and (typ == 'esa'):   #žiadosť o TS
             if not self.vlaknoUpdate.dictTS[self.poslednyTS].prijem:    #kontrola udelenia TS
                 if self.vlaknoUpdate.dictTS[self.poslednyTS].volnost:   #kontrola voľnosti úseku
-                    self.prikazDoPLC(adresat='TS', prikaz='ZUS/' + str(self.poslednyTS) + '/True')
+                    self.prikazDoPLC(adresat='TS', nazov=str(self.poslednyTS), prikaz='true')
                 
                 else:
                     self.vypisHlasenia('Obsadený medzistaničný úsek')
@@ -595,15 +591,15 @@ class App(QMainWindow): #hlavná triedy vizualizácie
                 self.vypisHlasenia('Traťový súhlas je prijatý')
 
         elif (index == 2) and (typ == 'esa'):   #zrušenie žiadosti o TS
-            self.prikazDoPLC(adresat='TS', prikaz='ZUS/' + str(self.poslednyTS) + '/False')   
+            self.prikazDoPLC(adresat='TS', nazov=str(self.poslednyTS), prikaz='false')  
             self.ziadostAktivna = False    
 
         elif (index == 1 and typ == 'disp') or (index == 3 and typ =='esa'):  #udelenie TS
             if self.vlaknoUpdate.dictTS[self.poslednyTS].prijem is True:   #kontrola príjmu TS
-                self.prikazDoPLC(adresat='TS', prikaz='UTS/' + str(self.poslednyTS))
+                self.prikazDoPLC(adresat='TS', nazov=str(self.poslednyTS))
           
         elif (index == 4) and (typ == 'esa'):    #zrušenie blokovej podmienky
-            self.prikazDoPLC(adresat='TS', prikaz='ZBP/' + str(self.poslednyTS))
+            self.prikazDoPLC(adresat='TS', prikaz='ZBP/', nazov=str(self.poslednyTS))
 
         elif index != 0:
             self.vypisHlasenia('Neudelený traťový súhlas')
@@ -616,17 +612,17 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         if index == 1: #žiadosť o prevzatie riadenia
             if not self.vlaknoUpdate.dictStanice[self.poslednaStn].dialkove:
                 if self.vlaknoUpdate.dictStanice[self.poslednaStn].ziadost: #ak už je aktívna žiadosť
-                    self.prikazDoPLC(adresat='ziadRiad/', prikaz='/True', nazov=self.vlaknoUpdate.dictStanice[self.poslednaStn].nazovGUI)    #zruš ju
+                    self.prikazDoPLC(adresat='ziadRiad/', prikaz='true', nazov=self.vlaknoUpdate.dictStanice[self.poslednaStn].nazovGUI)    #zruš ju
 
                 else:   #ak nie je žiadosť aktívna
-                    self.prikazDoPLC(adresat='ziadRiad/', prikaz='/True', nazov=self.vlaknoUpdate.dictStanice[self.poslednaStn].nazovGUI) #aktivuj ju
+                    self.prikazDoPLC(adresat='ziadRiad/', prikaz='true', nazov=self.vlaknoUpdate.dictStanice[self.poslednaStn].nazovGUI) #aktivuj ju
 
             else:
                 self.vypisHlasenia('Obsluha stanice prevedená na pracovisko vzdialenej obsluhy')
         
         elif index == 2: #potvrdenie žiadosti o prevzatie riadenia
             if self.vlaknoUpdate.dictStanice[self.poslednaStn].ziadost:
-                self.prikazDoPLC(adresat='udelRiad/', prikaz='/False', nazov=self.vlaknoUpdate.dictStanice[self.poslednaStn].nazovGUI)     
+                self.prikazDoPLC(adresat='udelRiad/', prikaz='false', nazov=self.vlaknoUpdate.dictStanice[self.poslednaStn].nazovGUI)     
 
             else:
                 self.vypisHlasenia('Žiadosť nebola prijatá')       
@@ -654,7 +650,7 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         self.zoznamNav[self.koncoveNav].vybrane = False
         self.zoznamNav[self.koncoveNav].update(self)
 
-        self.szz.stavanieCesty(OD = Ochr, Disp = True)
+        return self.szz.stavanieCesty(OD = Ochr, Disp = True)
 
     def ukonciStavanie(self, TS:bool=False, odhl:bool=False, volnost:bool=False):   #metóda slúži na ukončenie stavania VC v prípade zlého TS alebo obsadeného medzist. úseku
         self.zoznamNav[self.pociatocneNav].stavanieOd = False
@@ -672,70 +668,53 @@ class App(QMainWindow): #hlavná triedy vizualizácie
         elif volnost:
             self.vypisHlasenia('Obsadený medzistaničný úsek')
 
-    def prikazDoPLC(self, prikaz:str=' ', id:int=0, nazov:str=' ', adresat:str=' ', auto:bool=False):  #metóda pre odosielanie dát do PLC
+    def prikazDoPLC(self, prikaz:str=' ', nazov:str=' ', adresat:str=' '):  #metóda pre odosielanie dát do PLC
         adresa = self.citajAdresu()
-        if adresat == 'cas':    #odosielanie času do aplikácie
-            URL = adresa + 'CasP/disp'
-        
-        elif adresat == 'navestidlo':   #pzmena návestného znaku
-            URL = 'write/navestidlo/'
-            if id in range(1,11) or id in range(46,55):
-                URL = URL + 'RAD/'
-            
-            elif id in range(12,34) or id in range(56,68):
-                URL = URL + 'ZBE/'
-            
-            elif id in range(35,45) or id in range(69,77):
-                URL = URL + 'HLO/'
-        
-            URL = adresa + URL + nazov + prikaz
+        if adresat == 'navestidlo':   #pzmena návestného znaku
+            URL = adresat + '/RAD?meno=' + nazov + '&znak=' + prikaz
+            URL = adresa + URL
         
         elif adresat == 'cesta': #prenos info o stavaní / rušení jazdnej cesty medzi plikáciami ILTIS-N
-            if self.pociatocneNav > 45:
-                start = self.zoznamNav[self.pociatocneNav].zavisle
-            
-            else:
-                start = self.pociatocneNav
-
-            if self.koncoveNav > 45:
-                end = self.zoznamNav[self.koncoveNav].zavisle
-            
-            else:
-                end = self.koncoveNav
+            start = self.pociatocneNav
+            end = self.koncoveNav
 
             if nazov == 'stavanie':
                 if prikaz == 'True':
-                    URL = adresa + 'Cesta/' + str(start) + '/' + str(end) + '/' + self.szz.typCesty + '/True/True/False/DISP'
+                    URL = adresa + 'cesta/' + str(start) + '?end=' + str(end) + '&typ=' + self.szz.typCesty + '&od=true&stav=true&rus=false&meno=RAD'
 
                 else:
-                    URL = adresa + 'Cesta/' + str(start) + '/' + str(end) + '/' + self.szz.typCesty + '/False/True/False/DISP'
+                    URL = adresa + 'cesta/' + str(start) + '?end=' + str(end) + '&typ=' + self.szz.typCesty + '&od=false&stav=true&rus=false&meno=RAD'
 
             elif nazov == 'rusenie':
-                URL = adresa + 'Cesta/' + str(start) + '/' + str(end) + '/X/False/False/True/DISP'
+                URL = adresa + 'cesta/' + str(start) + '?end=' + str(end) + '&typ=X&od=false&stav=true&rus=false&meno=RAD'
                 
             else:
-                URL = adresa + 'Cesta/0/0/False/False/False/False/DISP'
+                URL = adresa + 'cesta/0?end=0&typ=X&od=false&stav=false&rus=false&meno=RAD'
         
         elif adresat == 'znak':  #prenos návestného znaku medzi plikáciami ILTIS-N
-            if self.posledneNav > 45:
-                nav = self.zoznamNav[self.posledneNav].zavisle
-            else:
-                nav = self.posledneNav
+            nav = self.posledneNav
 
             if prikaz != '_':
-                URL = adresa + 'Navest/' + str(nav) + prikaz + '/DISP'
+                URL = adresa + 'navest/' + str(nav) + '?znak=' + prikaz + '&meno=RAD'
 
             else:
-                URL = adresa + 'Navest/0/Stoj/DISP'
+                URL = adresa + 'navest/0?znak=Stoj&meno=RAD'
 
         elif adresat == 'vymena': #prestavenie výhybky
-            URL = adresa + 'write/vyhybka/' + nazov + prikaz + auto           
+            URL = adresa + adresat + '/' + nazov + '?smer=' + prikaz           
         
         elif adresat == 'TS':   #Traťový súhlas
-            URL = adresa + prikaz
+            if prikaz != ' ':
+                if prikaz in ['true','false']:
+                    URL = adresa + 'ZUS/' + nazov + '?hodnota=' + prikaz
+                elif prikaz == 'ZBP/':
+                    URL = adresa + 'ZBP/' + nazov
 
-        elif adresat in ['write/OchrDr/', 'odchod/', 'predhl/', 'ziadRiad/', 'write/priecestie/']:   #odosielanie info o ochrannej dráhe, odchodových cestách, predhláškach a diaľkovom riadení
-            URL = adresa + adresat + nazov + prikaz
+            else:  
+                URL = adresa + 'UTS/' + nazov
+
+        elif adresat in ['ochranna_draha/', 'priecestie/', 'odchod/', 'predhl/', 'ziadRiad/', ]:   #odosielanie info o ochrannej dráhe, odchodových cestách, predhláškach a diaľkovom riadení
+            URL = adresa + adresat + nazov + '?hodnota=' + prikaz
         
         requests.put(URL)
                 
